@@ -1,0 +1,2563 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Two-Round Threshold Signatures with FROST</title>
+<meta content="Deirdre Connolly" name="author">
+<meta content="Chelsea Komlo" name="author">
+<meta content="Ian Goldberg" name="author">
+<meta content="Christopher A. Wood" name="author">
+<meta content="
+       In this draft, we present a two-round signing variant of FROST, a Flexible Round-Optimized
+Schnorr Threshold signature scheme. FROST signatures can be issued after a threshold number
+of entities cooperate to issue a signature, allowing for improved distribution of trust and
+redundancy with respect to a secret key.
+Further, this draft specifies signatures that are compatible with EdDSA verification of
+signatures. However, this draft does not generate deterministic nonces as defined by EdDSA,
+to ensure protection against a key-recovery attack that is possible when even only one
+participant is malicious. 
+       
+
+
+
+    " name="description">
+<meta content="xml2rfc 3.12.0" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-irtf-cfrg-frost-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.12.0
+    Python 3.9.7
+    appdirs 1.4.4
+    ConfigArgParse 1.3
+    google-i18n-address 2.5.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.6.5
+    pycountry 20.7.3
+    pyflakes 2.3.1
+    PyYAML 5.4.1
+    requests 2.26.0
+    setuptools 52.0.0
+    six 1.16.0
+-->
+<link href="draft-irtf-cfrg-frost.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+dd.break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href].selfRef {
+  color: var(--text-color);
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  pre + .pilcrow, svg + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+tr:nth-child(2n) > td {
+  background-color: var(--background-color);
+}
+tr:nth-child(2n+1) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n) > td {
+  background-color: var(--highlight-color);
+}
+thead+tbody > tr:nth-child(2n+1) > td {
+  background-color: var(--background-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 8em;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  margin: 0;
+  clear: left;
+  float: left;
+  text-align: right;
+}
+#identifiers dd {
+  margin: 0 0 0 calc(1em + var(--identifier-width));
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul p, #toc ul li {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left, table .text-left {
+  text-align: left;
+}
+table .text-center, table .text-center {
+  text-align: center;
+}
+table .text-right, table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  dd {
+    page-break-before: avoid;
+  }
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
+</style>
+
+</head>
+<body>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">FROST</td>
+<td class="right">January 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Connolly, et al.</td>
+<td class="center">Expires 4 August 2022</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">CFRG</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-irtf-cfrg-frost-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-01-31" class="published">31 January 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2022-08-04">4 August 2022</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">D. Connolly</div>
+<div class="org">Zcash Foundation</div>
+</div>
+<div class="author">
+      <div class="author-name">C. Komlo</div>
+<div class="org">University of Waterloo, Zcash Foundation</div>
+</div>
+<div class="author">
+      <div class="author-name">I. Goldberg</div>
+<div class="org">University of Waterloo</div>
+</div>
+<div class="author">
+      <div class="author-name">C.A. Wood</div>
+<div class="org">Cloudflare</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Two-Round Threshold Signatures with FROST</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">In this draft, we present a two-round signing variant of FROST, a Flexible Round-Optimized
+Schnorr Threshold signature scheme. FROST signatures can be issued after a threshold number
+of entities cooperate to issue a signature, allowing for improved distribution of trust and
+redundancy with respect to a secret key.
+Further, this draft specifies signatures that are compatible with EdDSA verification of
+signatures. However, this draft does not generate deterministic nonces as defined by EdDSA,
+to ensure protection against a key-recovery attack that is possible when even only one
+participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Discussion of this document takes place on the
+    Crypto Forum Research Group mailing list (cfrg@ietf.org),
+    which is archived at <span><a href="https://mailarchive.ietf.org/arch/search/?email_list=cfrg">https://mailarchive.ietf.org/arch/search/?email_list=cfrg</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+    <span><a href="https://github.com/cfrg/draft-irtf-cfrg-frost">https://github.com/cfrg/draft-irtf-cfrg-frost</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 4 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-change-log" class="xref">Change Log</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="xref">3</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-overview" class="xref">Overview</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-conventions-and-terminology" class="xref">Conventions and Terminology</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-cryptographic-dependencies" class="xref">Cryptographic Dependencies</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="xref">6.1</a>.  <a href="#name-prime-order-group" class="xref">Prime-Order Group</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1.2.1">
+                    <p id="section-toc.1-1.6.2.1.2.1.1"><a href="#section-6.1.1" class="xref">6.1.1</a>.  <a href="#name-input-validation" class="xref">Input Validation</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="xref">6.2</a>.  <a href="#name-cryptographic-hash-function" class="xref">Cryptographic Hash Function</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-helper-functions" class="xref">Helper functions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="xref">7.1</a>.  <a href="#name-schnorr-signature-operation" class="xref">Schnorr Signature Operations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="xref">7.2</a>.  <a href="#name-polynomial-operations" class="xref">Polynomial Operations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="xref">7.2.1</a>.  <a href="#name-evaluation-of-a-polynomial" class="xref">Evaluation of a polynomial</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
+                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="xref">7.2.2</a>.  <a href="#name-lagrange-coefficients" class="xref">Lagrange coefficients</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.3">
+                    <p id="section-toc.1-1.7.2.2.2.3.1"><a href="#section-7.2.3" class="xref">7.2.3</a>.  <a href="#name-deriving-the-constant-term-" class="xref">Deriving the constant term of a polynomial</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-encoding-operations" class="xref">Encoding Operations</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-two-round-frost" class="xref">Two-Round FROST</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-round-one-commitment" class="xref">Round One - Commitment</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-round-two-signature-share-g" class="xref">Round Two - Signature Share Generation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-signature-share-aggregation" class="xref">Signature Share Aggregation</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-ciphersuites" class="xref">Ciphersuites</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-frostristretto255-sha-512" class="xref">FROST(ristretto255, SHA-512)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-frostp-256-sha-256" class="xref">FROST(P-256, SHA-256)</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="xref">10.1</a>.  <a href="#name-nonce-reuse-attacks" class="xref">Nonce Reuse Attacks</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="xref">10.2</a>.  <a href="#name-protocol-failures" class="xref">Protocol Failures</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="xref">10.3</a>.  <a href="#name-external-requirements-non-g" class="xref">External Requirements / Non-Goals</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-removing-the-coordinator-ro" class="xref">Removing the Coordinator Role</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-contributors" class="xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="xref">13</a>. <a href="#name-references" class="xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="xref">13.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="xref">13.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-trusted-dealer-key-generati" class="xref">Trusted Dealer Key Generation</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-shamir-secret-sharing" class="xref">Shamir Secret Sharing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
+                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-verifiable-secret-sharing" class="xref">Verifiable Secret Sharing</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-C" class="xref">Appendix C</a>.  <a href="#name-wire-format" class="xref">Wire Format</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.1">
+                <p id="section-toc.1-1.16.2.1.1"><a href="#appendix-C.1" class="xref">C.1</a>.  <a href="#name-signing-commitment" class="xref">Signing Commitment</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.2">
+                <p id="section-toc.1-1.16.2.2.1"><a href="#appendix-C.2" class="xref">C.2</a>.  <a href="#name-signing-packages" class="xref">Signing Packages</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.3">
+                <p id="section-toc.1-1.16.2.3.1"><a href="#appendix-C.3" class="xref">C.3</a>.  <a href="#name-signature-share" class="xref">Signature Share</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#appendix-D" class="xref">Appendix D</a>.  <a href="#name-test-vectors" class="xref">Test Vectors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
+            <p id="section-toc.1-1.18.1"><a href="#appendix-E" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">DISCLAIMER: This is a work-in-progress draft of FROST.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">RFC EDITOR: PLEASE REMOVE THE FOLLOWING PARAGRAPH The source for this draft is
+maintained in GitHub. Suggested changes should be submitted as pull requests
+at https://github.com/cfrg/draft-irtf-cfrg-frost. Instructions are on that page as
+well.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Unlike signatures in a single-party setting, threshold signatures
+require cooperation among a threshold number of signers each holding a share
+of a common private key.  The security of threshold schemes in general assume
+that an adversary can corrupt strictly fewer than a threshold number of participants.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">In this draft, we present a variant of FROST, a Flexible Round-Optimized Schnorr Threshold
+signature scheme. FROST reduces network overhead during threshold signing operations while
+employing a novel technique to protect against forgery attacks applicable to prior
+Schnorr-based threshold signature constructions.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">This draft specifies only two-round signing operations. This draft specifies signatures
+that are compatible with EdDSA verification of signatures, but not EdDSA nonce generation.
+EdDSA-style nonce-generation, where the nonce is derived deterministically, is insecure
+in a multi-party signature setting.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">Further, this draft implements signing efficiency improvements for FROST described by
+Crites, Komlo, and Maller in <span>[<a href="#Schnorr21" class="xref">Schnorr21</a>]</span>.<a href="#section-1-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="change-log">
+<section id="section-2">
+      <h2 id="name-change-log">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-change-log" class="section-name selfRef">Change Log</a>
+      </h2>
+<p id="section-2-1">draft-01<a href="#section-2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-2.1">Submitted a draft that specifies operations, notation and cryptographic dependencies.<a href="#section-2-2.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-2-3">draft-00<a href="#section-2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2-4.1">Submitted a basic draft after adoption of draft-komlo-frost as a working
+group item.<a href="#section-2-4.1" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<div id="terminology">
+<section id="section-3">
+      <h2 id="name-terminology">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-3-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in
+BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they appear in all
+capitals, as shown here.<a href="#section-3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="overview">
+<section id="section-4">
+      <h2 id="name-overview">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
+      </h2>
+<p id="section-4-1">FROST is a threshold signature protocol involving the following parties:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4-2.1">Signers: Entities with signing key shares that participate in the threshold
+signing protocol<a href="#section-4-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-4-2.2">Coordinator: An entity responsible for performing coordination among signers
+and for aggregating signature shares at the end of the protocol, resulting
+in the final signature. This party may be a signer themselves or an external
+party.<a href="#section-4-2.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-4-3">FROST assumes the selection of all participants, including the dealer, signer, and
+Coordinator are all chosen external to the protocol.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">In FROST, Signers participate in two rounds to sign an input message and produce
+a single, aggregate signature. All signers are assumed to have the group state and
+their corresponding signing keys; see <a href="#frost-spec" class="xref">Section 8</a> for details about how this state
+is generated. At the end of the second round, the Coordinator performs an aggregation
+function to produce the final signature This is sketched below.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4-5">
+<pre>
+        (group info)             (group info,     (group info,
+            |                     signing key)     signing key)
+            |                         |                |
+            v                         v                v
+        Coordinator               Signer-1   ...   Signer-n
+    ------------------------------------------------------------
+   message
+------------&gt;
+            |
+      == Round 1 (Commitment) ==
+            |    SigningCommitment   |                 |
+            |&lt;-----------------------+                 |
+            |          ...                             |
+            |    SigningCommitment                     |
+            |&lt;-----------------------------------------+
+
+      == Round 2 (Signing) ==
+            |
+            |    SigningPackage      |                 |
+            +------------------------&gt;                 |
+            |    SignatureShare      |                 |
+            |&lt;-----------------------+                 |
+            |          ...                             |
+            |    SigningPackage                        |
+            +------------------------------------------&gt;
+            |    SignatureShare                        |
+            &lt;------------------------------------------+
+            |
+      == Aggregation ==
+            |
+  signature |
+&lt;-----------+
+</pre><a href="#section-4-5" class="pilcrow">¶</a>
+</div>
+<p id="section-4-6">Details about each of these rounds and the corresponding protocol
+messages is in <a href="#frost-spec" class="xref">Section 8</a>.<a href="#section-4-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-terminology">
+<section id="section-5">
+      <h2 id="name-conventions-and-terminology">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-conventions-and-terminology" class="section-name selfRef">Conventions and Terminology</a>
+      </h2>
+<p id="section-5-1">The following notation and terminology are used throughout this document.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-2.1">A participant is an entity that is trusted to hold a secret share.<a href="#section-5-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-2.2">
+          <code>NUM_SIGNERS</code> denotes the number of participants, and the number of shares that <code>s</code> is split into.
+This value MUST NOT exceed 2^16-1.<a href="#section-5-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-2.3">
+          <code>THRESHOLD_LIMIT</code> denotes the threshold number of participants required to issue a signature. More specifically,
+at least THRESHOLD_LIMIT shares must be combined to issue a valid signature.<a href="#section-5-2.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-2.4">
+          <code>len(x)</code> is the length of integer input <code>x</code> as an 8-byte, big-endian integer.<a href="#section-5-2.4" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-2.5">
+          <code>I2OSP(x, w)</code>: Convert non-negative integer <code>x</code> to a <code>w</code>-length,
+big-endian byte string as described in <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-5-2.5" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-2.6">
+          <code>OS2IP(s)</code>: Convert byte string <code>s</code> to a non-negative integer as
+described in <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>, assuming big-endian byte order.<a href="#section-5-2.6" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-5-2.7">|| denotes contatenation, i.e., x || y = xy.<a href="#section-5-2.7" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-5-3">Unless otherwise stated, we assume that secrets are sampled uniformly at random
+using a cryptographically secure pseudorandom number generator (CSPRNG); see
+<span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional guidance on the generation of random numbers.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">Let <code>B</code> be a generator, or distiguished element, of <code>G</code>, a finite group of with
+order <code>l</code>, a large prime.  Throughout this document, and in practice, we assume
+this group to be instantiated as an arbitrary abstraction of an elliptic curve
+subgroup, defined over a finite field; however, that does not restrict an
+implementation from instantiating FROST signatures over other groups, provided
+their order be prime.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">We denote group elements with capital Roman letters, and scalars with
+lower-cased Roman letters.  We use <code>+</code> to denote the group operation, and <code>-</code> to
+denote inversion.  We use <code>*</code> to denote multiplication of a scalar by a group
+element, that is, the group element added to itself in succession a number of
+times equal to the value of the scalar. Testing equality between two group elements
+is denoted as <code>?=</code>, where it is assumed that the elements are in some canonical,
+serialised form.<a href="#section-5-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cryptographic-dependencies">
+<section id="section-6">
+      <h2 id="name-cryptographic-dependencies">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-cryptographic-dependencies" class="section-name selfRef">Cryptographic Dependencies</a>
+      </h2>
+<p id="section-6-1">FROST depends on the following cryptographic constructs:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-2.1">Prime-order Group, <a href="#dep-pog" class="xref">Section 6.1</a>;<a href="#section-6-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-6-2.2">Cryptographic hash function, <a href="#dep-hash" class="xref">Section 6.2</a>;<a href="#section-6-2.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-6-3">These are described in the following sections.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<div id="dep-pog">
+<section id="section-6.1">
+        <h3 id="name-prime-order-group">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-prime-order-group" class="section-name selfRef">Prime-Order Group</a>
+        </h3>
+<p id="section-6.1-1">FROST depends on an abelian group <code>G</code> of prime order <code>p</code>. The fundamental group operation
+is addition <code>+</code> with identity element <code>I</code>. For any elements <code>A</code> and <code>B</code> of the group <code>G</code>,
+<code>A + B = B + A</code> is also a member of <code>G</code>. Also, for any <code>A</code> in <code>GG</code>, there exists an element
+<code>-A</code> such that <code>A + (-A) = (-A) + A = I</code>. Scalar multiplication is equivalent to the repeated
+application of the group operation on an element A with itself <code>r-1</code> times, this is denoted
+as <code>r*A = A + ... + A</code>. For any element <code>A</code>, <code>p * A = I</code>. We denote <code>B</code> as the fixed generator
+of the group. Scalar base multiplication is equivalent to the repeated application of the group
+operation <code>B</code> with itself <code>r-1</code> times, this is denoted as <code>ScalarBaseMult(r)</code>. The set of
+scalars corresponds to <code>GF(p)</code>, which refer to as the scalar field. This document uses types
+<code>Element</code> and <code>Scalar</code> to denote elements of the group <code>G</code> and its set of scalars, respectively.
+We denote equality comparison as <code>==</code> and assignment of values by <code>=</code>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">We now detail a number of member functions that can be invoked on a prime-order group <code>G</code>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.1-3.1">Order(): Outputs the order of <code>G</code> (i.e. <code>p</code>).<a href="#section-6.1-3.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-3.2">Identity(): Outputs the identity element of the group (i.e. <code>I</code>).<a href="#section-6.1-3.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-3.3">HashToScalar(x): A member function of <code>G</code> that deterministically maps
+an array of bytes <code>x</code> to an element in GF(p). This function is optionally
+parameterized by a DST.<a href="#section-6.1-3.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-3.4">RandomScalar(): A member function of <code>G</code> that chooses at random a
+non-zero element in GF(p).<a href="#section-6.1-3.4" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-3.5">SerializeElement(A): A member function of <code>G</code> that maps a group element <code>A</code>
+to a unique byte array <code>buf</code> of fixed length <code>Ne</code>. The output type of
+this function is <code>SerializedElement</code>.<a href="#section-6.1-3.5" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-3.6">DeserializeElement(buf): A member function of <code>G</code> that maps a byte array
+<code>buf</code> to a group element <code>A</code>, or fails if the input is not a valid
+byte representation of an element. This function can raise a
+DeserializeError if deserialization fails or <code>A</code> is the identity element
+of the group; see <a href="#input-validation" class="xref">Section 6.1.1</a>.<a href="#section-6.1-3.6" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-3.7">SerializeScalar(s): A member function of <code>G</code> that maps a scalar element <code>s</code>
+to a unique byte array <code>buf</code> of fixed length <code>Ns</code>. The output type of this
+function is <code>SerializedScalar</code>.<a href="#section-6.1-3.7" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-6.1-3.8">DeserializeScalar(buf): A member function of <code>G</code> that maps a byte array
+<code>buf</code> to a scalar <code>s</code>, or fails if the input is not a valid byte
+representation of a scalar. This function can raise a
+DeserializeError if deserialization fails; see <a href="#input-validation" class="xref">Section 6.1.1</a>.<a href="#section-6.1-3.8" class="pilcrow">¶</a>
+</li>
+        </ul>
+<div id="input-validation">
+<section id="section-6.1.1">
+          <h4 id="name-input-validation">
+<a href="#section-6.1.1" class="section-number selfRef">6.1.1. </a><a href="#name-input-validation" class="section-name selfRef">Input Validation</a>
+          </h4>
+<p id="section-6.1.1-1">The DeserializeElement function recovers a group element from an arbitrary
+byte array. This function validates that the element is a proper member
+of the group and is not the identity element, and returns an error if either
+condition is not met.<a href="#section-6.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-2">For ristretto255, elements are deserialized by invoking the Decode
+function from <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01#section-4.3.1" class="relref">Section 4.3.1</a></span>,
+which returns false if the element is invalid. If this function returns false,
+deserialization returns an error.<a href="#section-6.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-3">The DeserializeScalar function recovers a scalar field element from an arbitrary
+byte array. Like DeserializeElement, this function validates that the element
+is a member of the scalar field and returns an error if this condition is not met.<a href="#section-6.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1.1-4">For ristretto255, this function ensures that the input, when treated as a
+little-endian integer, is a value greater than or equal to 0, and less than <code>Order()</code>.<a href="#section-6.1.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="dep-hash">
+<section id="section-6.2">
+        <h3 id="name-cryptographic-hash-function">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-cryptographic-hash-function" class="section-name selfRef">Cryptographic Hash Function</a>
+        </h3>
+<p id="section-6.2-1">FROST requires the use of a cryptographically secure hash function, generically
+written as H, which functions effectively as a random oracle. For concrete
+recommendations on hash functions which SHOULD BE used in practice, see
+<a href="#ciphersuites" class="xref">Section 9</a>. By construction, the hash functions inputs MUST be smaller
+than 2^64 bits.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Using H, we introduce two separate domain-separated hashes, H1, H2, and H3.
+These hash functions differ per parameter set, so H1, H2, and H3 differ
+between instantiations of the protocol as follows:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.2-3">
+<pre>
+H1(m) = H(contextString || "rho" || I2OSP(len(m), 8) || m)
+H2(m) = H(contextString || "chal" || I2OSP(len(m), 8) || m)
+H3(m) = H(m)
+</pre><a href="#section-6.2-3" class="pilcrow">¶</a>
+</div>
+<p id="section-6.2-4">Normally H3 would also include a domain separator, but for backwards compatibility
+with <span>[<a href="#RFC8032" class="xref">RFC8032</a>]</span>, it is omitted here.<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.2-5">The variable contextString is unique for each ciphersuite defined in <a href="#ciphersuites" class="xref">Section 9</a>.<a href="#section-6.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="helpers">
+<section id="section-7">
+      <h2 id="name-helper-functions">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-helper-functions" class="section-name selfRef">Helper functions</a>
+      </h2>
+<p id="section-7-1">Beyond the core dependencies, the protocol in this document depends on the
+following helper operations:<a href="#section-7-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-2.1">Schnorr signatures, <a href="#dep-schnorr" class="xref">Section 7.1</a>;<a href="#section-7-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-7-2.2">Polynomial operations, <a href="#dep-polynomial" class="xref">Section 7.2</a>;<a href="#section-7-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-7-2.3">Encoding operations, <a href="#dep-encoding" class="xref">Section 7.3</a><a href="#section-7-2.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-7-3">This sections describes these operations in more detail.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<div id="dep-schnorr">
+<section id="section-7.1">
+        <h3 id="name-schnorr-signature-operation">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-schnorr-signature-operation" class="section-name selfRef">Schnorr Signature Operations</a>
+        </h3>
+<p id="section-7.1-1">In the single-party setting, a Schnorr signature is generated with the
+following operation.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1-2">
+<pre>
+  schnorr_signature_generate(msg, SK):
+
+  Inputs:
+  - msg, message to be signed, an octet string
+  - SK, private key, a scalar
+  - PK, public key, a group element
+
+  Outputs: signature (R, z), a pair of scalar values
+
+  def schnorr_signature_generate(msg, SK, PK):
+    r = G.RandomScalar()
+    R = G.ScalarBaseMult(r)
+
+    msg_hash = H3(msg)
+    comm_enc = G.SerializeElement(R)
+    pk_enc = G.SerializeElement(PK)
+    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    c = H2(challenge_input)
+
+    z = r + (c * SK)
+    return (R, z)
+</pre><a href="#section-7.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7.1-3">The corresponding verification operation is as follows.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1-4">
+<pre>
+  schnorr_signature_verify(msg, sig, PK):
+
+  Inputs:
+  - msg, signed message, an octet string
+  - sig, a tuple (R, z) output from schnorr_signature_generate or FROST
+  - PK, public key, a group element
+
+  Outputs: 1 if signature is valid, and 0 otherwise
+
+  def schnorr_signature_verify(msg, sig = (R, z), PK):
+    msg_hash = H3(msg)
+    comm_enc = G.SerializeElement(R)
+    pk_enc = G.SerializeElement(PK)
+    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    c = H2(challenge_input)
+
+    l = ScalarBaseMult(z)
+    r = R + (c * PK)
+    if l == r:
+      return 1
+    return 0
+</pre><a href="#section-7.1-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="dep-polynomial">
+<section id="section-7.2">
+        <h3 id="name-polynomial-operations">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-polynomial-operations" class="section-name selfRef">Polynomial Operations</a>
+        </h3>
+<p id="section-7.2-1">This section describes operations on and associated with polynomials
+that are used in the main signing protocol. A polynomial of degree t
+is represented as a sorted list of t coefficients. A point on the
+polynomial is a tuple (x, y), where <code>y = f(x)</code>. For notational
+convenience, we refer to the x-coordinate and y-coordinate of a
+point p as <code>p.x</code> and <code>p.y</code>, respectively.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<div id="evaluation-of-a-polynomial">
+<section id="section-7.2.1">
+          <h4 id="name-evaluation-of-a-polynomial">
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-evaluation-of-a-polynomial" class="section-name selfRef">Evaluation of a polynomial</a>
+          </h4>
+<p id="section-7.2.1-1">This section describes a method for evaluating a polynomial <code>f</code> at a
+particular input <code>x</code>, i.e., <code>y = f(x)</code> using Horner's method.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2.1-2">
+<pre>
+  polynomial_evaluate(x, coeffs):
+
+  Inputs:
+  - x, input at which to evaluate the polynomial, a scalar
+  - coeffs, the polynomial coefficients, a list of scalars
+
+  Outputs: Scalar result of the polynomial evaluated at input x
+
+  def polynomial_evaluate(x, coeffs):
+    value = 0
+    for (counter, coeff) in coeffs.reverse():
+      if counter == coeffs.len() - 1:
+        value += coeff // add the constant term
+      else:
+        value += coeff
+        value *= x
+
+    return value
+</pre><a href="#section-7.2.1-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="lagrange-coefficients">
+<section id="section-7.2.2">
+          <h4 id="name-lagrange-coefficients">
+<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-lagrange-coefficients" class="section-name selfRef">Lagrange coefficients</a>
+          </h4>
+<p id="section-7.2.2-1">Lagrange coefficients are used in FROST to evaluate a polynomial
+<code>f</code> at <code>f(0)</code>, given a set of <code>t</code> other points, where <code>f</code> is
+represented as a set of coefficients.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2.2-2">
+<pre>
+  derive_lagrange_coefficient(i, L):
+
+  Inputs:
+  - i, an index contained in L, a scalar
+  - L, the set of x-coordinates, each a scalar
+
+  Outputs: L_i, the i-th Lagrange coefficient
+
+  def derive_lagrange_coefficient(i, L):
+    numerator = 1
+    denominator = 1
+    for j in L:
+      if j == i: continue
+      numerator *= j
+      denominator *= j - i
+
+    L_i = numerator / denominator
+    return L_i
+</pre><a href="#section-7.2.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="deriving-the-constant-term-of-a-polynomial">
+<section id="section-7.2.3">
+          <h4 id="name-deriving-the-constant-term-">
+<a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-deriving-the-constant-term-" class="section-name selfRef">Deriving the constant term of a polynomial</a>
+          </h4>
+<p id="section-7.2.3-1">Secret sharing requires "splitting" a secret, which is represented as
+a constant term of some polynomial <code>f</code> of degree <code>t</code>. Recovering the
+constant term occurs with a set of <code>t</code> points using polynomial
+interpolation, defined as follows.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2.3-2">
+<pre>
+  Inputs:
+  - points, a set of `t` points on a polynomial f, each a tuple of two
+    scalar values representing the x and y coordinates
+
+  Outputs: The constant term of f, i.e., f(0)
+
+  def polynomial_interpolation(points):
+    L = []
+    for point in points:
+      L.append(point.x)
+
+    f_zero = F(0)
+    for point in points:
+      delta = point.y * derive_lagrange_coefficient(point.x, L)
+      f_zero = f_zero + delta
+
+    return f_zero
+</pre><a href="#section-7.2.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="dep-encoding">
+<section id="section-7.3">
+        <h3 id="name-encoding-operations">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-encoding-operations" class="section-name selfRef">Encoding Operations</a>
+        </h3>
+<p id="section-7.3-1">This section describes various helper functions used for encoding data
+structures into values that can be processed with hash functions.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.3-2">
+<pre>
+  Inputs:
+  - commitment_list = [(j, D_j, E_j), ...], a list of commitments issued by each signer,
+    where each element in the list indicates the signer index and their
+    two commitment Element values. B MUST be sorted in ascending order
+    by signer index.
+
+  Outputs: A byte string containing the serialized representation of B.
+
+  def encode_group_commitment_list(commitment_list):
+    encoded_group_commitment = nil
+    for (j, D_j, E_j) in B:
+      encoded_commitment = I2OSP(j, 2) ||
+                           G.SerializeElement(D_j) ||
+                           G.SerializeElement(E_j)
+      encoded_group_commitment = encoded_group_commitment || encoded_commitment
+    return encoded_group_commitment
+</pre><a href="#section-7.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="frost-spec">
+<section id="section-8">
+      <h2 id="name-two-round-frost">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-two-round-frost" class="section-name selfRef">Two-Round FROST</a>
+      </h2>
+<p id="section-8-1">The FROST protocol produces a standard Schnorr signature over an input message
+of at most 2^16-1 bytes long. The protocol assumes that each participant <code>P_i</code>
+knows the following:<a href="#section-8-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8-2.1">Group public key, denoted <code>PK = G.ScalarMultBase(s)</code>, corresponding to the group secret key <code>s</code>.<a href="#section-8-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-8-2.2">Participant i signing key, which is the i-th secret share of <code>s</code>.<a href="#section-8-2.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-8-3">The exact key generation mechanism is out of scope for this specification. In general,
+key generation is a protocol that outputs (1) a shared, group public key PK owned
+by each Signer, and (2) individual shares of the signing key owned by each Signer.
+In general, two possible key generation mechanisms are possible, one that requires
+a single, trusted dealer, and the other which requires performing a distributed
+key generation protocol. We highlight key generation mechanism by a trusted dealer
+in <a href="#dep-dealer" class="xref">Appendix B</a>, for reference.<a href="#section-8-3" class="pilcrow">¶</a></p>
+<p id="section-8-4">FROST assumes the existence of a <em>Coordinator</em>, which is a Signer responsible for the following:<a href="#section-8-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-8-5">
+<li id="section-8-5.1">Determining which signers will participate (at least THRESHOLD_LIMIT in number);<a href="#section-8-5.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-8-5.2">Coordinating rounds (receiving and forwarding inputs among participants); and<a href="#section-8-5.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-8-5.3">Aggregating signature shares output by each participant, and publishing the resulting signature.<a href="#section-8-5.3" class="pilcrow">¶</a>
+</li>
+      </ol>
+<p id="section-8-6">Selection of the Coordinator is outside the scope of this specification.<a href="#section-8-6" class="pilcrow">¶</a></p>
+<p id="section-8-7">We describe the protocol in two rounds: commitment and signing. The first round serves for each
+participant to issue a commitment. The second round receives commitments for all signers as well
+as the message, and issues a signature share. The Coordinator performs the coordination of each
+of these rounds. The Coordinator then performs an aggregation round at the end and outputs the
+final signature.<a href="#section-8-7" class="pilcrow">¶</a></p>
+<p id="section-8-8">This protocol assumes reliable message delivery between Coordinator and signing participants
+in order for the protocol to complete. Messages exchanged during signing operations are all within
+the public domain. An attacker masquerading as another participant will result only in an invalid
+signature; see <a href="#sec-considerations" class="xref">Section 10</a>.<a href="#section-8-8" class="pilcrow">¶</a></p>
+<div id="frost-round-one">
+<section id="section-8.1">
+        <h3 id="name-round-one-commitment">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-round-one-commitment" class="section-name selfRef">Round One - Commitment</a>
+        </h3>
+<p id="section-8.1-1">Round one involves each signer generating a pair of nonces and their corresponding public
+commitments. A nonce is a pair of Scalar values, and a commitment is a pair of Element values.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">Each signer in round one generates a nonce <code>nonce = (d, e)</code> and commitment
+<code>comm = (D, E)</code> for each signer.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.1-3">
+<pre>
+  Inputs: None
+
+  Outputs: (nonce, comm), a tuple of nonce and nonce commitment pairs.
+
+  def commit():
+    d = G.RandomScalar()
+    e = G.RandomScalar()
+    D = G.ScalarBaseMult(d)
+    E = G.ScalarBaseMult(e)
+    nonce = (d, e)
+    comm = (D, E)
+    return nonce, comm
+</pre><a href="#section-8.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-8.1-4">The output <code>nonce</code> from Participant <code>P_i</code> is stored locally and kept private
+for use in the second round. The public output <code>comm</code> from Participant <code>P_i</code>
+is sent to the Coordinator; see <a href="#encode-commitment" class="xref">Appendix C.1</a> for encoding recommendations.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="frost-round-two">
+<section id="section-8.2">
+        <h3 id="name-round-two-signature-share-g">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-round-two-signature-share-g" class="section-name selfRef">Round Two - Signature Share Generation</a>
+        </h3>
+<p id="section-8.2-1">In round two, the Coordinator is responsible for sending the message to be signed, and
+for choosing which signers will participate (of number at least THRESHOLD_LIMIT). Signers
+additionally require locally held data; specifically, their private key and the
+nonces corresponding to their commitment issued in round one.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">The Coordinator begins by sending each signer the message to be signed along with the
+set of signing commitments for other signers in the participant list. Upon receipt,
+each Signer then runs the following procedure to produce its own signature share.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.2-3">
+<pre>
+  Inputs:
+  - index, Index `i` of the signer. Note index will never equal `0`.
+  - sk_i, Signer secret key share.
+  - group_public_key, public key corresponding to the signer secret key share.
+  - nonce_i, pair of Scalar values (d, e) generated in round one.
+  - comm_i, pair of Element values (D, E) generated in round one.
+  - msg, the message to be signed (sent by the Coordinator).
+  - commitment_list = [(j, D_j, E_j), ...], a list of commitments issued by each signer,
+    where each element in the list indicates the signer index and their
+    two commitment Element values. B MUST be sorted in ascending order
+    by signer index.
+  - participant_list, a set containing identifiers for each signer, similarly of length
+    NUM_SIGNERS (sent by the Coordinator).
+
+  Outputs: a signature share z_i and commitment share R_i
+
+  def sign(index, sk, group_public_key, nonce, comm, msg, commitment_list, participant_list):
+    # Compute the blinding factor
+    encoded_commitments = encode_group_commitment_list(commitment_list)
+    blinding_factor = H1(encoded_commitments)
+
+    # Compute the group commitment
+    R = G.Identity()
+    for (_, D_i, E_i) in B:
+      R = R + (D_i + (E_i * blinding_factor))
+
+    lambda_i = derive_lagrange_coefficient(index, participant_list)
+
+    # Compute the per-message challenge
+    msg_hash = H3(msg)
+    group_comm_enc = G.SerializeElement(R)
+    group_public_key_enc = G.SerializeElement(group_public_key)
+    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    c = H2(challenge_input)
+
+    # Compute the signature share
+    (d, e) = nonce_i
+    z_i = d + (e * blinding_factor) + (lambda_i * sk_i * c)
+
+    # Compute the commitment share
+    (D, E) = comm_i
+    R_i = D + (E * blinding_factor)
+
+    return z_i, R_i
+</pre><a href="#section-8.2-3" class="pilcrow">¶</a>
+</div>
+<p id="section-8.2-4">The output of this procedure is a signature share and group commitment share.
+Each signer then sends these shares back to the collector; see
+<a href="#encode-sig-share" class="xref">Appendix C.3</a> for encoding recommendations.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5">The Coordinator MUST verify the set of signature shares using the following procedure.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.2-6">
+<pre>
+  Inputs:
+  - index, Index `i` of the signer. Note index will never equal `0`.
+  - PK, the public key for the group
+  - PK_i, the public key for the ith signer, where PK_i = ScalarBaseMult(s[i])
+  - z_i, the signature share for the ith signer, computed from the signer
+  - R_i, the commitment for the ith signer, computed from the signer
+  - R, the group commitment
+  - msg, the message to be signed
+  - participant_list, a set containing identifiers for each signer, similarly of length
+    NUM_SIGNERS (sent by the Coordinator).
+
+  Outputs: 1 if the signature share is valid, and 0 otherwise
+
+  def verify_signature_share(index, PK, PK_i, z_i, R_i, R, msg, participant_list):
+    msg_hash = H3(msg)
+    group_comm_enc = G.SerializeElement(R)
+    group_public_key_enc = G.SerializeElement(group_public_key)
+    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    c = H2(challenge_input)
+
+    l = G.ScalarbaseMult(z_i)
+
+    lambda_i = derive_lagrange_coefficient(index, participant_list)
+    r = R_i + (z_i * c * lambda_i)
+
+    return l == r
+</pre><a href="#section-8.2-6" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="signature-share-aggregation">
+<section id="section-8.3">
+        <h3 id="name-signature-share-aggregation">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-signature-share-aggregation" class="section-name selfRef">Signature Share Aggregation</a>
+        </h3>
+<p id="section-8.3-1">After signers perform round two and send their signature shares to the Coordinator,
+the Coordinator performs the <code>aggregate</code> operation and publishes the resulting
+signature. Note that here we do not specify the Coordinator as validating each
+signature schare, as if any signature share is invalid, the resulting joint
+signature will similarly be invalid. Deployments that wish to validate signature
+shares can do so using the <code>verify_signature_share</code> function in <a href="#frost-round-two" class="xref">Section 8.2</a><a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.3-2">
+<pre>
+  Inputs:
+  - R: the group commitment.
+  - sig_shares: a set of signature shares z_i for each signer, of length NUM_SIGNERS,
+  where THRESHOLD_LIMIT &lt;= NUM_SIGNERS &lt;= MAX_SIGNERS.
+
+  Outputs: (R, z), a Schnorr signature consisting of an Element and Scalar value.
+
+  def frost_aggregate(R, sig_shares):
+    z = 0
+    for z_i in sig_shares:
+      z = z + z_i
+    return (R, z)
+</pre><a href="#section-8.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="ciphersuites">
+<section id="section-9">
+      <h2 id="name-ciphersuites">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-ciphersuites" class="section-name selfRef">Ciphersuites</a>
+      </h2>
+<p id="section-9-1">A FROST ciphersuite must specify the underlying prime-order group details
+and cryptographic hash function. Each ciphersuite is denoted as (Group, Hash),
+e.g., (ristretto255, SHA-512). This section contains some ciphersuites.
+The RECOMMENDED ciphersuite is (ristretto255, SHA-512) <a href="#recommended-suite" class="xref">Section 9.1</a>.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<div id="recommended-suite">
+<section id="section-9.1">
+        <h3 id="name-frostristretto255-sha-512">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-frostristretto255-sha-512" class="section-name selfRef">FROST(ristretto255, SHA-512)</a>
+        </h3>
+<p id="section-9.1-1">This ciphersuite uses ristretto255 for the Group and SHA-512 for the Hash function <code>H</code>.
+The value of the contextString parameter is "FROST-RISTRETTO255-SHA512".<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-2.1">
+            <p id="section-9.1-2.1.1">Group: ristretto255 <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>]</span><a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-2.1.2.1">HashToScalar(): Compute <code>uniform_bytes</code> using <code>expand_message</code> = <code>expand_message_xmd</code>,
+DST = "HashToScalar-" || contextString, and output length 64, interpret
+<code>uniform_bytes</code> as a 512-bit integer in little-endian order, and reduce the integer
+modulo <code>Order()</code>.<a href="#section-9.1-2.1.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.1-2.1.2.2">Serialization: Both group elements and scalars are encoded in Ne = Ns = 32
+bytes. For group elements, use the 'Encode' and 'Decode' functions from
+<span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>]</span>. For scalars, ensure they are fully reduced modulo <code>Order()</code>
+and in little-endian order.<a href="#section-9.1-2.1.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-9.1-2.2">Hash (<code>H</code>): SHA-512, and Nh = 64.<a href="#section-9.1-2.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+<div id="frostp-256-sha-256">
+<section id="section-9.2">
+        <h3 id="name-frostp-256-sha-256">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-frostp-256-sha-256" class="section-name selfRef">FROST(P-256, SHA-256)</a>
+        </h3>
+<p id="section-9.2-1">This ciphersuite uses P-256 for the Group and SHA-256 for the Hash function <code>H</code>.
+The value of the contextString parameter is "FROST-P256-SHA256".<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-2.1">
+            <p id="section-9.2-2.1.1">Group: P-256 (secp256r1) <span>[<a href="#x9.62" class="xref">x9.62</a>]</span><a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-2.1.2.1">HashToScalar(): Use hash_to_field from <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>
+using L = 48, <code>expand_message_xmd</code> with SHA-256,
+DST = "HashToScalar-" || contextString, and
+prime modulus equal to <code>Order()</code>.<a href="#section-9.2-2.1.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.2-2.1.2.2">Serialization: Elements are serialized as Ne = 33 byte string<a href="#section-9.2-2.1.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-9.2-2.2">Hash (<code>H</code>): SHA-256, and Nh = 32.<a href="#section-9.2-2.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-considerations">
+<section id="section-10">
+      <h2 id="name-security-considerations">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-10-1">A security analysis of FROST exists in <span>[<a href="#FROST20" class="xref">FROST20</a>]</span>. The protocol as specified
+in this document assumes the following threat model.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10-2.1">Trusted dealer. The dealer that performs key generation is trusted to follow
+the protocol, although participants still are able to verify the consistency of their
+shares via a VSS (verifiable secret sharing) step; see <a href="#dep-vss" class="xref">Appendix B.2</a>.<a href="#section-10-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-10-2.2">Unforgeability assuming less than <code>(t-1)</code> corrupted signers. So long as an adverary
+corrupts fewer than <code>(t-1)</code> participants, the scheme remains secure against EUF-CMA attacks.<a href="#section-10-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-10-2.3">Coordinator. We assume the Coordinator at the time of signing does not perform a
+denial of service attack. A denial of service would include any action which either
+prevents the protocol from completing or causing the resulting signature to be invalid.
+Such actions for the latter include sending inconsistent values to signing participants,
+such as messages or the set of individual commitments. Note that the Coordinator
+is <em>not</em> trusted with any private information and communication at the time of signing
+can be performed over a public but reliable channel.<a href="#section-10-2.3" class="pilcrow">¶</a>
+</li>
+      </ul>
+<p id="section-10-3">The rest of this section documents issues particular to implementations or deployments.<a href="#section-10-3" class="pilcrow">¶</a></p>
+<div id="nonce-reuse-attacks">
+<section id="section-10.1">
+        <h3 id="name-nonce-reuse-attacks">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-nonce-reuse-attacks" class="section-name selfRef">Nonce Reuse Attacks</a>
+        </h3>
+<p id="section-10.1-1">Nonces generated by each participant in the first round of signing must be sampled
+uniformly at random and cannot be derived from some determinstic function. This
+is to avoid replay attacks initiated by other signers, which allows for a complete
+key-recovery attack. Coordinates MAY further hedge against nonce reuse attacks by
+tracking signer nonce commitments used for a given group key, at the cost of additional
+state.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="protocol-failures">
+<section id="section-10.2">
+        <h3 id="name-protocol-failures">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-protocol-failures" class="section-name selfRef">Protocol Failures</a>
+        </h3>
+<p id="section-10.2-1">We do not specify what implementations should do when the protocol fails, other than requiring that
+the protocol abort. Examples of viable failure include when a verification check returns invalid or
+if the underlying transport failed to deliver the required messages.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="external-requirements-non-goals">
+<section id="section-10.3">
+        <h3 id="name-external-requirements-non-g">
+<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-external-requirements-non-g" class="section-name selfRef">External Requirements / Non-Goals</a>
+        </h3>
+<p id="section-10.3-1">FROST does not target the following goals.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-10.3-2.1">Post quantum security. FROST requires the hardness of the Discrete Logarithm Problem.<a href="#section-10.3-2.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-10.3-2.2">Robustness. In the case of failure, FROST requires aborting the protocol.<a href="#section-10.3-2.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-10.3-2.3">Downgrade prevention. The sender and receiver are assumed to agree on what algorithms
+to use.<a href="#section-10.3-2.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-10.3-2.4">Metadata protection. If protection for metadata is desired, a higher-level communication
+channel can be used to facilitate key generation and signing.<a href="#section-10.3-2.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="removing-the-coordinator-role">
+<section id="section-11">
+      <h2 id="name-removing-the-coordinator-ro">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-removing-the-coordinator-ro" class="section-name selfRef">Removing the Coordinator Role</a>
+      </h2>
+<p id="section-11-1">In some settings, it may be desirable to omit the role of the coordinator entirely.
+Doing so does not change the security implications of FROST, but instead simply
+requires each participant to communicate with all other participants. We loosely
+describe how to perform FROST signing among signers without this coordinator role.
+We assume that every participant receives as input from an external source the
+message to be signed prior to performing the protocol.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-2">Every participant begins by performing <code>frost_commit()</code> as is done in the setting
+where a coordinator is used. However, instead of sending the commitment
+<code>SigningCommitment</code> to the coordinator, every participant instead will publish
+this commitment to every other participant. Then, in the second round, instead of
+receiving a <code>SigningPackage</code> from the coordinator, signers will already have
+sufficient information to perform signing. They will directly perform <code>frost_sign</code>.
+All participants will then publish a <code>SignatureShare</code> to one another. After having
+received all signature shares from all other signers, each signer will then perform
+<code>frost_verify</code> and then <code>frost_aggregate</code> directly.<a href="#section-11-2" class="pilcrow">¶</a></p>
+<p id="section-11-3">The requirements for the underlying network channel remain the same in the setting
+where all participants play the role of the coordinator, in that all messages that
+are exchanged are public and so the channel simply must be reliable. However, in
+the setting that a player attempts to split the view of all other players by
+sending disjoint values to a subset of players, the signing operation will output
+an invalid signature. To avoid this denial of service, implementations may wish
+to define a mechanism where messages are authenticated, so that cheating players
+can be identified and excluded.<a href="#section-11-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="contributors">
+<section id="section-12">
+      <h2 id="name-contributors">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-contributors" class="section-name selfRef">Contributors</a>
+      </h2>
+<ul class="normal">
+<li class="normal" id="section-12-1.1">Isis Lovecruft<a href="#section-12-1.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-12-1.2">T. Wilson-Brown<a href="#section-12-1.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<section id="section-13">
+      <h2 id="name-references">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-13.1">
+        <h3 id="name-normative-references">
+<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.irtf-cfrg-hash-to-curve">[I-D.irtf-cfrg-hash-to-curve]</dt>
+        <dd>
+<span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Scott, S.</span>, <span class="refAuthor">Sullivan, N.</span>, <span class="refAuthor">Wahby, R. S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Hashing to Elliptic Curves"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-hash-to-curve-13</span>, <time datetime="2021-11-10" class="refDate">10 November 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-13">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-13</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8017">[RFC8017]</dt>
+        <dd>
+<span class="refAuthor">Moriarty, K., Ed.</span>, <span class="refAuthor">Kaliski, B.</span>, <span class="refAuthor">Jonsson, J.</span>, and <span class="refAuthor">A. Rusch</span>, <span class="refTitle">"PKCS #1: RSA Cryptography Specifications Version 2.2"</span>, <span class="seriesInfo">RFC 8017</span>, <span class="seriesInfo">DOI 10.17487/RFC8017</span>, <time datetime="2016-11" class="refDate">November 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8017">https://www.rfc-editor.org/rfc/rfc8017</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8032">[RFC8032]</dt>
+        <dd>
+<span class="refAuthor">Josefsson, S.</span> and <span class="refAuthor">I. Liusvaara</span>, <span class="refTitle">"Edwards-Curve Digital Signature Algorithm (EdDSA)"</span>, <span class="seriesInfo">RFC 8032</span>, <span class="seriesInfo">DOI 10.17487/RFC8032</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8032">https://www.rfc-editor.org/rfc/rfc8032</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RISTRETTO">[RISTRETTO]</dt>
+        <dd>
+<span class="refAuthor">Valence, H. D.</span>, <span class="refAuthor">Grigg, J.</span>, <span class="refAuthor">Tankersley, G.</span>, <span class="refAuthor">Valsorda, F.</span>, <span class="refAuthor">Lovecruft, I.</span>, and <span class="refAuthor">M. Hamburg</span>, <span class="refTitle">"The ristretto255 and decaf448 Groups"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-ristretto255-decaf448-01</span>, <time datetime="2021-08-04" class="refDate">4 August 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="x9.62">[x9.62]</dt>
+      <dd>
+<span class="refAuthor">ANSI</span>, <span class="refTitle">"Public Key Cryptography for the Financial Services Industry: the Elliptic Curve Digital Signature Algorithm (ECDSA)"</span>, <span class="seriesInfo">ANSI X9.62-1998</span>, <time datetime="1998-09" class="refDate">September 1998</time>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-13.2">
+        <h3 id="name-informative-references">
+<a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="FROST20">[FROST20]</dt>
+        <dd>
+<span class="refAuthor">Komlo, C.</span> and <span class="refAuthor">I. Goldberg</span>, <span class="refTitle">"Two-Round Threshold Signatures with FROST"</span>, <time datetime="2020-12-22" class="refDate">22 December 2020</time>, <span>&lt;<a href="https://eprint.iacr.org/2020/852.pdf">https://eprint.iacr.org/2020/852.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC4086">[RFC4086]</dt>
+        <dd>
+<span class="refAuthor">Eastlake 3rd, D.</span>, <span class="refAuthor">Schiller, J.</span>, and <span class="refAuthor">S. Crocker</span>, <span class="refTitle">"Randomness Requirements for Security"</span>, <span class="seriesInfo">BCP 106</span>, <span class="seriesInfo">RFC 4086</span>, <span class="seriesInfo">DOI 10.17487/RFC4086</span>, <time datetime="2005-06" class="refDate">June 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4086">https://www.rfc-editor.org/rfc/rfc4086</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Schnorr21">[Schnorr21]</dt>
+      <dd>
+<span class="refAuthor">Crites, E.</span>, <span class="refAuthor">Komlo, C.</span>, and <span class="refAuthor">M. Maller</span>, <span class="refTitle">"How to Prove Schnorr Assuming Schnorr"</span>, <time datetime="2021-10-11" class="refDate">11 October 2021</time>, <span>&lt;<a href="https://eprint.iacr.org/2021/1375">https://eprint.iacr.org/2021/1375</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="acknowledgments">
+<section id="appendix-A">
+      <h2 id="name-acknowledgments">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-A-1">The Zcash Foundation engineering team designed a serialization format for FROST messages which
+we employ a slightly adapted version here.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="dep-dealer">
+<section id="appendix-B">
+      <h2 id="name-trusted-dealer-key-generati">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-trusted-dealer-key-generati" class="section-name selfRef">Trusted Dealer Key Generation</a>
+      </h2>
+<p id="appendix-B-1">One possible key generation mechanism is to depend on a trusted dealer, wherein the
+dealer generates a group secret <code>s</code> uniformly at random and uses Shamir and Verifiable
+Secret Sharing as described in Sections <a href="#dep-shamir" class="xref">Appendix B.1</a> and <a href="#dep-vss" class="xref">Appendix B.2</a> to create secret
+shares of <code>s</code> to be sent to all other participants. We highlight at a high level how this
+operation can be performed.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B-2">
+<pre>
+  Inputs:
+  - n, the number of shares to generate, an integer
+  - t, the threshold of the secret sharing scheme, an integer
+
+  Outputs: a secret key Scalar, public key Element, along with `n`
+  shares of the secret key, each a Scalar value.
+
+  def trusted_dealer_keygen(n, t):
+    secret_key = G.RandomScalar()
+    secret_key_shares = secret_share_split(secret_key, n, t)
+    public_key = G.ScalarBaseMult(s)
+    return secret_key, public_key, secret_key_shares
+</pre><a href="#appendix-B-2" class="pilcrow">¶</a>
+</div>
+<p id="appendix-B-3">It is assumed the dealer then sends one secret key to each of the NUM_SIGNERS participants,
+and afterwards deletes the secrets from their local device.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-4">Use of this method for key generation requires a mutually authenticated secure channel
+between Coordinator and participants, wherein the channel provides confidentiality
+and integrity. Mutually authenticated TLS is one possible deployment option.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<div id="dep-shamir">
+<section id="appendix-B.1">
+        <h3 id="name-shamir-secret-sharing">
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-shamir-secret-sharing" class="section-name selfRef">Shamir Secret Sharing</a>
+        </h3>
+<p id="appendix-B.1-1">In Shamir secret sharing, a dealer distributes a secret <code>s</code> to <code>n</code> participants
+in such a way that any cooperating subset of <code>t</code> participants can recover the
+secret. There are two basic steps in this scheme: (1) splitting a secret into
+multiple shares, and (2) combining shares to reveal the resulting secret.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-2">This secret sharing scheme works over any field <code>F</code>. In this specification, <code>F</code> is
+the scalar field of the prime-order group <code>G</code>.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-3">The procedure for splitting a secret into shares is as follows.<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.1-4">
+<pre>
+  secret_share_split(s, n, t):
+
+  Inputs:
+  - s, secret to be shared, an element of F
+  - n, the number of shares to generate, an integer
+  - t, the threshold of the secret sharing scheme, an integer
+
+  Outputs: A list of n secret shares, each of which is an element of F
+
+  Errors:
+  - "invalid parameters", if t &gt; n
+
+  def secret_share(s, n, t):
+    if t &gt; n:
+      raise "invalid parameters"
+
+    # Generate random coefficients for the polynomial, yielding
+    # a polynomial of degree (t - 1)
+    coefficients = [s]
+    for i in range(t - 1):
+      coefficients.append(RandomScalar())
+
+    # Evaluate the polynomial for each point x=1,...,n
+    points = []
+    for x_i in range(1, n+1):
+      y_i = polynomial_evaluate(x_i, coefficients)
+      point_i = (x_i, y_i)
+      points.append(point_i)
+    return points
+</pre><a href="#appendix-B.1-4" class="pilcrow">¶</a>
+</div>
+<p id="appendix-B.1-5">Let <code>points</code> be the output of this function. The i-th element in <code>points</code> is
+the share for the i-th participant, which is the randomly generated polynomial
+evaluated at coordinate <code>i</code>. We denote a secret share as the tuple <code>(i, points[i])</code>,
+and the list of these shares as <code>shares</code>.
+<code>i</code> MUST never equal <code>0</code>.<a href="#appendix-B.1-5" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-6">The procedure for combining a <code>shares</code> list of length <code>t</code> to recover the
+secret <code>s</code> is as follows.<a href="#appendix-B.1-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.1-7">
+<pre>
+  secret_share_combine(shares):
+
+  Inputs:
+  - shares, a list of t secret shares, each a tuple (i, f(i))
+
+  Outputs: A list of n secret shares, each of which is an element of F
+
+  Errors:
+  - "invalid parameters", if less than t input shares are provided
+
+  def secret_share_combine(shares):
+    if len(shares) &lt; t:
+      raise "invalid parameters"
+    s = polynomial_interpolation(shares)
+    return s
+</pre><a href="#appendix-B.1-7" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="dep-vss">
+<section id="appendix-B.2">
+        <h3 id="name-verifiable-secret-sharing">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-verifiable-secret-sharing" class="section-name selfRef">Verifiable Secret Sharing</a>
+        </h3>
+<p id="appendix-B.2-1">Feldman's Verifiable Secret Sharing (VSS) builds upon Shamir secret sharing,
+adding a verification step to demonstrate the consistency of a participant's
+share with a public commitment to the polynomial <code>f</code> for which the secret <code>s</code>
+is the constant term. This check ensure that all participants have a point
+(their share) on the same polynomial, ensuring that they can later reconstruct
+the correct secret. If the validation fails, the participant can issue a complaint
+against the dealer, and take actions such as broadcasting this complaint to all
+other participants. We do not specify the complaint procedure in this draft, as
+it will be implementation-specific.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.2-2">The procedure for committing to a polynomial <code>f</code> of degree <code>t-1</code> is as follows.<a href="#appendix-B.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.2-3">
+<pre>
+  vss_commit(coeffs):
+
+  Inputs:
+  - coeffs, a vector of the t coefficients which uniquely determine
+  a polynomial f.
+
+  Outputs: a commitment C, which is a vector commitment to each of the
+  coefficients in coeffs.
+
+  def vss_commit(coeffs):
+    C = []
+    for coeff in coeffs:
+      A_i = ScalarBaseMult(coeff)
+      C.append(A_i)
+    return C
+</pre><a href="#appendix-B.2-3" class="pilcrow">¶</a>
+</div>
+<p id="appendix-B.2-4">The procedure for verification of a participant's share is as follows.<a href="#appendix-B.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.2-5">
+<pre>
+  vss_verify(sk_i, C):
+
+  Inputs:
+  - sk_i: A participant's secret key, the tuple sk_i = (i, s[i]),
+  where s[i] is a secret share of the constant term of f.
+  - C: A VSS commitment to a secret polynomial f.
+
+  Outputs: 1 if s[i] is valid, and 0 otherwise
+
+  vss_verify(sk_i, commitment)
+    S_i = ScalarBaseMult(s[i])
+    S_i' = SUM(commitment[0], commitment[t-1]){A_j}: A_j*(i^j)
+    if S_i == S_i':
+      return 1
+    return 0
+</pre><a href="#appendix-B.2-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="wire-format">
+<section id="appendix-C">
+      <h2 id="name-wire-format">
+<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-wire-format" class="section-name selfRef">Wire Format</a>
+      </h2>
+<p id="appendix-C-1">Applications are responsible for encoding protocol messages between peers. This section
+contains RECOMMENDED encodings for different protocol messages as described in <a href="#frost-spec" class="xref">Section 8</a>.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<div id="encode-commitment">
+<section id="appendix-C.1">
+        <h3 id="name-signing-commitment">
+<a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-signing-commitment" class="section-name selfRef">Signing Commitment</a>
+        </h3>
+<p id="appendix-C.1-1">A commitment from a signer is a pair of Element values. It can be encoded in the following manner.<a href="#appendix-C.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-C.1-2">
+<pre>
+  SignerID uint64;
+
+  struct {
+    SignerID id;
+    opaque D[Ne];
+    opaque E[Ne];
+  } SigningCommitment;
+</pre><a href="#appendix-C.1-2" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="appendix-C.1-3">
+          <dt id="appendix-C.1-3.1">
+id  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.1-3.2">
+            <p id="appendix-C.1-3.2.1">The SignerID.<a href="#appendix-C.1-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.1-3.3">
+D  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.1-3.4">
+            <p id="appendix-C.1-3.4.1">The commitment hiding factor encoded as a serialized group element.<a href="#appendix-C.1-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.1-3.5">
+E  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.1-3.6">
+            <p id="appendix-C.1-3.6.1">The commitment blinding factor encoded as a serialized group element.<a href="#appendix-C.1-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="encode-package">
+<section id="appendix-C.2">
+        <h3 id="name-signing-packages">
+<a href="#appendix-C.2" class="section-number selfRef">C.2. </a><a href="#name-signing-packages" class="section-name selfRef">Signing Packages</a>
+        </h3>
+<p id="appendix-C.2-1">The Coordinator sends "signing packages" to each Signer in Round two. Each package
+contains the list of signing commitments generated during round one along with the
+message to sign. This package can be encoded in the following manner.<a href="#appendix-C.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-C.2-2">
+<pre>
+struct {
+  SigningCommitment signing_commitments&lt;1..2^16-1&gt;;
+  opaque msg&lt;0..2^16-1&gt;;
+} SigningPackage;
+</pre><a href="#appendix-C.2-2" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="appendix-C.2-3">
+          <dt id="appendix-C.2-3.1">
+signing_commitments  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.2-3.2">
+            <p id="appendix-C.2-3.2.1">An list of SIGNING_COUNT SigningCommitment values, where THRESHOLD_LIIMT &lt;= SIGNING_COUNT &lt;= NUM_SIGNERS,
+ordered in ascending order by SigningCommitment.id. This list MUST NOT contain more than one
+SigningCommitment value corresponding to each signer. Signers MUST ignore SigningPackage values with
+duplicate SignerIDs.<a href="#appendix-C.2-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.2-3.3">
+msg  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.2-3.4">
+            <p id="appendix-C.2-3.4.1">The message to be signed.<a href="#appendix-C.2-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="encode-sig-share">
+<section id="appendix-C.3">
+        <h3 id="name-signature-share">
+<a href="#appendix-C.3" class="section-number selfRef">C.3. </a><a href="#name-signature-share" class="section-name selfRef">Signature Share</a>
+        </h3>
+<p id="appendix-C.3-1">The output of each signer is a signature share which is sent to the Coordinator. This
+can be constructed as follows.<a href="#appendix-C.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-C.3-2">
+<pre>
+  struct {
+    SignerID id;
+    opaque signature_share[Ns];
+    opaque commitment_share[Ne];
+  } SignatureShare;
+</pre><a href="#appendix-C.3-2" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="appendix-C.3-3">
+          <dt id="appendix-C.3-3.1">
+id  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.3-3.2">
+            <p id="appendix-C.3-3.2.1">The SignerID.<a href="#appendix-C.3-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.3-3.3">
+signature_share  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.3-3.4">
+            <p id="appendix-C.3-3.4.1">The signature share from this signer encoded as a serialized scalar.<a href="#appendix-C.3-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="test-vectors">
+<section id="appendix-D">
+      <h2 id="name-test-vectors">
+<a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
+      </h2>
+<p id="appendix-D-1">TODO<a href="#appendix-D-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-E">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Deirdre Connolly</span></div>
+<div dir="auto" class="left"><span class="org">Zcash Foundation</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:durumcrustulum@gmail.com" class="email">durumcrustulum@gmail.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Chelsea Komlo</span></div>
+<div dir="auto" class="left"><span class="org">University of Waterloo, Zcash Foundation</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:ckomlo@uwaterloo.ca" class="email">ckomlo@uwaterloo.ca</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Ian Goldberg</span></div>
+<div dir="auto" class="left"><span class="org">University of Waterloo</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:iang@uwaterloo.ca" class="email">iang@uwaterloo.ca</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Christopher A. Wood</span></div>
+<div dir="auto" class="left"><span class="org">Cloudflare</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:caw@heapingbits.net" class="email">caw@heapingbits.net</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2613 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2022-02-03T00:30:22.028252+00:00",
+  "repo": "cfrg/draft-irtf-cfrg-frost",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    },
+    {
+      "name": "editorial",
+      "description": "Editorial",
+      "color": "59FAD3"
+    },
+    {
+      "name": "interop",
+      "description": "Interop-related issue",
+      "color": "006b75"
+    },
+    {
+      "name": "design",
+      "description": "Design-related issue",
+      "color": "d93f0b"
+    },
+    {
+      "name": "blocked",
+      "description": "",
+      "color": "D0590D"
+    },
+    {
+      "name": "discuss",
+      "description": "",
+      "color": "46C465"
+    }
+  ],
+  "issues": [
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWU5NjM5NjI3NTI=",
+      "title": "Ed25519 compatibility",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/5",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Beyond ristretto255, we should describe how to instantiate FROST with the [edwards25519 curve from RFC 8032](https://datatracker.ietf.org/doc/html/rfc8032#section-5.1). We might include the EdDSA verification procedure, too, listed below (bugs are my own):\r\n\r\n~~~\r\nEdDSA_verify(msg, sig, PK)\r\n\r\nInputs:\r\n- msg, message signed, an octet string\r\n- sig, message signature, a tuple of scalars (z, c)\r\n- PK, EdDSA public key\r\n\r\nOutputs: 1 if the signature is valid, and 0 otherwise\r\n\r\ndef EdDSA_verify(msg, sig, PK):\r\n  (z, c) = SIG\r\n  R' = (z * P) + (PK * c^-1)\r\n  c' = Hash(m, R')\r\n  if c == c':\r\n    return 1\r\n  return 0\r\n~~~",
+      "createdAt": "2021-08-09T12:50:59Z",
+      "updatedAt": "2021-12-13T23:49:23Z",
+      "closedAt": "2021-12-13T23:49:23Z",
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOEpUZs84-1lXn",
+      "title": "Add P-256 ciphersuite",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/11",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "interop"
+      ],
+      "body": "",
+      "createdAt": "2021-11-15T23:14:32Z",
+      "updatedAt": "2021-12-14T14:56:00Z",
+      "closedAt": "2021-12-14T14:56:00Z",
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOEpUZs84-1li8",
+      "title": "Add a security considerations section for curves with a cofactor != 1",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/12",
+      "state": "OPEN",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "dconnolly"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "",
+      "createdAt": "2021-11-15T23:15:09Z",
+      "updatedAt": "2021-12-13T23:33:03Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOEpUZs84-1lxO",
+      "title": "Detail domain separation ",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/13",
+      "state": "CLOSED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-11-15T23:15:57Z",
+      "updatedAt": "2021-12-13T23:30:56Z",
+      "closedAt": "2021-12-13T23:30:56Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This should be `PARAM_NAME_VARIABLE NAME`. So, for example, `RISTRETTO_RHO`",
+          "createdAt": "2021-12-13T23:30:29Z",
+          "updatedAt": "2021-12-13T23:30:29Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Dupe of #15 -- closing.",
+          "createdAt": "2021-12-13T23:30:56Z",
+          "updatedAt": "2021-12-13T23:30:56Z"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOEpUZs84-1pLo",
+      "title": "Define a domain separation bytestring for each parameter set",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/15",
+      "state": "OPEN",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "editorial"
+      ],
+      "body": "To update[ this change](https://github.com/chelseakomlo/frost-spec/pull/14) to point to $PARAMETER_SET.DOMAIN_SEPARATOR or something like that.",
+      "createdAt": "2021-11-15T23:28:46Z",
+      "updatedAt": "2021-12-13T23:37:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "For example: `H1(m) = H(\"FROST-RISTRETTO-SHA512\" || \"rho\" || len(m) || m)`",
+          "createdAt": "2021-12-13T23:37:11Z",
+          "updatedAt": "2021-12-13T23:37:11Z"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOEpUZs84-1pvt",
+      "title": "Create list of known implementations",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/16",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [],
+      "body": "And put it in the README.",
+      "createdAt": "2021-11-15T23:31:05Z",
+      "updatedAt": "2021-12-13T22:48:11Z",
+      "closedAt": "2021-12-13T22:48:11Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Started in #30",
+          "createdAt": "2021-12-13T22:48:11Z",
+          "updatedAt": "2021-12-13T22:48:11Z"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOEpUZs84-1p4H",
+      "title": "Specify order of commitments hashed into rho",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/17",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [
+        "design"
+      ],
+      "body": "Currently it's an unordered set. We can probably just order by participant ID. We should also hash the participant ID into the value as well. We should encode these IDs as a 32-bit unsigned integer.\r\n\r\n````\r\nfor item in signing_package.signing_commitments.iter() {\r\n        hasher.update(item.index.to_be_bytes());\r\n        let hiding_bytes = item.hiding.0.compress().to_bytes();\r\n        hasher.update(hiding_bytes);\r\n        let binding_bytes = item.binding.0.compress().to_bytes();\r\n        hasher.update(binding_bytes);\r\n    }\r\n```",
+      "createdAt": "2021-11-15T23:31:35Z",
+      "updatedAt": "2022-01-29T00:58:07Z",
+      "closedAt": "2022-01-29T00:58:06Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "On group consensus, we'll move to the order being `(identifier, commitment_i)`",
+          "createdAt": "2022-01-13T23:57:56Z",
+          "updatedAt": "2022-01-13T23:57:56Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't think #52 addresses this. It's still not clear how to encode the indices in the hash function input, for example. Are they 32-bit unsigned integers? Something else? I'll put up a PR that addresses this further.",
+          "createdAt": "2022-01-27T17:25:00Z",
+          "updatedAt": "2022-01-27T17:25:00Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in #53.",
+          "createdAt": "2022-01-29T00:58:06Z",
+          "updatedAt": "2022-01-29T00:58:06Z"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOEpUZs84-1p_c",
+      "title": "Ensure that participant identifiers can never be zero",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/18",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [],
+      "body": "... as zero (0) is a special-case identifier.",
+      "createdAt": "2021-11-15T23:32:02Z",
+      "updatedAt": "2021-12-13T17:26:42Z",
+      "closedAt": "2021-12-13T17:26:42Z",
+      "comments": []
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOEpUZs84-1qOq",
+      "title": "Specify known implementations",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/19",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We should list all known FROST implementations and their status in terms of interoperability. \r\n\r\nSee https://github.com/cfrg/draft-irtf-cfrg-hpke for an example",
+      "createdAt": "2021-11-15T23:32:50Z",
+      "updatedAt": "2021-11-15T23:33:03Z",
+      "closedAt": "2021-11-15T23:33:03Z",
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOEpUZs84-1qpW",
+      "title": "Create test vectors for a NIST curve",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/20",
+      "state": "CLOSED",
+      "author": "isislovecruft",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "interop"
+      ],
+      "body": "We should specify valid test vectors for something like P256 for users who require following those standards.",
+      "createdAt": "2021-11-15T23:34:34Z",
+      "updatedAt": "2021-12-13T23:34:50Z",
+      "closedAt": "2021-12-13T23:34:50Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We need to specify this param set in the ciphersuites section: https://github.com/chelseakomlo/draft-irtf-cfrg-frost/blob/master/draft-irtf-cfrg-frost.md#ciphersuites-ciphersuites",
+          "createdAt": "2021-12-13T23:33:13Z",
+          "updatedAt": "2021-12-13T23:33:13Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Duplicate of  #11",
+          "createdAt": "2021-12-13T23:34:49Z",
+          "updatedAt": "2021-12-13T23:34:49Z"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOEpUZs84-1seN",
+      "title": "Change construction for more efficient variant",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/21",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "A more efficient variant of FROST was specified in https://eprint.iacr.org/2021/1375; the draft should reflect this.",
+      "createdAt": "2021-11-15T23:43:25Z",
+      "updatedAt": "2021-12-06T23:26:55Z",
+      "closedAt": "2021-12-06T23:26:55Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closed by #28",
+          "createdAt": "2021-12-06T23:26:55Z",
+          "updatedAt": "2021-12-06T23:26:55Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "I_kwDOEpUZs84-1stj",
+      "title": "Interop testing over Ristretto-Sha512",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/22",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "dconnolly"
+      ],
+      "labels": [
+        "interop"
+      ],
+      "body": "",
+      "createdAt": "2021-11-15T23:45:43Z",
+      "updatedAt": "2022-02-02T01:49:47Z",
+      "closedAt": "2022-02-02T01:49:40Z",
+      "comments": [
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I have another FROST on Ristretto impl ready, I will commence interop testing with `frost-dalek`",
+          "createdAt": "2021-12-14T00:10:19Z",
+          "updatedAt": "2021-12-14T00:10:19Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Blocked by conformance with #42 first",
+          "createdAt": "2022-01-14T00:20:50Z",
+          "updatedAt": "2022-01-14T00:20:50Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly can we close this out and track interop in the implementation repos? I don't think this is an issue for the spec to resolve.",
+          "createdAt": "2022-02-01T23:50:22Z",
+          "updatedAt": "2022-02-01T23:50:22Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> @dconnolly can we close this out and track interop in the implementation repos? I don't think this is an issue for the spec to resolve.\r\n\r\n\ud83d\udcaf \r\n\r\nhttps://github.com/ZcashFoundation/frost/issues/8",
+          "createdAt": "2022-02-02T01:49:40Z",
+          "updatedAt": "2022-02-02T01:49:40Z"
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "I_kwDOEpUZs84-1tTP",
+      "title": "Explicitly define a Schnorr signature inline",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/23",
+      "state": "CLOSED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "We define the Schnorr signature operations in 7.1, but need a little more detail?",
+      "createdAt": "2021-11-15T23:50:59Z",
+      "updatedAt": "2022-01-29T00:58:48Z",
+      "closedAt": "2022-01-29T00:58:47Z",
+      "comments": [
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Does this section resolve this issue?\r\n\r\nhttps://github.com/cfrg/draft-irtf-cfrg-frost/blob/master/draft-irtf-cfrg-frost.md#schnorr-signature-operations-dep-schnorr\r\n\r\n![image](https://user-images.githubusercontent.com/552961/149429534-fb81cce6-6352-434c-9556-9bf9ab64bf94.png)\r\n",
+          "createdAt": "2022-01-14T00:18:55Z",
+          "updatedAt": "2022-01-14T00:18:55Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yep, I think we can close this. ",
+          "createdAt": "2022-01-29T00:58:47Z",
+          "updatedAt": "2022-01-29T00:58:47Z"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOEpUZs84-1ti5",
+      "title": "Specify verification",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/24",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [],
+      "body": "Specify with `(R, z)` and also how parameters are used within the verification algorithm",
+      "createdAt": "2021-11-15T23:53:02Z",
+      "updatedAt": "2021-12-14T21:11:44Z",
+      "closedAt": "2021-12-14T21:11:44Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Two TODOs: \r\n1. Add the verification algorithm with `(R, z)` as the output\r\n2. Include information in each ciphersuite about deriving `c`",
+          "createdAt": "2021-12-13T23:54:56Z",
+          "updatedAt": "2021-12-13T23:55:41Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This may require changing the signing procedures such that the output signatures are of the form `(R, z)` (commitment based, where the challenge is rederived).",
+          "createdAt": "2021-12-13T23:56:53Z",
+          "updatedAt": "2021-12-13T23:56:53Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chelseakomlo can we close this now that #34 is merged?",
+          "createdAt": "2021-12-14T20:56:04Z",
+          "updatedAt": "2021-12-14T20:56:20Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, thanks for flagging. Closed by #34\r\n",
+          "createdAt": "2021-12-14T21:11:44Z",
+          "updatedAt": "2021-12-14T21:11:44Z"
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "I_kwDOEpUZs84-1t9h",
+      "title": "Explictly describe assumptions when making each signing participant an aggregator",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/25",
+      "state": "CLOSED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [
+        "design"
+      ],
+      "body": "Vs having a single explicit aggregator:\r\n\r\n![image](https://user-images.githubusercontent.com/552961/141872069-a9d80b4d-094d-4159-8006-0de1843bc0ed.png)\r\n\r\nTo me this assumes some other trust level amongst the signing participants if they are allowed to self-verify its own signature before outputting it.",
+      "createdAt": "2021-11-15T23:56:46Z",
+      "updatedAt": "2022-01-18T20:00:55Z",
+      "closedAt": "2022-01-18T20:00:55Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Use case: https://blog.coinbase.com/threshold-digital-signatures-1d467054acd4",
+          "createdAt": "2021-11-16T00:02:26Z",
+          "updatedAt": "2021-11-16T00:02:26Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addressed in #39",
+          "createdAt": "2022-01-18T20:00:55Z",
+          "updatedAt": "2022-01-18T20:00:55Z"
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "I_kwDOEpUZs84_C6mv",
+      "title": "Drop SUM/PROD notation in favor of subroutines",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/26",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [
+        "editorial"
+      ],
+      "body": "We use SUM/PROD for convenience, but I find it to be somewhat unreadable in text form. For example, this:\r\n\r\n~~~\r\nf_zero = SUM(points[0], points[t]){point}: point[1] * derive_lagrange_coefficient(point[0], L)\r\n~~~\r\n\r\nCould be written as:\r\n\r\n~~~\r\nf_zero = F(0)\r\nfor point in points:\r\n   f_zero = f_zero + (point[1] * derive_lagrange_coefficient(point[0], L))\r\n~~~\r\n\r\nThis is certainly subjective, but I find the latter easier to read in text form. (It would be lovely if we could throw \\sum and \\prod in specs!)",
+      "createdAt": "2021-11-18T19:38:01Z",
+      "updatedAt": "2022-01-29T00:57:55Z",
+      "closedAt": "2022-01-29T00:57:55Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in #53.",
+          "createdAt": "2022-01-29T00:57:55Z",
+          "updatedAt": "2022-01-29T00:57:55Z"
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "I_kwDOEpUZs85Bn_hW",
+      "title": "Review length of messages",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/37",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There is currently a limit on the length of messages at `2^16-1`. Let's review this restriction to determine if this length is sufficient, and what to recommend in the setting if longer messages are needed. ",
+      "createdAt": "2022-01-13T01:21:08Z",
+      "updatedAt": "2022-01-29T01:12:35Z",
+      "closedAt": "2022-01-29T01:12:35Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Tracking in #55.",
+          "createdAt": "2022-01-29T01:12:35Z",
+          "updatedAt": "2022-01-29T01:12:35Z"
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "I_kwDOEpUZs85BoADG",
+      "title": "Review naming of nonces",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/38",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "dconnolly"
+      ],
+      "labels": [],
+      "body": "Right now we refer to the nonce pair as `(D, E)` as is done in the FROST paper. Let's review this notation and decide if we should adopt more descriptive naming such as \"hiding\" and \"binding.\"",
+      "createdAt": "2022-01-13T01:23:16Z",
+      "updatedAt": "2022-02-01T20:13:27Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, please! `(D, E)` are quite vague. @dconnolly would you be able to take this? I think `hiding_nonce` and `blinding_nonce` are perfectly fine terms for `d` and `e`, respectively. I suppose we might call the commitments to these nonces `hiding_nonce_commitment` and `blinding_nonce_commitment`, resp?",
+          "createdAt": "2022-01-29T01:12:16Z",
+          "updatedAt": "2022-01-29T01:12:16Z"
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "I_kwDOEpUZs85BoFcw",
+      "title": "Review inputs to frost_sign",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/40",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Should we rewrite inputs as a function of the SigningPackage, or have SigningPackage deserialization done externally to these functions?",
+      "createdAt": "2022-01-13T01:44:47Z",
+      "updatedAt": "2022-01-29T01:11:04Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think these should be expressed in terms of the \"raw\" values. SigningPackage is an external detail. (An application could use a different encoding if it wanted without changing the breaking interoperability \ud83e\udd37 )",
+          "createdAt": "2022-01-29T01:11:04Z",
+          "updatedAt": "2022-01-29T01:11:04Z"
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "I_kwDOEpUZs85BrqEB",
+      "title": "Add test vectors for FROST(P-256, SHA-256)",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/41",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "See #49 for description of test vectors. ",
+      "createdAt": "2022-01-13T15:50:20Z",
+      "updatedAt": "2022-02-01T20:42:53Z",
+      "closedAt": "2022-02-01T20:42:53Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'd prefer we close this and use a single issue to track all test vectors.",
+          "createdAt": "2022-02-01T20:42:53Z",
+          "updatedAt": "2022-02-01T20:42:53Z"
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "id": "I_kwDOEpUZs85BrrYt",
+      "title": "Add test vectors for FROST(ristretto255, SHA-512) ",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/42",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [],
+      "body": "See #49 for description of test vectors. ",
+      "createdAt": "2022-01-13T15:55:07Z",
+      "updatedAt": "2022-01-29T00:59:18Z",
+      "closedAt": "2022-01-29T00:59:18Z",
+      "comments": []
+    },
+    {
+      "number": 43,
+      "id": "I_kwDOEpUZs85Brz0z",
+      "title": "Messages should be fixed size when hashing ",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/43",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This comes from an audit of FROST implementations, an easy fix for this is to hash the message before it is hashed to derive `rho` or the challenge. \r\n\r\nSee recommendation 2.2 https://github.com/ZcashFoundation/redjubjub/blob/main/zcash-frost-audit-report-20210323.pdf",
+      "createdAt": "2022-01-13T16:24:43Z",
+      "updatedAt": "2022-02-01T20:44:14Z",
+      "closedAt": "2022-02-01T17:45:05Z",
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addressed in #55 ",
+          "createdAt": "2022-02-01T17:45:05Z",
+          "updatedAt": "2022-02-01T17:45:05Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Wait, is it? #55 is about lifting message size limits. This issue is about pre-hashing the message before signing it. They're separable issues, I think. Can we please reopen this and track them separately?",
+          "createdAt": "2022-02-01T20:44:14Z",
+          "updatedAt": "2022-02-01T20:44:14Z"
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "id": "I_kwDOEpUZs85Bsdf0",
+      "title": "Denote when and which information needs to be deleted",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/44",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [],
+      "body": "At various times throughout the protocol, secret information should be securely deleted. We should denote in the draft when these occur and over which information. ",
+      "createdAt": "2022-01-13T18:54:20Z",
+      "updatedAt": "2022-02-01T00:26:45Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chelseakomlo can you please take this? It should go into the security considerations.",
+          "createdAt": "2022-01-29T01:09:32Z",
+          "updatedAt": "2022-01-29T01:09:32Z"
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "id": "I_kwDOEpUZs85Bsel0",
+      "title": "Add failure case when signers receive insufficient information for a valid signing operation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/45",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For example, if signers receive fewer than `t` commitments, they should abort signing. \r\n\r\nWe should discuss also if signers were to receive commitments where either value is null. ",
+      "createdAt": "2022-01-13T18:57:17Z",
+      "updatedAt": "2022-02-01T00:27:37Z",
+      "closedAt": "2022-02-01T00:27:29Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chelseakomlo can we fold this into #48 and close this?",
+          "createdAt": "2022-01-31T16:14:56Z",
+          "updatedAt": "2022-01-31T16:14:56Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "(Done and copied the issue text over)",
+          "createdAt": "2022-02-01T00:27:37Z",
+          "updatedAt": "2022-02-01T00:27:37Z"
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "id": "I_kwDOEpUZs85BtdCy",
+      "title": "Signing participants should verify message before signing",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/47",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [],
+      "body": "The draft assumes that all participants verify the message that they are signing before they sign it. We should make this assumption explicit in the draft. ",
+      "createdAt": "2022-01-13T21:49:30Z",
+      "updatedAt": "2022-02-01T17:44:04Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> The draft assumes that all participants verify the message that they are signing before they sign it. We should make this assumption explicit in the draft.\r\n\r\n@chelseakomlo What does it mean to verify the message? This seems like an application-specific consideration that might be useful to note in the security considerations, but I don't see a protocol change required here.",
+          "createdAt": "2022-01-29T01:00:17Z",
+          "updatedAt": "2022-01-29T01:00:17Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It is application-specific, but I think we should call this out specifically because it is easy to overlook or forget about. I'll note it as a security consideration but also say that how this is performed is application-specific.",
+          "createdAt": "2022-02-01T17:43:16Z",
+          "updatedAt": "2022-02-01T17:43:16Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I guess I don't understand what sort of verification you have in mind. Do you have an example?",
+          "createdAt": "2022-02-01T17:44:04Z",
+          "updatedAt": "2022-02-01T17:44:04Z"
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "id": "I_kwDOEpUZs85Bt8XV",
+      "title": "Specify places in the spec where the protocol should error or abort",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/48",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [],
+      "body": "We should add everywhere in the spec where the protocol should error and/or abort, such as: \r\n\r\n1. When a signature share is invalid\r\n2. When `t` is set to `1`\r\n3. When `t` is greater than `n`\r\n4. When fewer than `t` commitments are received\r\n5. When any received commitment is null\r\n6. When a participant index is `0`\r\n7. When the message that is requested to be signed is invalid\r\n8. When a signing request is made with respect to commitments that were used for a previous signature (i.e, request for a nonce reuse)\r\n9. Verification of a signature share fails on aggregation\r\n\r\nWe should discuss also if signers were to receive commitments where either value is null.",
+      "createdAt": "2022-01-13T23:22:00Z",
+      "updatedAt": "2022-02-01T00:27:26Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 49,
+      "id": "I_kwDOEpUZs85Bt_C3",
+      "title": "Test Vectors",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/49",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [],
+      "body": "Here are the test vectors that we would like for each ciphersuite:\r\n\r\n- Success case\r\n1. (2,3), where the threshold is 2 and number of participants are 3\r\n2. Inputs should be deterministic, outputs should be the defined serialized structs. \r\n3. Tests should validate for the (2,3) signers and (3,3) signers\r\n\r\n- Failure cases: \r\n1. Participant index of 0\r\n2. When t is one",
+      "createdAt": "2022-01-13T23:30:26Z",
+      "updatedAt": "2022-02-01T20:24:14Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Related: https://github.com/ZcashFoundation/frost/blob/main/frost-ristretto255/tests/frost.rs",
+          "createdAt": "2022-01-28T22:09:23Z",
+          "updatedAt": "2022-01-28T22:09:23Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Linking #42 and #41, and close those two.",
+          "createdAt": "2022-01-29T00:59:14Z",
+          "updatedAt": "2022-01-29T00:59:14Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Closed by #60 for Ristretto, opening #41 to track FROST(P-256, SHA-256)",
+          "createdAt": "2022-02-01T20:05:47Z",
+          "updatedAt": "2022-02-01T20:05:47Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We haven't resolved this yet! Test vectors still aren't in the draft, and not all cases above have been covered.",
+          "createdAt": "2022-02-01T20:24:14Z",
+          "updatedAt": "2022-02-01T20:24:14Z"
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "id": "I_kwDOEpUZs85BuDm5",
+      "title": "Clarify HashToScalar/H2 reduction to scalars",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/50",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [],
+      "body": "\"c\" and \"rho\" are both the result of hash-to-scalar (H2), but we don't really make clear how the scalar conversion is done.\r\n\r\n",
+      "createdAt": "2022-01-13T23:45:35Z",
+      "updatedAt": "2022-01-26T23:12:33Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Same goes for the output of H1, too, which is assumed to map to a non-zero scalar.",
+          "createdAt": "2022-01-26T23:12:19Z",
+          "updatedAt": "2022-01-26T23:12:33Z"
+        }
+      ]
+    },
+    {
+      "number": 51,
+      "id": "I_kwDOEpUZs85BuDql",
+      "title": "Drop HashToScalar, clarify H2 reduction to scalars",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/51",
+      "state": "CLOSED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "\"c\" and \"rho\" are both the result of hash-to-scalar (H2), but we don't really make clear how the scalar conversion is done.",
+      "createdAt": "2022-01-13T23:45:49Z",
+      "updatedAt": "2022-01-13T23:46:46Z",
+      "closedAt": "2022-01-13T23:46:46Z",
+      "comments": []
+    },
+    {
+      "number": 54,
+      "id": "I_kwDOEpUZs85CoRGF",
+      "title": "Verification of signature shares should be mandatory",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/54",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [],
+      "body": "This also means that whoever is performing aggregate needs to be given the correct public keys after keygen is performed. I.e, those keys should be valid, but it is up to the implementation to ensure that they are.",
+      "createdAt": "2022-01-28T21:13:29Z",
+      "updatedAt": "2022-01-31T14:58:11Z",
+      "closedAt": "2022-01-31T14:58:11Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'll take this.",
+          "createdAt": "2022-01-29T01:00:32Z",
+          "updatedAt": "2022-01-29T01:00:32Z"
+        }
+      ]
+    },
+    {
+      "number": 55,
+      "id": "I_kwDOEpUZs85CoTG3",
+      "title": "Length of message to be signed should be larger",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/55",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [
+        "discuss"
+      ],
+      "body": "Currently messages are limited to the `2^16` length in a `SigningPackage`, but instead this should be limited by the underlying hash function minus minus overhead such as public key, commitment set, etc. \r\n\r\n\r\n",
+      "createdAt": "2022-01-28T21:24:43Z",
+      "updatedAt": "2022-02-01T17:42:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Upon revisiting this, I think we ought to remove the practical limit entirely and let applications define it. We should define the theoretical limit based on the underlying cryptographic hash function, but how applications choose to wrap up messages between coordinator and signers should be left to those applications, I think.\r\n\r\nBasically, I think I'm now advocating for removing `SigningPackage` and the like as _requirements_. A shared wire format isn't necessary for interoperability here. ",
+          "createdAt": "2022-01-31T16:43:03Z",
+          "updatedAt": "2022-01-31T16:43:03Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I agree that the message length should be unbounded but I'm uncertain about removing the `SigningPackage` wire format altogether. Do you mind saying why this is a preferable option than just allowing the message length to be variable-sized in this data structure?",
+          "createdAt": "2022-01-31T23:48:25Z",
+          "updatedAt": "2022-01-31T23:48:25Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Do you mind saying why this is a preferable option than just allowing the message length to be variable-sized in this data structure?\r\n\r\nSure: it will surely vary by use case and application embedding, so a one-size-fits-all structure isn't necessary for interop. Thus, I think we ought to just remove it.",
+          "createdAt": "2022-02-01T00:12:50Z",
+          "updatedAt": "2022-02-01T00:12:50Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Ok. We can keep `SigningPackage` as an example, but remove the requirement that implementations enforce this structure? I can do this change. ",
+          "createdAt": "2022-02-01T15:59:47Z",
+          "updatedAt": "2022-02-01T15:59:47Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I would hold off until we have a larger discussion about it. I think this relates to the interface that this specification should expose, which is something I raised in #62.",
+          "createdAt": "2022-02-01T16:00:47Z",
+          "updatedAt": "2022-02-01T16:00:47Z"
+        }
+      ]
+    },
+    {
+      "number": 56,
+      "id": "I_kwDOEpUZs85CoUPA",
+      "title": "Limit number of signers to 2^16-1",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/56",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There is no theoretical hard bound on the number of participants, but we cap the number of participants to something reasonable just for ease of managing secret key material. ",
+      "createdAt": "2022-01-28T21:31:43Z",
+      "updatedAt": "2022-01-31T18:48:50Z",
+      "closedAt": "2022-01-31T18:48:50Z",
+      "comments": [
+        {
+          "author": "isislovecruft",
+          "authorAssociation": "COLLABORATOR",
+          "body": "2^16-1 because participant index cannot be zero.",
+          "createdAt": "2022-01-28T22:05:22Z",
+          "updatedAt": "2022-01-28T22:05:22Z"
+        }
+      ]
+    },
+    {
+      "number": 57,
+      "id": "I_kwDOEpUZs85CoUy0",
+      "title": "Use Commitment List Terminology",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/57",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently the spec uses `B` as a variable name for the commitment set for a signing session. Instead, we should use the variable name `commitment_list`.",
+      "createdAt": "2022-01-28T21:35:15Z",
+      "updatedAt": "2022-01-29T00:57:25Z",
+      "closedAt": "2022-01-29T00:57:25Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Or `commitment_list` since we assume it to have a well-defined order based no participant index?",
+          "createdAt": "2022-01-28T22:03:03Z",
+          "updatedAt": "2022-01-28T22:03:03Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in #53.",
+          "createdAt": "2022-01-29T00:57:25Z",
+          "updatedAt": "2022-01-29T00:57:25Z"
+        }
+      ]
+    },
+    {
+      "number": 58,
+      "id": "I_kwDOEpUZs85CoVYi",
+      "title": "Commitment set should be hashed in ascending order of participant id",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/58",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently, the commitment set does not specify ordering of elements that are hashed in. Instead, we should hash in commitment elements in ascending order of the participant identifier. ",
+      "createdAt": "2022-01-28T21:38:52Z",
+      "updatedAt": "2022-01-29T00:58:26Z",
+      "closedAt": "2022-01-29T00:57:18Z",
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed in #53.",
+          "createdAt": "2022-01-29T00:57:18Z",
+          "updatedAt": "2022-01-29T00:57:18Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "(This was also a dupe!)",
+          "createdAt": "2022-01-29T00:58:26Z",
+          "updatedAt": "2022-01-29T00:58:26Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "MDExOlB1bGxSZXF1ZXN0NTcyMTQwMDEw",
+      "title": "Begin detailing notation and primitives",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/1",
+      "state": "MERGED",
+      "author": "isislovecruft",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-02-11T22:00:49Z",
+      "updatedAt": "2021-08-09T01:50:33Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "b82f641a32d2e11f5954208d9a0dc6b0397077b6",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "feature/notation-and-primitives",
+      "headRefOid": "7b996fc3a502dd42adfc9a653fc6d9bd8700c657",
+      "closedAt": "2021-08-09T01:50:30Z",
+      "mergedAt": "2021-08-09T01:50:30Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "4520453cd5671cfa47e863976fe2b1e292c6c6d9"
+      },
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Oh wow, I completely missed seeing this. I'm going to merge this in today. Thank you! ",
+          "createdAt": "2021-08-05T15:23:24Z",
+          "updatedAt": "2021-08-05T15:23:24Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzAxODY5MzMw",
+      "title": "Add POG dependency, and clean up overview.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/2",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This is an imperfect start, but, hopefully it helps! I'm happy to take the secret sharing section(s) next, if that'd be useful.",
+      "createdAt": "2021-08-03T00:39:16Z",
+      "updatedAt": "2021-08-03T15:17:07Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "3c859132fac5fabbe86150cd3598ea1fb81a4ace",
+      "headRepository": null,
+      "headRefName": "caw/overview-and-deps",
+      "headRefOid": "69d06d3c8300770162d24a5015994931f556bd50",
+      "closedAt": "2021-08-03T15:17:00Z",
+      "mergedAt": "2021-08-03T15:17:00Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "6f4c2f70df048718490ad2efc53fa44939d3e3fa"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzIxMjI4ODQx",
+          "commit": {
+            "abbreviatedOid": "69d06d3"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-08-03T13:54:21Z",
+          "updatedAt": "2021-08-03T13:54:21Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "This should actually be a VSS commitment, a Pedersen commitment is to a single value alpha, in the form C = g^alpha * h^beta, where beta is chosen uniformly at random.",
+              "createdAt": "2021-08-03T13:54:21Z",
+              "updatedAt": "2021-08-03T13:54:21Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzIxMzMyMjIz",
+          "commit": {
+            "abbreviatedOid": "69d06d3"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-08-03T15:16:55Z",
+          "updatedAt": "2021-08-03T15:16:56Z",
+          "comments": [
+            {
+              "originalPosition": 172,
+              "body": "I'll fix this up after merge! ",
+              "createdAt": "2021-08-03T15:16:55Z",
+              "updatedAt": "2021-08-03T15:16:56Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzA1ODA3OTYx",
+      "title": "Define secret-sharing in terms of polynomial operations",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/3",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-08-07T00:39:30Z",
+      "updatedAt": "2021-08-07T18:57:26Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "e083e795cf123482feddb3b74e26e4a30a89efac",
+      "headRepository": null,
+      "headRefName": "caw/ss",
+      "headRefOid": "326335f56b8ce6aaf52ce7c8f3d91eec4a1dce51",
+      "closedAt": "2021-08-07T18:57:23Z",
+      "mergedAt": "2021-08-07T18:57:23Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "6b40be2cc4e0fdff430a9f55b2808a86ddb5499f"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzA2MTI2MDg5",
+      "title": "Serialization and whatnot",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/4",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-08-08T23:40:06Z",
+      "updatedAt": "2021-08-09T00:41:33Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "95d23648d5855be9c3cf80d9950094e56eb9026a",
+      "headRepository": null,
+      "headRefName": "caw/ser",
+      "headRefOid": "33afde6e3651151bb8b4cca32c95e17985ed58fb",
+      "closedAt": "2021-08-09T00:41:30Z",
+      "mergedAt": "2021-08-09T00:41:30Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "22477aeb53b1df0e9b69a0dbeed7073b7e667224"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzA2NTMxNzA1",
+      "title": "Add a protocol overview sketch.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/6",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "And also cleanup the Schnorr signature section, make algorithms appear \"prettier\", add the (ristretto255, SHA-512) suite, and remove some redundant text.",
+      "createdAt": "2021-08-09T13:39:30Z",
+      "updatedAt": "2021-08-09T14:12:29Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "afe879a95fe5e6a7d46f46cbecb60eae7ca37a2c",
+      "headRepository": null,
+      "headRefName": "caw/cleanup",
+      "headRefOid": "de8f77410e8327af119d75a43a1405c458cca539",
+      "closedAt": "2021-08-09T14:12:26Z",
+      "mergedAt": "2021-08-09T14:12:26Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "c1653cc29d5259befc5da276b868486f82b2c01a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "MDExOlB1bGxSZXF1ZXN0NzA2OTI3NDM5",
+      "title": "Fix typos and formatting",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/7",
+      "state": "MERGED",
+      "author": "teor2345",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "teor2345"
+      ],
+      "labels": [],
+      "body": "Minor fixes to typos and formatting",
+      "createdAt": "2021-08-09T23:43:57Z",
+      "updatedAt": "2021-08-10T04:59:56Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "1901da2a719a67ac7d9901711800b80e15523b8b",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "fix-typos",
+      "headRefOid": "5ddda99f38adb768462e77fb06f788112dfb49de",
+      "closedAt": "2021-08-10T04:59:52Z",
+      "mergedAt": "2021-08-10T04:59:52Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "5366d3b901d67ac046391e477924f376131b8047"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzI1ODk1MDc5",
+          "commit": {
+            "abbreviatedOid": "5ddda99"
+          },
+          "author": "teor2345",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-08-09T23:44:25Z",
+          "updatedAt": "2021-08-09T23:44:25Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "I'm not sure about this function formatting",
+              "createdAt": "2021-08-09T23:44:25Z",
+              "updatedAt": "2021-08-09T23:44:25Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzI1ODk1MzI5",
+          "commit": {
+            "abbreviatedOid": "5ddda99"
+          },
+          "author": "teor2345",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-08-09T23:45:02Z",
+          "updatedAt": "2021-08-09T23:45:02Z",
+          "comments": [
+            {
+              "originalPosition": 31,
+              "body": "`SUM` and `PROD` are already specified 2 paragraphs above this one.",
+              "createdAt": "2021-08-09T23:45:02Z",
+              "updatedAt": "2021-08-09T23:45:02Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NzI2MDA3MDA2",
+          "commit": {
+            "abbreviatedOid": "5ddda99"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks great, thanks @teor2345 ",
+          "createdAt": "2021-08-10T04:59:40Z",
+          "updatedAt": "2021-08-10T04:59:40Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOEpUZs84tg9xo",
+      "title": "s/comitment/commitment/",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/8",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-10-21T19:59:11Z",
+      "updatedAt": "2021-10-30T20:03:58Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "50588dac82f6d690a54fe6274fa89b5d61c4410a",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "typo",
+      "headRefOid": "e12fa39ace272bf50ebe6d4594cabd913d64fe4a",
+      "closedAt": "2021-10-30T20:03:58Z",
+      "mergedAt": "2021-10-30T20:03:58Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "59e909df9fa067091b6bbdc9a8914dd10534c89c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84vTWR3",
+          "commit": {
+            "abbreviatedOid": "e12fa39"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-30T20:03:53Z",
+          "updatedAt": "2021-10-30T20:03:53Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOEpUZs84uEeSY",
+      "title": "Remove unused inputs",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/9",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-11-04T00:19:40Z",
+      "updatedAt": "2021-11-18T17:20:28Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "59e909df9fa067091b6bbdc9a8914dd10534c89c",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "chris-wood-patch-1",
+      "headRefOid": "e5fae627d622a657d0d5cf15aa256bd842047743",
+      "closedAt": "2021-11-18T17:20:27Z",
+      "mergedAt": "2021-11-18T17:20:27Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "482dd2dc09652725b57953f63b8d79fd4f05aa54"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOEpUZs84uEfll",
+      "title": "No let",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/10",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-11-04T00:30:12Z",
+      "updatedAt": "2021-11-18T17:20:18Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "59e909df9fa067091b6bbdc9a8914dd10534c89c",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "chris-wood-patch-2",
+      "headRefOid": "537cee8c30918d1f40fb3ce6d8cc191972ed14d8",
+      "closedAt": "2021-11-18T17:20:18Z",
+      "mergedAt": "2021-11-18T17:20:18Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "234ed7b4a82c260bb1bb1b29758135713c2be88e"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOEpUZs84uj1zH",
+      "title": "Domain-separate H1 and H2 by parameter set  example",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/14",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-11-15T23:26:47Z",
+      "updatedAt": "2021-11-30T21:13:12Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "59e909df9fa067091b6bbdc9a8914dd10534c89c",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "domain-separate",
+      "headRefOid": "a8f69a65087e521bbf3ebf8f44aba3bb30cb1989",
+      "closedAt": "2021-11-30T21:01:17Z",
+      "mergedAt": "2021-11-30T21:01:17Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "3c9ff7c7f37472ebef601869b8d93097b297b839"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOEpUZs84uvPWo",
+      "title": "Fix some issues in the polynomial math section",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/27",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-11-18T21:32:24Z",
+      "updatedAt": "2021-12-02T03:39:20Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "482dd2dc09652725b57953f63b8d79fd4f05aa54",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/poly-bug-fixes",
+      "headRefOid": "292563a27f0781a08dd301a1a4805a322ad31113",
+      "closedAt": "2021-12-02T03:39:17Z",
+      "mergedAt": "2021-12-02T03:39:17Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "6ead3aa798352d220c18076200634463b694dba8"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84w78Yg",
+          "commit": {
+            "abbreviatedOid": "292563a"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good to me, thanks! ",
+          "createdAt": "2021-12-02T03:39:09Z",
+          "updatedAt": "2021-12-02T03:39:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOEpUZs84vNnbR",
+      "title": "Specify FROST efficiency improvements",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/28",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Efficiency improvements to FROST were presented in https://eprint.iacr.org/2021/1375. This change ensures that rho is derived correctly, and cites this paper for reference. ",
+      "createdAt": "2021-11-30T21:53:21Z",
+      "updatedAt": "2021-12-06T23:26:19Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "744d2245a096b61340f6968f2684e8907f98137d",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "efficient-variant",
+      "headRefOid": "02926ae0ba4a2a7a7b3a9b0d4c9b7f3286a889bd",
+      "closedAt": "2021-12-06T23:26:16Z",
+      "mergedAt": "2021-12-06T23:26:16Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "db2a378d00c5393f908703641e8ba57fb62c3ab5"
+      },
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addresses issue #21 ",
+          "createdAt": "2021-11-30T21:54:33Z",
+          "updatedAt": "2021-11-30T21:54:33Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't see how this is more efficient. If anything, it seems to be less efficient since it requires more cycles to compute `binding_factor`. Was there more to be done in this PR? Also, the build breaks, which we should fix before merging.",
+          "createdAt": "2021-11-30T23:45:35Z",
+          "updatedAt": "2021-11-30T23:45:35Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sorry, I should have been more clear in the comment. The binding factor *must* include the identifiers of all the participants. I could have included these in the `B` term, but since we already defined `L`, I thought it would be clearer to include `L` separately. Let me know which you prefer. ",
+          "createdAt": "2021-12-01T05:18:12Z",
+          "updatedAt": "2021-12-01T05:18:12Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> The binding factor must include the identifiers of all the participants. I could have included these in the B term, but since we already defined L, I thought it would be clearer to include L separately. Let me know which you prefer.\r\n\r\nThe change is fine, but I'm just not seeing how this adds any efficiency improvement. To try and be a bit more clear: are the changes from Schnorr21 going to land in this PR, or another one?",
+          "createdAt": "2021-12-01T16:09:25Z",
+          "updatedAt": "2021-12-01T16:09:25Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I just made the title more clear- these efficiency improvements are from Schnorr21; FROST20 requires computing different binding factors for each participant.",
+          "createdAt": "2021-12-01T17:09:51Z",
+          "updatedAt": "2021-12-01T17:09:51Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84w7QpP",
+          "commit": {
+            "abbreviatedOid": "b4e3e50"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "\ud83e\udd37 ",
+          "createdAt": "2021-12-01T21:50:42Z",
+          "updatedAt": "2021-12-01T21:50:42Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84xJj8T",
+          "commit": {
+            "abbreviatedOid": "17e788e"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-12-06T23:12:46Z",
+          "updatedAt": "2021-12-06T23:12:49Z",
+          "comments": [
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\n -  ins: C. A. Wood\r\n    name: Christopher A. Wood\r\n```",
+              "createdAt": "2021-12-06T23:12:46Z",
+              "updatedAt": "2021-12-06T23:12:49Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOEpUZs84vttdy",
+      "title": "Participants should never be assigned the zero identifier.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/29",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses issue #18 ",
+      "createdAt": "2021-12-11T18:22:11Z",
+      "updatedAt": "2021-12-11T18:47:22Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "db2a378d00c5393f908703641e8ba57fb62c3ab5",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "zero-identifier",
+      "headRefOid": "1b24faa469b44aa271403b6756a9ab41e00edc11",
+      "closedAt": "2021-12-11T18:47:22Z",
+      "mergedAt": "2021-12-11T18:47:22Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "2e377fe7a1b5d70098cc9d362f68fae085ad5613"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84xcf_o",
+          "commit": {
+            "abbreviatedOid": "1b24faa"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-12-11T18:45:55Z",
+          "updatedAt": "2021-12-11T18:45:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "PR_kwDOEpUZs84vtuOl",
+      "title": "Start list of known implementations",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/30",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "It would be great to have a better distinguishes for implementations that are not complete but also not yet interoperable. Also how to specify the curves these different implementations are over, and which ones we should include here (i.e, should we include the redjubjub implementation). \r\n\r\nAddresses #16",
+      "createdAt": "2021-12-11T18:43:19Z",
+      "updatedAt": "2021-12-13T22:47:49Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "db2a378d00c5393f908703641e8ba57fb62c3ab5",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "implementations",
+      "headRefOid": "69111dab6817bdcd3b0f923d00521d3023cbd3b5",
+      "closedAt": "2021-12-13T22:47:47Z",
+      "mergedAt": "2021-12-13T22:47:47Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "09758504e0732b16f865c5d80d2c69f3e0663d2d"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We should also add https://github.com/taurusgroup/multi-party-sig.",
+          "createdAt": "2021-12-13T17:35:30Z",
+          "updatedAt": "2021-12-13T17:35:30Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84xgTP2",
+          "commit": {
+            "abbreviatedOid": "135f73a"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-12-13T17:35:34Z",
+          "updatedAt": "2021-12-13T17:35:34Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "PR_kwDOEpUZs84vypY6",
+      "title": "Add link to new frost-ristretto255 impl",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/31",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-12-13T23:27:53Z",
+      "updatedAt": "2021-12-13T23:49:15Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "09758504e0732b16f865c5d80d2c69f3e0663d2d",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "add-frost-ristretto255",
+      "headRefOid": "6a5099e58fc6fe364453ea163f3d99381b313e9d",
+      "closedAt": "2021-12-13T23:49:15Z",
+      "mergedAt": "2021-12-13T23:49:15Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "c9d58cf05154ecd3a5a94afed7820d12dab1c54e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84xhi9w",
+          "commit": {
+            "abbreviatedOid": "6a5099e"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-12-13T23:49:12Z",
+          "updatedAt": "2021-12-13T23:49:12Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "PR_kwDOEpUZs84vysgi",
+      "title": "Add P256-SHA-256 ciphersuite",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/32",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "To match the Ristretto ciphersuite as it exists",
+      "createdAt": "2021-12-13T23:55:37Z",
+      "updatedAt": "2021-12-14T19:55:38Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "c9d58cf05154ecd3a5a94afed7820d12dab1c54e",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "p256-sha-256",
+      "headRefOid": "988686d23366f02f24440d3408f75450fb7276bd",
+      "closedAt": "2021-12-14T14:56:00Z",
+      "mergedAt": "2021-12-14T14:55:59Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "d44e648edcd9f6b18d589c8058f600728b8d15da"
+      },
+      "comments": [
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chris-wood where should I put this:\r\n\r\n```\r\nx9.62:\r\n    title: \"Public Key Cryptography for the Financial Services Industry: the Elliptic Curve Digital Signature Algorithm (ECDSA)\"\r\n    date: Sep, 1998\r\n    seriesinfo:\r\n      \"ANSI\": X9.62-1998\r\n    author:\r\n      -\r\n        org: ANSI\r\n\r\n```",
+          "createdAt": "2021-12-14T00:03:13Z",
+          "updatedAt": "2021-12-14T00:03:13Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly there's a section up at the top we need to add, so it'd look like so:\r\n\r\n```\r\nnormative:\r\n   x9.62:\r\n     title: \"Public Key Cryptography for the Financial Services Industry: the Elliptic Curve Digital Signature Algorithm (ECDSA)\"\r\n     date: Sep, 1998\r\n     seriesinfo:\r\n       \"ANSI\": X9.62-1998\r\n     author:\r\n       -\r\n         org: ANSI\r\n\r\ninformative:\r\n   FROST20:\r\n   ...\r\n```",
+          "createdAt": "2021-12-14T00:05:11Z",
+          "updatedAt": "2021-12-14T00:05:11Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84xhkFT",
+          "commit": {
+            "abbreviatedOid": "dfc5156"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Excellent!",
+          "createdAt": "2021-12-13T23:58:05Z",
+          "updatedAt": "2021-12-13T23:58:59Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n## FROST(P-256, SHA-256)\r\n```",
+              "createdAt": "2021-12-13T23:58:05Z",
+              "updatedAt": "2021-12-13T23:58:59Z"
+            },
+            {
+              "originalPosition": 15,
+              "body": "```suggestion\r\n- Hash: SHA-256, and Nh = 32.\r\n```",
+              "createdAt": "2021-12-13T23:58:41Z",
+              "updatedAt": "2021-12-13T23:58:59Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOEpUZs84v1DOA",
+      "title": "Add contextString variable",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/33",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "And add missing reference from #32.",
+      "createdAt": "2021-12-14T15:00:46Z",
+      "updatedAt": "2021-12-14T15:53:04Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "d44e648edcd9f6b18d589c8058f600728b8d15da",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/add-context",
+      "headRefOid": "f7e2eb42c6a2d729d0196a7ee21c77b238d19193",
+      "closedAt": "2021-12-14T15:53:04Z",
+      "mergedAt": "2021-12-14T15:53:04Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "97bd6c0017584b3593734b26f5be964e29d33916"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84xkqXF",
+          "commit": {
+            "abbreviatedOid": "c82b4ca"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-12-14T15:50:06Z",
+          "updatedAt": "2021-12-14T15:50:25Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "```suggestion\nThe value of the contextString parameter is \"FROST-RISTRETTO255-SHA512\".\n```\n",
+              "createdAt": "2021-12-14T15:50:06Z",
+              "updatedAt": "2021-12-14T15:50:25Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "PR_kwDOEpUZs84v1Lgm",
+      "title": "EdX interop",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/34",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This aligns signature generation and verification with that of [EdX from RFC8032](https://datatracker.ietf.org/doc/html/rfc8032). ",
+      "createdAt": "2021-12-14T15:33:06Z",
+      "updatedAt": "2021-12-14T19:56:15Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "d44e648edcd9f6b18d589c8058f600728b8d15da",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/edx-alignment",
+      "headRefOid": "d0d9c5bf2962f30c42f500df08ca08194e080fbb",
+      "closedAt": "2021-12-14T19:56:12Z",
+      "mergedAt": "2021-12-14T19:56:12Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "3bdaa22d7485cdc4adbfb947b530e56b639aa9d0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84xllyN",
+          "commit": {
+            "abbreviatedOid": "d0d9c5b"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks great to me, thank you \ud83c\udf8a ",
+          "createdAt": "2021-12-14T19:20:23Z",
+          "updatedAt": "2021-12-14T19:20:23Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84xluYr",
+          "commit": {
+            "abbreviatedOid": "d0d9c5b"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-12-14T19:56:05Z",
+          "updatedAt": "2021-12-14T19:56:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "id": "PR_kwDOEpUZs84v2Xne",
+      "title": "Stop adding teor to every PR as a reviewer",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/35",
+      "state": "MERGED",
+      "author": "teor2345",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This removes teor from the CODEOWNERS file, so I don't get added as a reviewer to every PR.",
+      "createdAt": "2021-12-14T21:12:11Z",
+      "updatedAt": "2021-12-14T21:17:46Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "3bdaa22d7485cdc4adbfb947b530e56b639aa9d0",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "stop-adding-teor-reviews",
+      "headRefOid": "2f254ed7dd4b6fa118a43d9480640d68ed36d9df",
+      "closedAt": "2021-12-14T21:17:44Z",
+      "mergedAt": "2021-12-14T21:17:43Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "5bcf68714f4260149388d885f781f778a41fecb1"
+      },
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks @teor2345, sorry about that! ",
+          "createdAt": "2021-12-14T21:17:39Z",
+          "updatedAt": "2021-12-14T21:17:39Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOEpUZs84w5CPT",
+      "title": "Typo",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/36",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-01-13T01:07:09Z",
+      "updatedAt": "2022-01-13T02:20:27Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "5bcf68714f4260149388d885f781f778a41fecb1",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "dconnolly-patch-1",
+      "headRefOid": "0a570ef7a244dd735c3202e5d52f9dbaaecfbd2e",
+      "closedAt": "2022-01-13T02:20:25Z",
+      "mergedAt": "2022-01-13T02:20:25Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "9c9b76280aa433b08f576760c6b81cfe83947d10"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84yvBlk",
+          "commit": {
+            "abbreviatedOid": "0a570ef"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-13T02:20:18Z",
+          "updatedAt": "2022-01-13T02:20:18Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "PR_kwDOEpUZs84w5JWS",
+      "title": "Rough description of performing the protocol without the aggregator",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/39",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses #25",
+      "createdAt": "2022-01-13T01:39:07Z",
+      "updatedAt": "2022-01-18T20:00:26Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "5bcf68714f4260149388d885f781f778a41fecb1",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "no-aggregator",
+      "headRefOid": "c58e4bf53fa5d30769034779b7f002c79803fe89",
+      "closedAt": "2022-01-18T20:00:22Z",
+      "mergedAt": "2022-01-18T20:00:22Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "38e8fa7a19f2778b4b2fd6c8a3eeb309dc7a8cfb"
+      },
+      "comments": [
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addressed the comment from @chris-wood in the last commit, hopefully this description of the network channel requirements is clear. ",
+          "createdAt": "2022-01-18T20:00:17Z",
+          "updatedAt": "2022-01-18T20:00:17Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84yy_B3",
+          "commit": {
+            "abbreviatedOid": "e874521"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "\ud83d\udc4d",
+          "createdAt": "2022-01-13T20:50:05Z",
+          "updatedAt": "2022-01-13T20:50:05Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84yzbut",
+          "commit": {
+            "abbreviatedOid": "e874521"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This text looks good, though I wonder if we need to expand on the requirements for the broadcast channel? In particular, this is written such that it assumes the broadcast channel (obviously) delivers each message correctly, but I don't think we state that explicitly? (We can do this in a future PR so as to not block this.)",
+          "createdAt": "2022-01-13T23:20:04Z",
+          "updatedAt": "2022-01-13T23:20:04Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "id": "PR_kwDOEpUZs84w9sYu",
+      "title": "Messages should be a fixed size when hashing",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "To ensure a fixed size message when calculating `rho` or the sig challenge, always hash the message into a fixed size first.\r\n\r\nAlso consistently use `msg`, and some tidy\r\n\r\nhttps://github.com/cfrg/draft-irtf-cfrg-frost/issues/43",
+      "createdAt": "2022-01-13T20:46:52Z",
+      "updatedAt": "2022-01-28T21:55:44Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "6f15e3b8ea32696d6e4bca61615fc591283a63bf",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "msg-hashing",
+      "headRefOid": "f741b1d10c77b215dba0ec7de09370fa58b72bde",
+      "closedAt": "2022-01-28T21:55:41Z",
+      "mergedAt": "2022-01-28T21:55:41Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "750a307a437d95418d640db824f444bdd1116279"
+      },
+      "comments": [
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> We need to explicitely define what `H` is, similarly to `H1` and `H2`.\r\n> \r\n> See https://github.com/cfrg/draft-irtf-cfrg-frost/blob/master/draft-irtf-cfrg-frost.md#cryptographic-hash-function-dep-hash\r\n\r\nIs that not specified by each parameter set? ",
+          "createdAt": "2022-01-13T22:39:40Z",
+          "updatedAt": "2022-01-13T22:39:40Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > We need to explicitely define what `H` is, similarly to `H1` and `H2`.\r\n> > See https://github.com/cfrg/draft-irtf-cfrg-frost/blob/master/draft-irtf-cfrg-frost.md#cryptographic-hash-function-dep-hash\r\n> \r\n> Is that not specified by each parameter set?\r\n\r\nWe should have an explicit definition with a domain seperator, to be on the safe side. ",
+          "createdAt": "2022-01-13T22:43:55Z",
+          "updatedAt": "2022-01-13T22:43:55Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chelseakomlo it is explicitly defined as part of the ciphersuite, so I don't think further work is needed there.",
+          "createdAt": "2022-01-13T22:54:40Z",
+          "updatedAt": "2022-01-13T22:54:40Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed!\r\n",
+          "createdAt": "2022-01-28T21:55:32Z",
+          "updatedAt": "2022-01-28T21:55:32Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84yzMg4",
+          "commit": {
+            "abbreviatedOid": "801db01"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "We need to explicitely define what `H` is, similarly to `H1` and `H2`. \r\n\r\nSee https://github.com/cfrg/draft-irtf-cfrg-frost/blob/master/draft-irtf-cfrg-frost.md#cryptographic-hash-function-dep-hash",
+          "createdAt": "2022-01-13T21:55:09Z",
+          "updatedAt": "2022-01-13T21:55:09Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zA7LP",
+          "commit": {
+            "abbreviatedOid": "272c75c"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-18T19:29:23Z",
+          "updatedAt": "2022-01-18T19:29:24Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "I would add a comment here that a domain seperator is omitted specifically for backwards compatibility and citation.",
+              "createdAt": "2022-01-18T19:29:23Z",
+              "updatedAt": "2022-01-18T19:29:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zA7d5",
+          "commit": {
+            "abbreviatedOid": "272c75c"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Approved, with request for comment on backwards compatibility and choice of `H3`",
+          "createdAt": "2022-01-18T19:29:56Z",
+          "updatedAt": "2022-01-18T19:29:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zqPVg",
+          "commit": {
+            "abbreviatedOid": "272c75c"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-28T21:08:11Z",
+          "updatedAt": "2022-01-28T21:08:12Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "```suggestion\r\nH3(m) = H(m)\r\n\r\nNormally this would also include a domain separator, but for backwards compatibility with other Schnorr signatures, we omit it here.\r\n```",
+              "createdAt": "2022-01-28T21:08:11Z",
+              "updatedAt": "2022-01-28T21:08:12Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 52,
+      "id": "PR_kwDOEpUZs84xObFo",
+      "title": "Update order of rho with regard to participant identifiers",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/52",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Addresses #17 ",
+      "createdAt": "2022-01-18T20:48:05Z",
+      "updatedAt": "2022-01-25T20:39:54Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "38e8fa7a19f2778b4b2fd6c8a3eeb309dc7a8cfb",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "order-rho",
+      "headRefOid": "89e3a47efd2f8f0d9753853a90d7793368c20b26",
+      "closedAt": "2022-01-25T20:38:19Z",
+      "mergedAt": "2022-01-25T20:38:19Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "34dc444633489c8687440cc3e04edb408f1e1bcb"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84zbdSy",
+          "commit": {
+            "abbreviatedOid": "89e3a47"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Good for now, if anyone runs into any confusion about the j, D_j, etc order, we can clarify further",
+          "createdAt": "2022-01-25T20:36:15Z",
+          "updatedAt": "2022-01-25T20:36:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 53,
+      "id": "PR_kwDOEpUZs84xsnRP",
+      "title": "Draft fixes and initial Sage implementation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/53",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The Sage implementation (in poc/frost.sage) is still a bit behind the spec, e.g., H1 and H2 are not correct. Test vectors are still TBD. We can either add them here or in a followup change. There's a couple general questions and comments that came up when making this change, including:\r\n\r\n- Why is signature share verification _optional_, as opposed to mandatory? It's pretty cheap, so I'm inclined to think we should make it mandatory.\r\n- Is the current blinding factor generation specification correct?\r\n- We currently say the upper bound on signing message limit is 2^16-1 -- is this sufficiently large?\r\n- What should be the maximum number of possible signers? 2^64-1?\r\n- We need to improve the vocabulary in the draft, e.g., `B` to denote the set of signer commitments. Can we come up with a better name?\r\n- ... and probably some others I forgot in the process.\r\n\r\n@dconnolly I suspect this won't interop with your ristretto255 implementation, but that's probably fine for now. I want to get. us to an initial place where we have test vectors from the Sage implementation that match the spec. Then we can change things as needed to converge (and work towards RFC8032 compatibility). ",
+      "createdAt": "2022-01-27T18:41:00Z",
+      "updatedAt": "2022-01-29T00:57:02Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "750a307a437d95418d640db824f444bdd1116279",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/fixes-and-poc",
+      "headRefOid": "105c3aaf93261754965c9717d027f8d2455a35a3",
+      "closedAt": "2022-01-29T00:57:01Z",
+      "mergedAt": "2022-01-29T00:57:01Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "b2a7d2eed48fec2afcd881c685231adf0c9056a0"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly I rebased on top of `master` and pulled in your change. I'll merge this now and focus on test vector capabilities next. Then I'll focus on RFC8032 compatibility. ",
+          "createdAt": "2022-01-29T00:56:31Z",
+          "updatedAt": "2022-01-29T00:56:31Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84zqZf-",
+          "commit": {
+            "abbreviatedOid": "3d7265f"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-28T22:07:31Z",
+          "updatedAt": "2022-01-28T22:07:31Z",
+          "comments": [
+            {
+              "originalPosition": 71,
+              "body": "Three, to be specific",
+              "createdAt": "2022-01-28T22:07:31Z",
+              "updatedAt": "2022-01-28T22:07:31Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zqabu",
+          "commit": {
+            "abbreviatedOid": "3d7265f"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good! ",
+          "createdAt": "2022-01-28T22:13:40Z",
+          "updatedAt": "2022-01-28T22:13:40Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zqqFd",
+          "commit": {
+            "abbreviatedOid": "105c3aa"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-29T00:56:41Z",
+          "updatedAt": "2022-01-29T00:56:42Z",
+          "comments": [
+            {
+              "originalPosition": 71,
+              "body": "Rebased and fixed.",
+              "createdAt": "2022-01-29T00:56:41Z",
+              "updatedAt": "2022-01-29T00:56:42Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 59,
+      "id": "PR_kwDOEpUZs84xxBU-",
+      "title": "Must verify signature shares",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/59",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "... and other editorial things.\r\n\r\nCloses #54.",
+      "createdAt": "2022-01-29T01:07:56Z",
+      "updatedAt": "2022-01-31T14:58:16Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "b2a7d2eed48fec2afcd881c685231adf0c9056a0",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/must-verify-shares",
+      "headRefOid": "af648871345eaaf281ed8818c546d9abc06926a1",
+      "closedAt": "2022-01-31T14:58:11Z",
+      "mergedAt": "2022-01-31T14:58:11Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "c650e456f649701b6e5947a170d30d100fb6e605"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84zqqp0",
+          "commit": {
+            "abbreviatedOid": "af64887"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-29T01:08:20Z",
+          "updatedAt": "2022-01-29T01:08:20Z",
+          "comments": [
+            {
+              "originalPosition": 39,
+              "body": "@dconnolly @chelseakomlo this is the real change.",
+              "createdAt": "2022-01-29T01:08:20Z",
+              "updatedAt": "2022-01-29T01:08:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zvAas",
+          "commit": {
+            "abbreviatedOid": "af64887"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks great to me",
+          "createdAt": "2022-01-31T14:58:03Z",
+          "updatedAt": "2022-01-31T14:58:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 60,
+      "id": "PR_kwDOEpUZs84xx1CW",
+      "title": "Add bare test vectors",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/60",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "First part of #49. It adds test vector generation for ristretto255 with one (2,3) participant configuration. We can extend this in a followup change to iterate through more subsets. Of course, I'm open to renaming or restructuring anything differently!\r\n\r\nExample output:\r\n\r\n```\r\n{\r\n  \"config\": {\r\n    \"NUM_SIGNERS\": \"3\",\r\n    \"THRESHOLD_LIMIT\": \"2\",\r\n    \"group\": \"ristretto255\",\r\n    \"hash\": \"SHA512\"\r\n  },\r\n  \"inputs\": {\r\n    \"group_secret_key\": \"c604c785ada70d77a5256ae21767de8c3304115237d262134f5e46e512cf8e03\",\r\n    \"group_public_key\": \"0ca5c9fa211b6c240e4e7af6c6cf624c7b0fd1f8916eacbb6518267f332db951\",\r\n    \"message\": \"74657374\",\r\n    \"signers\": {\r\n      \"1\": {\r\n        \"signer_share\": \"24dd5ca618a461a81256e505fcd5aaf356b3c45aa479a49cf3744710f306740f\"\r\n      },\r\n      \"2\": {\r\n        \"signer_share\": \"95e1fc69693da381a9e96886014b98457a6278631121e625988b483bd33e590b\"\r\n      },\r\n      \"3\": {\r\n        \"signer_share\": \"06e69c2dbad6e45a407dec0607c085979d112c6c7ec827af3ca24966b3763e07\"\r\n      }\r\n    }\r\n  },\r\n  \"round_one_outputs\": {\r\n    \"participants\": [\r\n      \"1\",\r\n      \"2\"\r\n    ],\r\n    \"commitment_list\": \"000000018a9049503ade17c922b4ab93e0fd7802f8986ee4cdd25d7e2da2691139160c15eee7a9c7fec3460c27c160c683d46a4fd18f537c055c3998748b8e4cd8f29b3e00000002d88068bbb009b13a005e66b143d52591f4081f4b3b342ebc4035af868ba82f7b3647dbbc9e46bd45cd1fe21d6197971b84e3ae2a7a165aaade49ee2ebf1eba5a\",\r\n    \"group_blinding_factor\": \"675146437df1bbc42f8fa74673c2c6a5393bb469a02c1402d497428575b55900\",\r\n    \"outputs\": {\r\n      \"1\": {\r\n        \"hiding_nonce\": \"ed8366feb6b1d05d1f46acb727061e43aadfafe9c10e5a64e7518d63e3263503\",\r\n        \"blinding_nonce\": \"019cbd1d7420292528f8cdd62f339fdabb602f04a95dac9dbcec831b8c681a09\",\r\n        \"hiding_nonce_commitment\": \"8a9049503ade17c922b4ab93e0fd7802f8986ee4cdd25d7e2da2691139160c15\",\r\n        \"blinding_nonce_commitment\": \"eee7a9c7fec3460c27c160c683d46a4fd18f537c055c3998748b8e4cd8f29b3e\"\r\n      },\r\n      \"2\": {\r\n        \"hiding_nonce\": \"89c61a42c8191a5ca41f2fe959843d333bcf43173b7de4c5c119e0e0d8b0e707\",\r\n        \"blinding_nonce\": \"e6d0f1d89ad552e383d6c6f4e8598cc3037d6e274d22da3089e7afbd4171ea02\",\r\n        \"hiding_nonce_commitment\": \"d88068bbb009b13a005e66b143d52591f4081f4b3b342ebc4035af868ba82f7b\",\r\n        \"blinding_nonce_commitment\": \"3647dbbc9e46bd45cd1fe21d6197971b84e3ae2a7a165aaade49ee2ebf1eba5a\"\r\n      }\r\n    }\r\n  },\r\n  \"round_two_outputs\": {\r\n    \"participants\": [\r\n      \"1\",\r\n      \"2\"\r\n    ],\r\n    \"outputs\": {\r\n      \"1\": {\r\n        \"sig_share\": \"949f570b01bb3da189e1138fa4a1637ebaef75afb7ba97a0e1e147e204a3c800\",\r\n        \"group_commitment_share\": \"aad18ee8e1aa4e0a1fc5da36aab1ed0b138a503e14a2dba771b2c170efd00f34\"\r\n      },\r\n      \"2\": {\r\n        \"sig_share\": \"0bbfe9944fa5e6f9aefe5b663598719305e0aad0f9e438318bce9e9f281e7d01\",\r\n        \"group_commitment_share\": \"8613328b9f574fdf988f60593da63ad3d2645ab62010048dccf65b6c3504a60a\"\r\n      }\r\n    }\r\n  },\r\n  \"final_output\": {\r\n    \"sig\": {\r\n      \"R\": \"828e92dec234c47d60f9fc4b2bb6c794b06e83d0a6be9479dd8e3fc66c69cf3e\",\r\n      \"z\": \"9f5e41a05060249b38e06ff5d939d511c0cf2080b19fd0d16cb0e6812dc14502\"\r\n    }\r\n  }\r\n}\r\n```",
+      "createdAt": "2022-01-29T14:57:44Z",
+      "updatedAt": "2022-02-01T20:04:25Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "c650e456f649701b6e5947a170d30d100fb6e605",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/bare-vectors",
+      "headRefOid": "ddf19b14f5ec08d1b2e3e8962e2844e4d3bbe486",
+      "closedAt": "2022-02-01T13:53:48Z",
+      "mergedAt": "2022-02-01T13:53:48Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "ea438bae97198bce95c247e0aa3183ef331d6937"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly are there any changes you'd like to see?",
+          "createdAt": "2022-01-31T23:56:18Z",
+          "updatedAt": "2022-01-31T23:56:18Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "In the example output, the message is the ascii bytes of \"test\" ?\r\n\r\nhttps://github.com/cfrg/draft-irtf-cfrg-frost/pull/60/files#diff-b6283431df51877348499b43b450f92d66069e6e453423a3a35b949720801d3aR201",
+          "createdAt": "2022-02-01T07:56:11Z",
+          "updatedAt": "2022-02-01T07:56:11Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> In the example output, the message is the ascii bytes of \"test\" ?\n> \n> \n\nYep, that's right. I figured it was best to use a consistent encoding (hex) for all values. ",
+          "createdAt": "2022-02-01T13:28:24Z",
+          "updatedAt": "2022-02-01T13:28:24Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84zxEAf",
+          "commit": {
+            "abbreviatedOid": "ddf19b1"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-31T22:40:41Z",
+          "updatedAt": "2022-01-31T22:40:42Z",
+          "comments": [
+            {
+              "originalPosition": 45,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-01-31T22:40:41Z",
+              "updatedAt": "2022-01-31T22:40:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zxECg",
+          "commit": {
+            "abbreviatedOid": "ddf19b1"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-31T22:40:52Z",
+          "updatedAt": "2022-01-31T22:40:53Z",
+          "comments": [
+            {
+              "originalPosition": 51,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-01-31T22:40:52Z",
+              "updatedAt": "2022-01-31T22:40:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zxEFF",
+          "commit": {
+            "abbreviatedOid": "ddf19b1"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-01-31T22:41:06Z",
+          "updatedAt": "2022-01-31T22:41:07Z",
+          "comments": [
+            {
+              "originalPosition": 54,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-01-31T22:41:06Z",
+              "updatedAt": "2022-01-31T22:41:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84zyFmc",
+          "commit": {
+            "abbreviatedOid": "ddf19b1"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This looks great, just one q about how we're representing the message in the vector outputs",
+          "createdAt": "2022-02-01T07:58:37Z",
+          "updatedAt": "2022-02-01T07:58:37Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 61,
+      "id": "PR_kwDOEpUZs84x2ReU",
+      "title": "Limit number of signers to 2^16-1.",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/61",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #56.",
+      "createdAt": "2022-01-31T16:09:04Z",
+      "updatedAt": "2022-01-31T18:48:54Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "c650e456f649701b6e5947a170d30d100fb6e605",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/signer-limit",
+      "headRefOid": "b29cf8ad7d37f83a11b2414624103c79d6ee42d5",
+      "closedAt": "2022-01-31T18:48:50Z",
+      "mergedAt": "2022-01-31T18:48:50Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "67131ee827afe17c3e1fb385b07ed5d23cd2f8de"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84zwOhU",
+          "commit": {
+            "abbreviatedOid": "b29cf8a"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-01-31T18:48:41Z",
+          "updatedAt": "2022-01-31T18:48:41Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 62,
+      "id": "PR_kwDOEpUZs84x56R_",
+      "title": "RFC8032 compat with some open questions",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/62",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This demonstrates RFC8032 compliance (for vanilla Ed25519, not the ctx or ph variants). To do so, it creates a signature using the reference implementation, encodes the signature and public key as RFC8032 expects, and then calls the signature verification routine [from the RFC](https://datatracker.ietf.org/doc/html/rfc8032#section-6).\r\n\r\nThis change raises a couple of questions (to me), including:\r\n1. The pre-hash step introduced in [this PR](https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46), to address [this issue](https://github.com/cfrg/draft-irtf-cfrg-frost/issues/43), meant that the vanilla ed25519 interop wouldn't work. (Vanilla ed25519 doesn't pre-hash the message when computing the challenge.) I think we got the change in #46 wrong. [The audit](https://github.com/ZcashFoundation/redjubjub/blob/main/zcash-frost-audit-report-20210323.pdf) only recommends this pre-hashing step when computing the blinding factor, not when computing the challenge, so I _think_ we could revert the pre-hashing step for the challenge.\r\n1. Do we want to specify a pile of different variants like RFC8032 did, including \"vanilla\" mode (Ed25519), pre-hash (ph) mode (Ed25519ph), and context-specific (ctx) mode (Ed25519ctx)? It seems like a lot of complexity to do everything, and to be honest I'm not sure what variant is most useful in practice. Does anyone else know?\r\n1. What is our API abstraction boundary? EdDSA uses byte strings everywhere, including signing and verifying keys, as well as signatures. Currently, we operate on \"internal\" types, e.g., scalars and elements for signing and verifying keys, respectively, and our signatures are (element, scalar) tuples. Should we adopt a higher layer of abstraction?\r\n1. Signature verification in this change was updated to match the logic in RFC8032. That is, rather than re-derive the group commitment and check for equality, check that the relation holds `[8][S]B = [8]R + [8][k]A'`.\r\n1. How do we want to handle domain separation for H1 and H2 for ciphersuites that target groups outside of RFC8032? \r\n\r\nStarting as a draft for now until we figure out what to do about (1), since I commented out the pre-hashing step in the code. I don't think we need to block on any of the remaining questions.\r\n\r\ncc @veorq in case he has thoughts on (1)",
+      "createdAt": "2022-02-01T14:11:08Z",
+      "updatedAt": "2022-02-02T23:16:58Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "ea438bae97198bce95c247e0aa3183ef331d6937",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/rfc8032-compat",
+      "headRefOid": "af54557945cdd881c31fedb25365c96078b8276a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 63,
+      "id": "PR_kwDOEpUZs84x-not",
+      "title": "Hash in message into rho",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/63",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-02T16:40:01Z",
+      "updatedAt": "2022-02-02T16:55:28Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "ea438bae97198bce95c247e0aa3183ef331d6937",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "rho",
+      "headRefOid": "a9381d19c92ead3d5eae06055c8ce43a7860cbc9",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84z5-e4",
+          "commit": {
+            "abbreviatedOid": "a9381d1"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-02T16:51:33Z",
+          "updatedAt": "2022-02-02T16:51:33Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84z5_wN",
+          "commit": {
+            "abbreviatedOid": "a9381d1"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "@chelseakomlo please also update the reference implementation!",
+          "createdAt": "2022-02-02T16:55:28Z",
+          "updatedAt": "2022-02-02T16:55:28Z",
+          "comments": []
+        }
+      ]
+    }
+  ]
+}
