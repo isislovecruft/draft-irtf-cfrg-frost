@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-03T00:30:22.028252+00:00",
+  "timestamp": "2022-02-06T00:37:42.041663+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -165,7 +165,7 @@
       "id": "I_kwDOEpUZs84-1pLo",
       "title": "Define a domain separation bytestring for each parameter set",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/15",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dconnolly",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -174,8 +174,8 @@
       ],
       "body": "To update[ this change](https://github.com/chelseakomlo/frost-spec/pull/14) to point to $PARAMETER_SET.DOMAIN_SEPARATOR or something like that.",
       "createdAt": "2021-11-15T23:28:46Z",
-      "updatedAt": "2021-12-13T23:37:12Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-03T21:09:33Z",
+      "closedAt": "2022-02-03T21:09:33Z",
       "comments": [
         {
           "author": "chelseakomlo",
@@ -183,6 +183,13 @@
           "body": "For example: `H1(m) = H(\"FROST-RISTRETTO-SHA512\" || \"rho\" || len(m) || m)`",
           "createdAt": "2021-12-13T23:37:11Z",
           "updatedAt": "2021-12-13T23:37:11Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "This is done.",
+          "createdAt": "2022-02-03T21:09:33Z",
+          "updatedAt": "2022-02-03T21:09:33Z"
         }
       ]
     },
@@ -568,7 +575,7 @@
       "id": "I_kwDOEpUZs85BoADG",
       "title": "Review naming of nonces",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/38",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -577,8 +584,8 @@
       "labels": [],
       "body": "Right now we refer to the nonce pair as `(D, E)` as is done in the FROST paper. Let's review this notation and decide if we should adopt more descriptive naming such as \"hiding\" and \"binding.\"",
       "createdAt": "2022-01-13T01:23:16Z",
-      "updatedAt": "2022-02-01T20:13:27Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-04T01:21:32Z",
+      "closedAt": "2022-02-04T01:21:32Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -586,6 +593,13 @@
           "body": "Yes, please! `(D, E)` are quite vague. @dconnolly would you be able to take this? I think `hiding_nonce` and `blinding_nonce` are perfectly fine terms for `d` and `e`, respectively. I suppose we might call the commitments to these nonces `hiding_nonce_commitment` and `blinding_nonce_commitment`, resp?",
           "createdAt": "2022-01-29T01:12:16Z",
           "updatedAt": "2022-01-29T01:12:16Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addressed in #62.",
+          "createdAt": "2022-02-03T21:07:53Z",
+          "updatedAt": "2022-02-03T21:07:53Z"
         }
       ]
     },
@@ -853,7 +867,7 @@
       "id": "I_kwDOEpUZs85BuDm5",
       "title": "Clarify HashToScalar/H2 reduction to scalars",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/50",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -862,8 +876,8 @@
       "labels": [],
       "body": "\"c\" and \"rho\" are both the result of hash-to-scalar (H2), but we don't really make clear how the scalar conversion is done.\r\n\r\n",
       "createdAt": "2022-01-13T23:45:35Z",
-      "updatedAt": "2022-01-26T23:12:33Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-04T01:20:49Z",
+      "closedAt": "2022-02-04T01:20:49Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -871,6 +885,13 @@
           "body": "Same goes for the output of H1, too, which is assumed to map to a non-zero scalar.",
           "createdAt": "2022-01-26T23:12:19Z",
           "updatedAt": "2022-01-26T23:12:33Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Addressed in #62.",
+          "createdAt": "2022-02-03T21:08:04Z",
+          "updatedAt": "2022-02-03T21:08:04Z"
         }
       ]
     },
@@ -1053,6 +1074,30 @@
           "body": "(This was also a dupe!)",
           "createdAt": "2022-01-29T00:58:26Z",
           "updatedAt": "2022-01-29T00:58:26Z"
+        }
+      ]
+    },
+    {
+      "number": 64,
+      "id": "I_kwDOEpUZs85C-Far",
+      "title": "Define alternative signature format with (response, commitment) ",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/64",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "RFC8032 requires that the signature format be in the form (response, challenge) but some implementations would like the format to be (response, commitment)  in order to allow for batched signature verification. We should allow for this alternative format in this draft.",
+      "createdAt": "2022-02-03T21:26:36Z",
+      "updatedAt": "2022-02-03T21:27:52Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think this will need to be a ciphersuite-specific detail. How we decide to present that in the draft is not immediately clear to me right now.",
+          "createdAt": "2022-02-03T21:27:52Z",
+          "updatedAt": "2022-02-03T21:27:52Z"
         }
       ]
     }
@@ -2535,50 +2580,705 @@
       "id": "PR_kwDOEpUZs84x56R_",
       "title": "RFC8032 compat with some open questions",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/62",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This demonstrates RFC8032 compliance (for vanilla Ed25519, not the ctx or ph variants). To do so, it creates a signature using the reference implementation, encodes the signature and public key as RFC8032 expects, and then calls the signature verification routine [from the RFC](https://datatracker.ietf.org/doc/html/rfc8032#section-6).\r\n\r\nThis change raises a couple of questions (to me), including:\r\n1. The pre-hash step introduced in [this PR](https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46), to address [this issue](https://github.com/cfrg/draft-irtf-cfrg-frost/issues/43), meant that the vanilla ed25519 interop wouldn't work. (Vanilla ed25519 doesn't pre-hash the message when computing the challenge.) I think we got the change in #46 wrong. [The audit](https://github.com/ZcashFoundation/redjubjub/blob/main/zcash-frost-audit-report-20210323.pdf) only recommends this pre-hashing step when computing the blinding factor, not when computing the challenge, so I _think_ we could revert the pre-hashing step for the challenge.\r\n1. Do we want to specify a pile of different variants like RFC8032 did, including \"vanilla\" mode (Ed25519), pre-hash (ph) mode (Ed25519ph), and context-specific (ctx) mode (Ed25519ctx)? It seems like a lot of complexity to do everything, and to be honest I'm not sure what variant is most useful in practice. Does anyone else know?\r\n1. What is our API abstraction boundary? EdDSA uses byte strings everywhere, including signing and verifying keys, as well as signatures. Currently, we operate on \"internal\" types, e.g., scalars and elements for signing and verifying keys, respectively, and our signatures are (element, scalar) tuples. Should we adopt a higher layer of abstraction?\r\n1. Signature verification in this change was updated to match the logic in RFC8032. That is, rather than re-derive the group commitment and check for equality, check that the relation holds `[8][S]B = [8]R + [8][k]A'`.\r\n1. How do we want to handle domain separation for H1 and H2 for ciphersuites that target groups outside of RFC8032? \r\n\r\nStarting as a draft for now until we figure out what to do about (1), since I commented out the pre-hashing step in the code. I don't think we need to block on any of the remaining questions.\r\n\r\ncc @veorq in case he has thoughts on (1)",
       "createdAt": "2022-02-01T14:11:08Z",
-      "updatedAt": "2022-02-02T23:16:58Z",
+      "updatedAt": "2022-02-04T15:05:16Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
-      "baseRefOid": "ea438bae97198bce95c247e0aa3183ef331d6937",
+      "baseRefOid": "872a7082d9ea33596b72d47a2d9ce906df25af06",
       "headRepository": "cfrg/draft-irtf-cfrg-frost",
       "headRefName": "caw/rfc8032-compat",
-      "headRefOid": "af54557945cdd881c31fedb25365c96078b8276a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "headRefOid": "36c2b9043000beccc6e4f2551963a3dd7ba66ccf",
+      "closedAt": "2022-02-04T01:20:39Z",
+      "mergedAt": "2022-02-04T01:20:39Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "9cf547200e7a0c18f24a3a2a32a51c2a8167fda0"
+      },
+      "comments": [
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> 1. The pre-hash step introduced in [this PR](https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46), to address [this issue](https://github.com/cfrg/draft-irtf-cfrg-frost/issues/43), meant that the vanilla ed25519 interop wouldn't work. (Vanilla ed25519 doesn't pre-hash the message when computing the challenge.) I think we got the change in [Messages should be a fixed size when hashing\u00a0#46](https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46) wrong. [The audit](https://github.com/ZcashFoundation/redjubjub/blob/main/zcash-frost-audit-report-20210323.pdf) only recommends this pre-hashing step when computing the blinding factor, not when computing the challenge, so I _think_ we could revert the pre-hashing step for the challenge.\r\n\r\nYes I think this is correct. @chelseakomlo can confirm\r\n\r\n\r\n",
+          "createdAt": "2022-02-03T07:18:06Z",
+          "updatedAt": "2022-02-03T07:18:06Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> 2\\. Do we want to specify a pile of different variants like RFC8032 did, including \"vanilla\" mode (Ed25519), pre-hash (ph) mode (Ed25519ph), and context-specific (ctx) mode (Ed25519ctx)? It seems like a lot of complexity to do everything, and to be honest I'm not sure what variant is most useful in practice. Does anyone else know?\r\n\r\nI don't think we want to go far with this. Looking at [ed25519-dalek](https://docs.rs/ed25519-dalek/latest/ed25519_dalek/), and the [`RustCrypto/ed25519` API](https://github.com/RustCrypto/signatures/blob/master/ed25519/src/lib.rs), and the [`ring_compat` ed25519 API](https://docs.rs/ring-compat/latest/ring_compat/signature/trait.Signer.html#tymethod.try_sign), they just sign a message that is an arbitrary set of bytes, nothing explicit about prehashing, or ctx mode. Feels like we should keep it simple as possible while remaining compatible with APIs like those.\r\n\r\n",
+          "createdAt": "2022-02-03T07:27:48Z",
+          "updatedAt": "2022-02-03T07:27:48Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> 3\\. What is our API abstraction boundary? EdDSA uses byte strings everywhere, including signing and verifying keys, as well as signatures. Currently, we operate on \"internal\" types, e.g., scalars and elements for signing and verifying keys, respectively, and our signatures are (element, scalar) tuples. Should we adopt a higher layer of abstraction?\r\n\r\nThe `Signature` is parsed into algebraic structures from 64 bytes, similar for the `VerifyingKey`s, etc. Maybe we make the serialization \"pattern\" of these explicit like we do for the `SigningShare`, `SigningPackage`, etc message types, but not getting too deep because then we have to make them explicit per parameter set?",
+          "createdAt": "2022-02-03T07:32:37Z",
+          "updatedAt": "2022-02-03T07:32:37Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> 5\\. How do we want to handle domain separation for H1 and H2 for ciphersuites that target groups outside of RFC8032?\r\n\r\nNot sure I understand",
+          "createdAt": "2022-02-03T07:37:55Z",
+          "updatedAt": "2022-02-03T07:37:55Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> 4\\. Signature verification in this change was updated to match the logic in RFC8032. That is, rather than re-derive the group commitment and check for equality, check that the relation holds `[8][S]B = [8]R + [8][k]A'`.\r\n\r\nI think the code looks ok, @chelseakomlo may want to look at the verification tweak",
+          "createdAt": "2022-02-03T07:47:55Z",
+          "updatedAt": "2022-02-03T07:48:22Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> The Signature is parsed into algebraic structures from 64 bytes, similar for the VerifyingKeys, etc. Maybe we make the serialization \"pattern\" of these explicit like we do for the SigningShare, SigningPackage, etc message types, but not getting too deep because then we have to make them explicit per parameter set?\r\n\r\nI'm not really sure I followed this. Having thought on this some more, I suggest we stick with the interface we have right now and then file a separate issue to further refine this down the road based on RG feedback.",
+          "createdAt": "2022-02-03T14:08:18Z",
+          "updatedAt": "2022-02-03T14:08:18Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > 4. Signature verification in this change was updated to match the logic in RFC8032. That is, rather than re-derive the group commitment and check for equality, check that the relation holds `[8][S]B = [8]R + [8][k]A'`.\r\n> \r\n> I think the code looks ok, @chelseakomlo may want to look at the verification tweak\r\n\r\nMaybe @hdevalence has an opinion on which validation check is preferred? =)",
+          "createdAt": "2022-02-03T14:09:12Z",
+          "updatedAt": "2022-02-03T14:09:12Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > 5. How do we want to handle domain separation for H1 and H2 for ciphersuites that target groups outside of RFC8032?\r\n>\r\n> Not sure I understand\r\n\r\nAh, sorry, I was basically asking if we wanted to keep the H1/H2 definitions we have in the draft, which fold in `contextString` and a string (`\"rho\"` or `\"chal\"`), for groups that are not targeting RFC8032. H2 is the hash we use for generating the challenge, so for RFC8032 compatibility, I don't think we can do as the draft currently describes. (Indeed, the code in this PR doesn't do it.) Does that clarify? ",
+          "createdAt": "2022-02-03T14:11:03Z",
+          "updatedAt": "2022-02-03T14:11:51Z"
+        },
+        {
+          "author": "hdevalence",
+          "authorAssociation": "NONE",
+          "body": "> > > 4. Signature verification in this change was updated to match the logic in RFC8032. That is, rather than re-derive the group commitment and check for equality, check that the relation holds `[8][S]B = [8]R + [8][k]A'`.\r\n> \r\n> Maybe @hdevalence has an opinion on which validation check is preferred? =)\r\n\r\nHey, I don't have a lot of context, so discount this drive-by comment as appropriate, but I'm wondering to what extent it's actually important for a FROST specification to specify the verification check?  To me, one of the big benefits of FROST or other threshold signature constructions is that they produce signatures that look and act just like normal signatures (because they are just normal signatures) -- the part that is distinct and special is in the *creation* of those signatures.  So my assumption would be that it's better not to specify verification at all, except by reference to the method used by whatever signature scheme is in use (i.e., rather than trying to match RFC8032 exactly, just refer to it).\r\n\r\nOtherwise, my opinion would be to use the ZIP215-style validation checks, but again, this is a drive-by comment, so feel free to discount it as appropriate, it's certainly possible that there's context I'm missing.",
+          "createdAt": "2022-02-03T18:06:17Z",
+          "updatedAt": "2022-02-03T18:06:17Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> > 1. The pre-hash step introduced in [this PR](https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46), to address [this issue](https://github.com/cfrg/draft-irtf-cfrg-frost/issues/43), meant that the vanilla ed25519 interop wouldn't work. (Vanilla ed25519 doesn't pre-hash the message when computing the challenge.) I think we got the change in [Messages should be a fixed size when hashing\u00a0#46](https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46) wrong. [The audit](https://github.com/ZcashFoundation/redjubjub/blob/main/zcash-frost-audit-report-20210323.pdf) only recommends this pre-hashing step when computing the blinding factor, not when computing the challenge, so I _think_ we could revert the pre-hashing step for the challenge.\r\n> \r\n> Yes I think this is correct. @chelseakomlo can confirm\r\n\r\nYes, I'm fine with this change.",
+          "createdAt": "2022-02-03T19:27:12Z",
+          "updatedAt": "2022-02-03T19:27:12Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Hey, I don't have a lot of context, so discount this drive-by comment as appropriate, but I'm wondering to what extent it's actually important for a FROST specification to specify the verification check? To me, one of the big benefits of FROST or other threshold signature constructions is that they produce signatures that look and act just like normal signatures (because they are just normal signatures) -- the part that is distinct and special is in the creation of those signatures. \r\n\r\nThanks for chiming in! This is a fair question. If we were only targeting RFC8032, then I agree that specifying verification would be redundant. However, one of the established goals -- which may certainly change -- is to support ciphersuites based on NIST curves (P-256) and ristretto255. As RFC8032 does not apply to these variants, we needed to include the verification algorithm.\r\n\r\nI'm not really familiar with the ZIP215-style validation checks, but I'll take a look. \ud83d\udc4d ",
+          "createdAt": "2022-02-03T19:29:45Z",
+          "updatedAt": "2022-02-03T19:29:45Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chelseakomlo addressed your comments -- thanks!",
+          "createdAt": "2022-02-03T22:10:41Z",
+          "updatedAt": "2022-02-03T22:10:41Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs84z8V4c",
+          "commit": {
+            "abbreviatedOid": "af54557"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T07:33:54Z",
+          "updatedAt": "2022-02-03T07:33:54Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Re: \r\n\r\n>The pre-hash step introduced in https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46, to address https://github.com/cfrg/draft-irtf-cfrg-frost/issues/43, meant that the vanilla ed25519 interop wouldn't work. (Vanilla ed25519 doesn't pre-hash the message when computing the challenge.) I think we got the change in https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46 wrong. [The audit](https://github.com/ZcashFoundation/redjubjub/blob/main/zcash-frost-audit-report-20210323.pdf) only recommends this pre-hashing step when computing the blinding factor, not when computing the challenge, so I think we could revert the pre-hashing step for the challenge.",
+              "createdAt": "2022-02-03T07:33:54Z",
+              "updatedAt": "2022-02-03T07:33:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84z8WBz",
+          "commit": {
+            "abbreviatedOid": "af54557"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T07:34:44Z",
+          "updatedAt": "2022-02-03T07:34:44Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "\ud83d\udc40 ",
+              "createdAt": "2022-02-03T07:34:44Z",
+              "updatedAt": "2022-02-03T07:34:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84z8WJo",
+          "commit": {
+            "abbreviatedOid": "af54557"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T07:35:24Z",
+          "updatedAt": "2022-02-03T07:35:25Z",
+          "comments": [
+            {
+              "originalPosition": 75,
+              "body": "re:\r\n\r\n> The pre-hash step introduced in https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46, to address https://github.com/cfrg/draft-irtf-cfrg-frost/issues/43, meant that the vanilla ed25519 interop wouldn't work. (Vanilla ed25519 doesn't pre-hash the message when computing the challenge.) I think we got the change in https://github.com/cfrg/draft-irtf-cfrg-frost/pull/46 wrong. [The audit](https://github.com/ZcashFoundation/redjubjub/blob/main/zcash-frost-audit-report-20210323.pdf) only recommends this pre-hashing step when computing the blinding factor, not when computing the challenge, so I think we could revert the pre-hashing step for the challenge.",
+              "createdAt": "2022-02-03T07:35:24Z",
+              "updatedAt": "2022-02-03T07:35:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84z9_Nj",
+          "commit": {
+            "abbreviatedOid": "e1893d0"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T14:06:50Z",
+          "updatedAt": "2022-02-03T14:06:50Z",
+          "comments": [
+            {
+              "originalPosition": 30,
+              "body": "Yeah, if we agree that we should revert this change, I'll tidy up this code and fix the main spec.",
+              "createdAt": "2022-02-03T14:06:50Z",
+              "updatedAt": "2022-02-03T14:06:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84z9_Yd",
+          "commit": {
+            "abbreviatedOid": "e1893d0"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T14:07:21Z",
+          "updatedAt": "2022-02-03T14:07:21Z",
+          "comments": [
+            {
+              "originalPosition": 43,
+              "body": "I'll tidy this up before I promote this PR for real review.",
+              "createdAt": "2022-02-03T14:07:21Z",
+              "updatedAt": "2022-02-03T14:07:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84z9_dm",
+          "commit": {
+            "abbreviatedOid": "e1893d0"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T14:07:28Z",
+          "updatedAt": "2022-02-03T14:07:29Z",
+          "comments": [
+            {
+              "originalPosition": 75,
+              "body": "(Same comment as above)",
+              "createdAt": "2022-02-03T14:07:29Z",
+              "updatedAt": "2022-02-03T14:07:29Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AF8u",
+          "commit": {
+            "abbreviatedOid": "3ff8b48"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good with these changes. Thanks for this huge effort.",
+          "createdAt": "2022-02-03T21:35:09Z",
+          "updatedAt": "2022-02-03T21:59:36Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "The `x,y` need to have subscript `i`s on them",
+              "createdAt": "2022-02-03T21:35:09Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 133,
+              "body": "Need subscript `j`s on the `(x,y)` values; same for values below.",
+              "createdAt": "2022-02-03T21:37:25Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 143,
+              "body": "Shouldn't this be \"are Scalar and Element values respectively\", if I'm reading this correctly?",
+              "createdAt": "2022-02-03T21:39:17Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 153,
+              "body": "Swap out `B` for `commitment_list`, no?",
+              "createdAt": "2022-02-03T21:39:42Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 163,
+              "body": "We need this to be either `H1,H2,H3`",
+              "createdAt": "2022-02-03T21:40:29Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 205,
+              "body": "Needs to be `H1/H2/H3`",
+              "createdAt": "2022-02-03T21:41:21Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 212,
+              "body": "Capital R_i",
+              "createdAt": "2022-02-03T21:42:03Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 59,
+              "body": "`H3` is an alias for `H` due to backwards compatibility reasons with {{!RFC8032}}",
+              "createdAt": "2022-02-03T21:50:02Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 85,
+              "body": "If you are feeling up for it, `participant_index` is more accurate, as opposed to just the ordering of the list.",
+              "createdAt": "2022-02-03T21:52:29Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 99,
+              "body": "Do you need the \"for each signer\" specification again at the end of this sentence?",
+              "createdAt": "2022-02-03T21:53:06Z",
+              "updatedAt": "2022-02-03T21:59:36Z"
+            },
+            {
+              "originalPosition": 136,
+              "body": "This list MUST be sorted in ascending order with respect to the participant identifier.",
+              "createdAt": "2022-02-03T21:53:53Z",
+              "updatedAt": "2022-02-03T21:59:37Z"
+            },
+            {
+              "originalPosition": 236,
+              "body": "Shouldn't you specify the input for `H2` as you did on line 672 for `H1`?",
+              "createdAt": "2022-02-03T21:56:58Z",
+              "updatedAt": "2022-02-03T21:59:37Z"
+            },
+            {
+              "originalPosition": 236,
+              "body": "Also, I seem to recall that the public key is also hashed into H2. Double checking that is not the case here.",
+              "createdAt": "2022-02-03T21:58:33Z",
+              "updatedAt": "2022-02-03T21:59:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840ALh9",
+          "commit": {
+            "abbreviatedOid": "3ff8b48"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:00:53Z",
+          "updatedAt": "2022-02-03T22:00:53Z",
+          "comments": [
+            {
+              "originalPosition": 143,
+              "body": "Oh, yes, duh.",
+              "createdAt": "2022-02-03T22:00:53Z",
+              "updatedAt": "2022-02-03T22:00:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840ALjQ",
+          "commit": {
+            "abbreviatedOid": "3ff8b48"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:01:00Z",
+          "updatedAt": "2022-02-03T22:01:00Z",
+          "comments": [
+            {
+              "originalPosition": 153,
+              "body": "Yep, thanks, missed this one.",
+              "createdAt": "2022-02-03T22:01:00Z",
+              "updatedAt": "2022-02-03T22:01:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AMDF",
+          "commit": {
+            "abbreviatedOid": "3ff8b48"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:03:15Z",
+          "updatedAt": "2022-02-03T22:03:15Z",
+          "comments": [
+            {
+              "originalPosition": 236,
+              "body": "No -- this is specifically done for compatibility with RFC8032.",
+              "createdAt": "2022-02-03T22:03:15Z",
+              "updatedAt": "2022-02-03T22:03:15Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AMOR",
+          "commit": {
+            "abbreviatedOid": "3ff8b48"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:04:04Z",
+          "updatedAt": "2022-02-03T22:04:04Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "What do we want H3 to be for non-RFC8032 suites?",
+              "createdAt": "2022-02-03T22:04:04Z",
+              "updatedAt": "2022-02-03T22:04:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AMqf",
+          "commit": {
+            "abbreviatedOid": "3ff8b48"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:06:06Z",
+          "updatedAt": "2022-02-03T22:06:07Z",
+          "comments": [
+            {
+              "originalPosition": 85,
+              "body": "`index` is the notation used in the parameter description, so I'll leave this as-is for now.",
+              "createdAt": "2022-02-03T22:06:07Z",
+              "updatedAt": "2022-02-03T22:06:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AMtX",
+          "commit": {
+            "abbreviatedOid": "3ff8b48"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:06:21Z",
+          "updatedAt": "2022-02-03T22:06:21Z",
+          "comments": [
+            {
+              "originalPosition": 59,
+              "body": "I picked something arbitrary for domain separation of H3 with these suites.",
+              "createdAt": "2022-02-03T22:06:21Z",
+              "updatedAt": "2022-02-03T22:06:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AOBC",
+          "commit": {
+            "abbreviatedOid": "a7a36b4"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:12:54Z",
+          "updatedAt": "2022-02-03T22:12:54Z",
+          "comments": [
+            {
+              "originalPosition": 205,
+              "body": "Thanks, yeah, I forgot to undo this change!",
+              "createdAt": "2022-02-03T22:12:54Z",
+              "updatedAt": "2022-02-03T22:12:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AODO",
+          "commit": {
+            "abbreviatedOid": "a7a36b4"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-03T22:13:06Z",
+          "updatedAt": "2022-02-03T22:13:06Z",
+          "comments": [
+            {
+              "originalPosition": 163,
+              "body": "(See below)",
+              "createdAt": "2022-02-03T22:13:06Z",
+              "updatedAt": "2022-02-03T22:13:06Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Am5K",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:00:45Z",
+          "updatedAt": "2022-02-04T01:00:46Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "I worry a little about the use of `x` and `y` because that may be confused with `x`-coordinates / `y`-coordinates of curve group elements (points) in affine coordinates",
+              "createdAt": "2022-02-04T01:00:45Z",
+              "updatedAt": "2022-02-04T01:00:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Am7f",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:01:05Z",
+          "updatedAt": "2022-02-04T01:01:05Z",
+          "comments": [
+            {
+              "originalPosition": 89,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-02-04T01:01:05Z",
+              "updatedAt": "2022-02-04T01:01:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Am_M",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:01:31Z",
+          "updatedAt": "2022-02-04T01:01:32Z",
+          "comments": [
+            {
+              "originalPosition": 125,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-02-04T01:01:31Z",
+              "updatedAt": "2022-02-04T01:01:32Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AnBb",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:01:47Z",
+          "updatedAt": "2022-02-04T01:01:47Z",
+          "comments": [
+            {
+              "originalPosition": 138,
+              "body": "Same here",
+              "createdAt": "2022-02-04T01:01:47Z",
+              "updatedAt": "2022-02-04T01:01:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AnDe",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:02:00Z",
+          "updatedAt": "2022-02-04T01:02:01Z",
+          "comments": [
+            {
+              "originalPosition": 145,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-02-04T01:02:01Z",
+              "updatedAt": "2022-02-04T01:02:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AnDl",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:02:01Z",
+          "updatedAt": "2022-02-04T01:02:02Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "Yeah, I didn't want to use D/E though, since we dropped that notation. Happy to take suggestions!",
+              "createdAt": "2022-02-04T01:02:01Z",
+              "updatedAt": "2022-02-04T01:02:02Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AnGD",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:02:22Z",
+          "updatedAt": "2022-02-04T01:02:22Z",
+          "comments": [
+            {
+              "originalPosition": 171,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-02-04T01:02:22Z",
+              "updatedAt": "2022-02-04T01:02:22Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AnJs",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:02:50Z",
+          "updatedAt": "2022-02-04T01:02:51Z",
+          "comments": [
+            {
+              "originalPosition": 224,
+              "body": "Cool, this helps",
+              "createdAt": "2022-02-04T01:02:50Z",
+              "updatedAt": "2022-02-04T01:02:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AnNH",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-04T01:03:19Z",
+          "updatedAt": "2022-02-04T01:03:20Z",
+          "comments": [
+            {
+              "originalPosition": 243,
+              "body": "Very good",
+              "createdAt": "2022-02-04T01:03:19Z",
+              "updatedAt": "2022-02-04T01:03:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840AnS9",
+          "commit": {
+            "abbreviatedOid": "36c2b90"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Tiny q, non-blocking. Yay!",
+          "createdAt": "2022-02-04T01:04:02Z",
+          "updatedAt": "2022-02-04T01:04:02Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 63,
       "id": "PR_kwDOEpUZs84x-not",
       "title": "Hash in message into rho",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/63",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2022-02-02T16:40:01Z",
-      "updatedAt": "2022-02-02T16:55:28Z",
+      "updatedAt": "2022-02-03T03:37:35Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
       "baseRefOid": "ea438bae97198bce95c247e0aa3183ef331d6937",
       "headRepository": "cfrg/draft-irtf-cfrg-frost",
       "headRefName": "rho",
-      "headRefOid": "a9381d19c92ead3d5eae06055c8ce43a7860cbc9",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "18b05359e4be282686d4f60cf5e9629821ed41a7",
+      "closedAt": "2022-02-03T03:37:35Z",
+      "mergedAt": "2022-02-03T03:37:35Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "872a7082d9ea33596b72d47a2d9ce906df25af06"
+      },
       "comments": [],
       "reviews": [
         {
@@ -2606,8 +3306,118 @@
           "createdAt": "2022-02-02T16:55:28Z",
           "updatedAt": "2022-02-02T16:55:28Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs84z74QG",
+          "commit": {
+            "abbreviatedOid": "6f1147d"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-03T03:36:57Z",
+          "updatedAt": "2022-02-03T03:37:13Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\n        msg_hash = self.H3(message)\n```\n",
+              "createdAt": "2022-02-03T03:36:57Z",
+              "updatedAt": "2022-02-03T03:37:13Z"
+            }
+          ]
         }
       ]
+    },
+    {
+      "number": 65,
+      "id": "PR_kwDOEpUZs84yDgPg",
+      "title": "Add automation to run poc make test",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/65",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-03T23:02:17Z",
+      "updatedAt": "2022-02-03T23:15:11Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "872a7082d9ea33596b72d47a2d9ce906df25af06",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "ci",
+      "headRefOid": "c89789165aebc71d05cc066672c3e63fa5012fe7",
+      "closedAt": "2022-02-03T23:15:09Z",
+      "mergedAt": "2022-02-03T23:15:09Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "af8c9651702c14ad8c3b15e40ae72b530110fa7b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 66,
+      "id": "PR_kwDOEpUZs84yDkQC",
+      "title": "Use sagemath:latest docker image to run make test",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/66",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-03T23:32:18Z",
+      "updatedAt": "2022-02-04T22:15:46Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "af8c9651702c14ad8c3b15e40ae72b530110fa7b",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "docker-sage",
+      "headRefOid": "91766afb598f124680bdffc18361e5b1851cabf4",
+      "closedAt": "2022-02-04T22:15:42Z",
+      "mergedAt": "2022-02-04T22:15:42Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "21471bbd339579da93ba14c0b1a4a79e6279c45a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 67,
+      "id": "PR_kwDOEpUZs84yFxqg",
+      "title": "Format test vectors and include them in the draft",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/67",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #49.",
+      "createdAt": "2022-02-04T15:38:44Z",
+      "updatedAt": "2022-02-04T22:22:02Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "21471bbd339579da93ba14c0b1a4a79e6279c45a",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/format-vectors",
+      "headRefOid": "3f4b408327cf8d4aabf299da41ac80941f10f3dd",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Rebased.",
+          "createdAt": "2022-02-04T22:22:02Z",
+          "updatedAt": "2022-02-04T22:22:02Z"
+        }
+      ],
+      "reviews": []
     }
   ]
 }
