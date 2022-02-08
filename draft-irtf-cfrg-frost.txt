@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 8 August 2022          University of Waterloo, Zcash Foundation
+Expires: 12 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                                C.A. Wood
                                                               Cloudflare
-                                                         4 February 2022
+                                                         8 February 2022
 
 
                Two-Round Threshold Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2022.
+   This Internet-Draft will expire on 12 August 2022.
 
 Copyright Notice
 
@@ -374,51 +374,51 @@ Table of Contents
    In the single-party setting, a Schnorr signature is generated with
    the following operation.
 
-  schnorr_signature_generate(msg, SK):
+     schnorr_signature_generate(msg, SK):
 
-  Inputs:
-  - msg, message to be signed, an octet string
-  - SK, private key, a scalar
-  - PK, public key, a group element
+     Inputs:
+     - msg, message to be signed, an octet string
+     - SK, private key, a scalar
+     - PK, public key, a group element
 
-  Outputs: signature (R, z), a pair of scalar values
+     Outputs: signature (R, z), a pair of scalar values
 
-  def schnorr_signature_generate(msg, SK, PK):
-    r = G.RandomScalar()
-    R = G.ScalarBaseMult(r)
+     def schnorr_signature_generate(msg, SK, PK):
+       r = G.RandomScalar()
+       R = G.ScalarBaseMult(r)
 
-    msg_hash = H3(msg)
-    comm_enc = G.SerializeElement(R)
-    pk_enc = G.SerializeElement(PK)
-    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
-    c = H2(challenge_input)
+       msg_hash = H3(msg)
+       comm_enc = G.SerializeElement(R)
+       pk_enc = G.SerializeElement(PK)
+       challenge_input = comm_enc || pk_enc || msg_hash
+       c = H2(challenge_input)
 
-    z = r + (c * SK)
-    return (R, z)
+       z = r + (c * SK)
+       return (R, z)
 
    The corresponding verification operation is as follows.
 
-  schnorr_signature_verify(msg, sig, PK):
+   schnorr_signature_verify(msg, sig, PK):
 
-  Inputs:
-  - msg, signed message, an octet string
-  - sig, a tuple (R, z) output from schnorr_signature_generate or FROST
-  - PK, public key, a group element
+   Inputs:
+   - msg, signed message, an octet string
+   - sig, a tuple (R, z) output from schnorr_signature_generate or FROST
+   - PK, public key, a group element
 
-  Outputs: 1 if signature is valid, and 0 otherwise
+   Outputs: 1 if signature is valid, and 0 otherwise
 
-  def schnorr_signature_verify(msg, sig = (R, z), PK):
-    msg_hash = H3(msg)
-    comm_enc = G.SerializeElement(R)
-    pk_enc = G.SerializeElement(PK)
-    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
-    c = H2(challenge_input)
+   def schnorr_signature_verify(msg, sig = (R, z), PK):
+     msg_hash = H3(msg)
+     comm_enc = G.SerializeElement(R)
+     pk_enc = G.SerializeElement(PK)
+     challenge_input = comm_enc || pk_enc || msg_hash
+     c = H2(challenge_input)
 
-    l = ScalarBaseMult(z)
-    r = R + (c * PK)
-    if l == r:
-      return 1
-    return 0
+     l = ScalarBaseMult(z)
+     r = R + (c * PK)
+     if l == r:
+       return 1
+     return 0
 
 7.2.  Polynomial Operations
 
