@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 8 August 2022          University of Waterloo, Zcash Foundation
+Expires: 12 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                                C.A. Wood
                                                               Cloudflare
-                                                         4 February 2022
+                                                         8 February 2022
 
 
                Two-Round Threshold Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 August 2022.
+   This Internet-Draft will expire on 12 August 2022.
 
 Copyright Notice
 
@@ -1243,8 +1243,8 @@ Appendix D.  Test Vectors
 
    *  Round two parameters and outputs: This lists the NUM_SIGNERS
       participants engaged in the protocol, identified by their integer
-      index, along with their corresponding output signature and
-      commitment share as produced in Section 8.2.
+      index, along with their corresponding output signature share and
+      group commitment share as produced in Section 8.2.
 
    *  Final output: This lists the aggregate signature as produced in
       Section 8.3.
