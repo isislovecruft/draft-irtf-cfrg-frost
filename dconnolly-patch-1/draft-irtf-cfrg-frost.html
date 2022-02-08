@@ -18,12 +18,16 @@ Further, this draft specifies signatures that are compatible with EdDSA verifica
 signatures. However, this draft does not generate deterministic nonces as defined by EdDSA,
 to ensure protection against a key-recovery attack that is possible when even only one
 participant is malicious. 
+       
+
+
+
     " name="description">
-<meta content="xml2rfc 3.12.0" name="generator">
+<meta content="xml2rfc 3.12.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-irtf-cfrg-frost-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.0
+  xml2rfc 3.12.1
     Python 3.9.7
     appdirs 1.4.4
     ConfigArgParse 1.3
@@ -1022,11 +1026,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">FROST</td>
-<td class="right">January 2022</td>
+<td class="right">February 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Connolly, et al.</td>
-<td class="center">Expires 17 July 2022</td>
+<td class="center">Expires 12 August 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1039,12 +1043,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-irtf-cfrg-frost-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-01-13" class="published">13 January 2022</time>
+<time datetime="2022-02-08" class="published">8 February 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-07-17">17 July 2022</time></dd>
+<dd class="expires"><time datetime="2022-08-12">12 August 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1084,10 +1088,10 @@ participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
 <p id="section-note.1-2">Discussion of this document takes place on the
-      mailing list (cfrg@ietf.org),
-    which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/cfrg/">https://mailarchive.ietf.org/arch/browse/cfrg/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+    Crypto Forum Research Group mailing list (cfrg@ietf.org),
+    which is archived at <span><a href="https://mailarchive.ietf.org/arch/search/?email_list=cfrg">https://mailarchive.ietf.org/arch/search/?email_list=cfrg</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">Source for this draft and an issue tracker can be found at
-    <span><a href="https://github.com/chelseakomlo/frost-spec">https://github.com/chelseakomlo/frost-spec</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+    <span><a href="https://github.com/cfrg/draft-irtf-cfrg-frost">https://github.com/cfrg/draft-irtf-cfrg-frost</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1108,7 +1112,7 @@ participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 July 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1189,10 +1193,7 @@ participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-shamir-secret-sharing" class="xref">Shamir Secret Sharing</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
-                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="xref">7.4</a>.  <a href="#name-verifiable-secret-sharing" class="xref">Verifiable Secret Sharing</a></p>
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="xref">7.3</a>.  <a href="#name-encoding-operations" class="xref">Encoding Operations</a></p>
 </li>
             </ul>
 </li>
@@ -1200,13 +1201,13 @@ participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-two-round-frost" class="xref">Two-Round FROST</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-round-one" class="xref">Round One</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-round-one-commitment" class="xref">Round One - Commitment</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-round-two" class="xref">Round Two</a></p>
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-round-two-signature-share-g" class="xref">Round Two - Signature Share Generation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
-                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-aggregate" class="xref">Aggregate</a></p>
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-signature-share-aggregation" class="xref">Signature Share Aggregation</a></p>
 </li>
             </ul>
 </li>
@@ -1214,10 +1215,13 @@ participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-ciphersuites" class="xref">Ciphersuites</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
-                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-frostristretto255-sha-512" class="xref">FROST(ristretto255, SHA-512)</a></p>
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-frostedwards25519-sha-512" class="xref">FROST(edwards25519, SHA-512)</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
-                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-frostp-256-sha-256" class="xref">FROST(P-256, SHA-256)</a></p>
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-frostristretto255-sha-512" class="xref">FROST(ristretto255, SHA-512)</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="xref">9.3</a>.  <a href="#name-frostp-256-sha-256" class="xref">FROST(P-256, SHA-256)</a></p>
 </li>
             </ul>
 </li>
@@ -1236,27 +1240,55 @@ participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-contributors" class="xref">Contributors</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-removing-the-coordinator-ro" class="xref">Removing the Coordinator Role</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-references" class="xref">References</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="xref">12.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="xref">12</a>. <a href="#name-contributors" class="xref">Contributors</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="xref">12.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="xref">13</a>. <a href="#name-references" class="xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="xref">13.1</a>.  <a href="#name-normative-references" class="xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.2">
+                <p id="section-toc.1-1.13.2.2.1"><a href="#section-13.2" class="xref">13.2</a>.  <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
-</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
-            <p id="section-toc.1-1.14.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-trusted-dealer-key-generati" class="xref">Trusted Dealer Key Generation</a></p>
+            <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-C" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="xref">Appendix B</a>.  <a href="#name-trusted-dealer-key-generati" class="xref">Trusted Dealer Key Generation</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.1">
+                <p id="section-toc.1-1.15.2.1.1"><a href="#appendix-B.1" class="xref">B.1</a>.  <a href="#name-shamir-secret-sharing" class="xref">Shamir Secret Sharing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15.2.2">
+                <p id="section-toc.1-1.15.2.2.1"><a href="#appendix-B.2" class="xref">B.2</a>.  <a href="#name-verifiable-secret-sharing" class="xref">Verifiable Secret Sharing</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-C" class="xref">Appendix C</a>.  <a href="#name-wire-format" class="xref">Wire Format</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.1">
+                <p id="section-toc.1-1.16.2.1.1"><a href="#appendix-C.1" class="xref">C.1</a>.  <a href="#name-signing-commitment" class="xref">Signing Commitment</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.2">
+                <p id="section-toc.1-1.16.2.2.1"><a href="#appendix-C.2" class="xref">C.2</a>.  <a href="#name-signing-packages" class="xref">Signing Packages</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16.2.3">
+                <p id="section-toc.1-1.16.2.3.1"><a href="#appendix-C.3" class="xref">C.3</a>.  <a href="#name-signature-share" class="xref">Signature Share</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#appendix-D" class="xref">Appendix D</a>.  <a href="#name-test-vectors" class="xref">Test Vectors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
+            <p id="section-toc.1-1.18.1"><a href="#appendix-E" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1270,7 +1302,7 @@ participant is malicious.<a href="#section-abstract-1" class="pilcrow">¶</a></p
 <p id="section-1-1">DISCLAIMER: This is a work-in-progress draft of FROST.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">RFC EDITOR: PLEASE REMOVE THE FOLLOWING PARAGRAPH The source for this draft is
 maintained in GitHub. Suggested changes should be submitted as pull requests
-at https://github.com/chelseakomlo/frost-spec. Instructions are on that page as
+at https://github.com/cfrg/draft-irtf-cfrg-frost. Instructions are on that page as
 well.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Unlike signatures in a single-party setting, threshold signatures
 require cooperation among a threshold number of signers each holding a share
@@ -1370,6 +1402,7 @@ function to produce the final signature This is sketched below.<a href="#section
             +------------------------------------------&gt;
             |    SignatureShare                        |
             &lt;------------------------------------------+
+            |
       == Aggregation ==
             |
   signature |
@@ -1387,64 +1420,46 @@ messages is in <a href="#frost-spec" class="xref">Section 8</a>.<a href="#sectio
       </h2>
 <p id="section-5-1">The following notation and terminology are used throughout this document.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-5-2.1">
-          <code>s</code> denotes a secret that is Shamir secret shared among the participants.<a href="#section-5-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-5-2.1">A participant is an entity that is trusted to hold a secret share.<a href="#section-5-2.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-5-2.2">
-          <code>s[i]</code> denotes the i-th share of the secret <code>s</code>.<a href="#section-5-2.2" class="pilcrow">¶</a>
+          <code>NUM_SIGNERS</code> denotes the number of participants, and the number of shares that <code>s</code> is split into.
+This value MUST NOT exceed 2^16-1.<a href="#section-5-2.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-2.3">A participant is an entity that is trusted to hold a secret share.<a href="#section-5-2.3" class="pilcrow">¶</a>
+        <li class="normal" id="section-5-2.3">
+          <code>THRESHOLD_LIMIT</code> denotes the threshold number of participants required to issue a signature. More specifically,
+at least THRESHOLD_LIMIT shares must be combined to issue a valid signature.<a href="#section-5-2.3" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-5-2.4">
-          <code>n</code> denotes the number of participants, and the number of shares that <code>s</code> is split into.<a href="#section-5-2.4" class="pilcrow">¶</a>
+          <code>len(x)</code> is the length of integer input <code>x</code> as an 8-byte, big-endian integer.<a href="#section-5-2.4" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-5-2.5">
-          <code>t</code> denotes the threshold number of participants required to issue a signature. More specifically,
-at least <code>t</code> shares must be combined to issue a valid signature.<a href="#section-5-2.5" class="pilcrow">¶</a>
+          <code>I2OSP(x, w)</code>: Convert non-negative integer <code>x</code> to a <code>w</code>-length,
+big-endian byte string as described in <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-5-2.5" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-5-2.6">
-          <code>L_i</code> represents the ith Lagrange coefficient.<a href="#section-5-2.6" class="pilcrow">¶</a>
+          <code>OS2IP(s)</code>: Convert byte string <code>s</code> to a non-negative integer as
+described in <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>, assuming big-endian byte order.<a href="#section-5-2.6" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-5-2.7">
-          <code>sig = (R, z)</code> denotes a Schnorr signature with public commitment <code>R</code> and response <code>z</code>.<a href="#section-5-2.7" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-5-2.8">
-          <code>PK</code> is the group public key.<a href="#section-5-2.8" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-5-2.9">
-          <code>sk_i</code> is each ith individual's private key, consisting of the tuple <code>sk_i = (i, s[i])</code>.<a href="#section-5-2.9" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-5-2.10">
-          <code>len(x)</code> is the length of integer input <code>x</code> as an 8-byte, big-endian integer.<a href="#section-5-2.10" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-5-2.11">|| denotes contatenation, i.e., x || y = xy.<a href="#section-5-2.11" class="pilcrow">¶</a>
+        <li class="normal" id="section-5-2.7">|| denotes contatenation, i.e., x || y = xy.<a href="#section-5-2.7" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="section-5-3">This specification makes use of the following utility functions:<a href="#section-5-3" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5-4.1">SUM(START, END){TERMS}: this function denotes the summation from START to END
-(inclusive) of TERMS. For example, SUM(N=0, 3){2N} is equal to 2*(1+2+3)=12.<a href="#section-5-4.1" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-5-4.2">PROD(START, END){TERMS}: this function denotes the product from START to
-END of TERMS in similar manner.<a href="#section-5-4.2" class="pilcrow">¶</a>
-</li>
-      </ul>
-<p id="section-5-5">Unless otherwise stated, we assume that secrets are sampled uniformly at random
+<p id="section-5-3">Unless otherwise stated, we assume that secrets are sampled uniformly at random
 using a cryptographically secure pseudorandom number generator (CSPRNG); see
-<span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional guidance on the generation of random numbers.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">Let <code>B</code> be a generator, or distiguished element, of <code>G</code>, a finite group of with
+<span>[<a href="#RFC4086" class="xref">RFC4086</a>]</span> for additional guidance on the generation of random numbers.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">Let <code>B</code> be a generator, or distiguished element, of <code>G</code>, a finite group of with
 order <code>l</code>, a large prime.  Throughout this document, and in practice, we assume
 this group to be instantiated as an arbitrary abstraction of an elliptic curve
 subgroup, defined over a finite field; however, that does not restrict an
 implementation from instantiating FROST signatures over other groups, provided
-their order be prime.<a href="#section-5-6" class="pilcrow">¶</a></p>
-<p id="section-5-7">We denote group elements with capital Roman letters, and scalars with
+their order be prime.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">We denote group elements with capital Roman letters, and scalars with
 lower-cased Roman letters.  We use <code>+</code> to denote the group operation, and <code>-</code> to
 denote inversion.  We use <code>*</code> to denote multiplication of a scalar by a group
 element, that is, the group element added to itself in succession a number of
 times equal to the value of the scalar. Testing equality between two group elements
 is denoted as <code>?=</code>, where it is assumed that the elements are in some canonical,
-serialised form.<a href="#section-5-7" class="pilcrow">¶</a></p>
+serialised form.<a href="#section-5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cryptographic-dependencies">
@@ -1482,31 +1497,18 @@ We denote equality comparison as <code>==</code> and assignment of values by <co
 </li>
           <li class="normal" id="section-6.1-3.2">Identity(): Outputs the identity element of the group (i.e. <code>I</code>).<a href="#section-6.1-3.2" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-6.1-3.3">HashToScalar(x): A member function of <code>G</code> that deterministically maps
-an array of bytes <code>x</code> to an element in GF(p). This function is optionally
-parameterized by a DST.<a href="#section-6.1-3.3" class="pilcrow">¶</a>
+          <li class="normal" id="section-6.1-3.3">RandomScalar(): A member function of <code>G</code> that chooses at random a
+non-zero element in GF(p).<a href="#section-6.1-3.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-6.1-3.4">RandomScalar(): A member function of <code>G</code> that chooses at random a
-non-zero element in GF(p).<a href="#section-6.1-3.4" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-6.1-3.5">SerializeElement(A): A member function of <code>G</code> that maps a group element <code>A</code>
+          <li class="normal" id="section-6.1-3.4">SerializeElement(A): A member function of <code>G</code> that maps a group element <code>A</code>
 to a unique byte array <code>buf</code> of fixed length <code>Ne</code>. The output type of
-this function is <code>SerializedElement</code>.<a href="#section-6.1-3.5" class="pilcrow">¶</a>
+this function is <code>SerializedElement</code>.<a href="#section-6.1-3.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-6.1-3.6">DeserializeElement(buf): A member function of <code>G</code> that maps a byte array
+          <li class="normal" id="section-6.1-3.5">DeserializeElement(buf): A member function of <code>G</code> that maps a byte array
 <code>buf</code> to a group element <code>A</code>, or fails if the input is not a valid
 byte representation of an element. This function can raise a
 DeserializeError if deserialization fails or <code>A</code> is the identity element
-of the group; see <a href="#input-validation" class="xref">Section 6.1.1</a>.<a href="#section-6.1-3.6" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-6.1-3.7">SerializeScalar(s): A member function of <code>G</code> that maps a scalar element <code>s</code>
-to a unique byte array <code>buf</code> of fixed length <code>Ns</code>. The output type of this
-function is <code>SerializedScalar</code>.<a href="#section-6.1-3.7" class="pilcrow">¶</a>
-</li>
-          <li class="normal" id="section-6.1-3.8">DeserializeScalar(buf): A member function of <code>G</code> that maps a byte array
-<code>buf</code> to a scalar <code>s</code>, or fails if the input is not a valid byte
-representation of a scalar. This function can raise a
-DeserializeError if deserialization fails; see <a href="#input-validation" class="xref">Section 6.1.1</a>.<a href="#section-6.1-3.8" class="pilcrow">¶</a>
+of the group; see <a href="#input-validation" class="xref">Section 6.1.1</a>.<a href="#section-6.1-3.5" class="pilcrow">¶</a>
 </li>
         </ul>
 <div id="input-validation">
@@ -1539,22 +1541,11 @@ little-endian integer, is a value greater than or equal to 0, and less than <cod
 <p id="section-6.2-1">FROST requires the use of a cryptographically secure hash function, generically
 written as H, which functions effectively as a random oracle. For concrete
 recommendations on hash functions which SHOULD BE used in practice, see
-<a href="#ciphersuites" class="xref">Section 9</a>.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<p id="section-6.2-2">Using H, we introduce two separate domain-separated hashes, H1 and H2, where they are
-domain separated. These hash functions differ per parameter set, so H1 and H2 will
-differ between instantiations of the protocol as follows:<a href="#section-6.2-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.2-3">
-<pre>
-H1(m) = H(contextString || "rho" || len(m) || m)
-</pre><a href="#section-6.2-3" class="pilcrow">¶</a>
-</div>
-<p id="section-6.2-4">and<a href="#section-6.2-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.2-5">
-<pre>
-H2(m) = H(contextString || "chal" || len(m) || m)
-</pre><a href="#section-6.2-5" class="pilcrow">¶</a>
-</div>
-<p id="section-6.2-6">The variable contextString is unique for each ciphersuite defined in <a href="#ciphersuites" class="xref">Section 9</a>.<a href="#section-6.2-6" class="pilcrow">¶</a></p>
+<a href="#ciphersuites" class="xref">Section 9</a>. Using H, we introduce three separate domain-separated hashes,
+H1, H2, and H3, where H1 and H2 map arbitrary inputs to non-zero Scalar elements of
+the prime-order group scalar field, and H3 is an alias for H with domain separation
+applied. The details of H1, H2, and H3 vary based on ciphersuite. See <a href="#ciphersuites" class="xref">Section 9</a>
+for more details about each.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1569,11 +1560,9 @@ following helper operations:<a href="#section-7-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-7-2.1">Schnorr signatures, <a href="#dep-schnorr" class="xref">Section 7.1</a>;<a href="#section-7-2.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-2.2">Polynomial operations, {dep-polynomial};<a href="#section-7-2.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-2.2">Polynomial operations, <a href="#dep-polynomial" class="xref">Section 7.2</a>;<a href="#section-7-2.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-7-2.3">Shamir Secret Sharing, {dep-shamir}; and<a href="#section-7-2.3" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-7-2.4">Verifiable Secret Sharing committments, <a href="#dep-vss" class="xref">Section 7.4</a>.<a href="#section-7-2.4" class="pilcrow">¶</a>
+        <li class="normal" id="section-7-2.3">Encoding operations, <a href="#dep-encoding" class="xref">Section 7.3</a><a href="#section-7-2.3" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="section-7-3">This sections describes these operations in more detail.<a href="#section-7-3" class="pilcrow">¶</a></p>
@@ -1596,9 +1585,15 @@ following operation.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
   Outputs: signature (R, z), a pair of scalar values
 
   def schnorr_signature_generate(msg, SK, PK):
-    r = RandomScalar()
-    R = ScalarBaseMult(r)
-    c = H2(R, PK, msg)
+    r = G.RandomScalar()
+    R = G.ScalarBaseMult(r)
+
+    msg_hash = H3(msg)
+    comm_enc = G.SerializeElement(R)
+    pk_enc = G.SerializeElement(PK)
+    challenge_input = comm_enc || pk_enc || msg_hash
+    c = H2(challenge_input)
+
     z = r + (c * SK)
     return (R, z)
 </pre><a href="#section-7.1-2" class="pilcrow">¶</a>
@@ -1616,7 +1611,12 @@ following operation.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
   Outputs: 1 if signature is valid, and 0 otherwise
 
   def schnorr_signature_verify(msg, sig = (R, z), PK):
-    c = H2(R, PK, msg)
+    msg_hash = H3(msg)
+    comm_enc = G.SerializeElement(R)
+    pk_enc = G.SerializeElement(PK)
+    challenge_input = comm_enc || pk_enc || msg_hash
+    c = H2(challenge_input)
+
     l = ScalarBaseMult(z)
     r = R + (c * PK)
     if l == r:
@@ -1657,7 +1657,7 @@ particular input <code>x</code>, i.e., <code>y = f(x)</code> using Horner's meth
   def polynomial_evaluate(x, coeffs):
     value = 0
     for (counter, coeff) in coeffs.reverse():
-      if counter = coeffs.len():
+      if counter == coeffs.len() - 1:
         value += coeff // add the constant term
       else:
         value += coeff
@@ -1711,8 +1711,6 @@ constant term occurs with a set of <code>t</code> points using polynomial
 interpolation, defined as follows.<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-7.2.3-2">
 <pre>
-  polynomial_interpolation(points):
-
   Inputs:
   - points, a set of `t` points on a polynomial f, each a tuple of two
     scalar values representing the x and y coordinates
@@ -1736,131 +1734,32 @@ interpolation, defined as follows.<a href="#section-7.2.3-1" class="pilcrow">¶<
 </div>
 </section>
 </div>
-<div id="dep-shamir">
+<div id="dep-encoding">
 <section id="section-7.3">
-        <h3 id="name-shamir-secret-sharing">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-shamir-secret-sharing" class="section-name selfRef">Shamir Secret Sharing</a>
+        <h3 id="name-encoding-operations">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-encoding-operations" class="section-name selfRef">Encoding Operations</a>
         </h3>
-<p id="section-7.3-1">In Shamir secret sharing, a dealer distributes a secret <code>s</code> to <code>n</code> participants
-in such a way that any cooperating subset of <code>t</code> participants can recover the
-secret. There are two basic steps in this scheme: (1) splitting a secret into
-multiple shares, and (2) combining shares to reveal the resulting secret.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
-<p id="section-7.3-2">This secret sharing scheme works over any field <code>F</code>. In this specification, <code>F</code> is
-the scalar field of the prime-order group <code>G</code>.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
-<p id="section-7.3-3">The procedure for splitting a secret into shares is as follows.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-7.3-4">
+<p id="section-7.3-1">This section describes various helper functions used for encoding data
+structures into values that can be processed with hash functions.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.3-2">
 <pre>
-  secret_share_split(s, n, t):
-
   Inputs:
-  - s, secret to be shared, an element of F
-  - n, the number of shares to generate, an integer
-  - t, the threshold of the secret sharing scheme, an integer
+  - commitment_list = [(i, x_i, y_i), ...], a list of commitments issued by each signer,
+    where each element in the list indicates the signer index i and their
+    two commitment Element values (x_i, y_i). This list MUST be sorted in ascending order
+    by signer index.
 
-  Outputs: A list of n secret shares, each of which is an element of F
+  Outputs: A byte string containing the serialized representation of commitment_list.
 
-  Errors:
-  - "invalid parameters", if t &gt; n
-
-  def secret_share(s, n, t):
-    if t &gt; n:
-      raise "invalid parameters"
-
-    # Generate random coefficients for the polynomial
-    coefficients = [s]
-    for i in range(t - 1):
-      coefficients.append(RandomScalar())
-
-    # Evaluate the polynomial for each participant, identified by their index i &gt; 0
-    points = []
-    for x_i in range(1, n+1):
-      y_i = polynomial_evaluate(x_i, coefficients)
-      point_i = (x_i, y_i)
-      points.append(point_i)
-    return points
-</pre><a href="#section-7.3-4" class="pilcrow">¶</a>
-</div>
-<p id="section-7.3-5">Let <code>points</code> be the output of this function. The i-th element in <code>points</code> is
-the share for the i-th participant, which is the randomly generated polynomial
-evaluated at coordinate <code>i</code>. We denote a secret share as the tuple <code>(i, points[i])</code>,
-and the list of these shares as <code>shares</code>.
-<code>i</code> MUST never equal <code>0</code>.<a href="#section-7.3-5" class="pilcrow">¶</a></p>
-<p id="section-7.3-6">The procedure for combining a <code>shares</code> list of length <code>t</code> to recover the
-secret <code>s</code> is as follows.<a href="#section-7.3-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-7.3-7">
-<pre>
-  secret_share_combine(shares):
-
-  Inputs:
-  - shares, a list of t secret shares, each a tuple (i, f(i))
-
-  Outputs: A list of n secret shares, each of which is an element of F
-
-  Errors:
-  - "invalid parameters", if less than t input shares are provided
-
-  def secret_share_combine(shares):
-    if len(shares) &lt; t:
-      raise "invalid parameters"
-    s = polynomial_interpolation(shares)
-    return s
-</pre><a href="#section-7.3-7" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="dep-vss">
-<section id="section-7.4">
-        <h3 id="name-verifiable-secret-sharing">
-<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-verifiable-secret-sharing" class="section-name selfRef">Verifiable Secret Sharing</a>
-        </h3>
-<p id="section-7.4-1">Feldman's Verifiable Secret Sharing (VSS) builds upon Shamir secret sharing,
-adding a verification step to demonstrate the consistency of a participant's
-share with a public commitment to the polynomial <code>f</code> for which the secret <code>s</code>
-is the constant term. This check ensure that all participants have a point
-(their share) on the same polynomial, ensuring that they can later reconstruct
-the correct secret. If the validation fails, the participant can issue a complaint
-against the dealer, and take actions such as broadcasting this complaint to all
-other participants. We do not specify the complaint procedure in this draft, as
-it will be implementation-specific.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
-<p id="section-7.4-2">The procedure for committing to a polynomial <code>f</code> of degree <code>t-1</code> is as follows.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-7.4-3">
-<pre>
-  vss_commit(coeffs):
-
-  Inputs:
-  - coeffs, a vector of the t coefficients which uniquely determine
-  a polynomial f.
-
-  Outputs: a commitment C, which is a vector commitment to each of the
-  coefficients in coeffs.
-
-  def vss_commit(coeffs):
-    C = []
-    for coeff in coeffs:
-      A_i = ScalarBaseMult(coeff)
-      C.append(A_i)
-    return C
-</pre><a href="#section-7.4-3" class="pilcrow">¶</a>
-</div>
-<p id="section-7.4-4">The procedure for verification of a participant's share is as follows.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-7.4-5">
-<pre>
-  vss_verify(sk_i, C):
-
-  Inputs:
-  - sk_i: A participant's secret key, the tuple sk_i = (i, s[i]),
-  where s[i] is a secret share of the constant term of f.
-  - C: A VSS commitment to a secret polynomial f.
-
-  Outputs: 1 if s[i] is valid, and 0 otherwise
-
-  vss_verify(sk_i, commitment)
-    S_i = ScalarBaseMult(s[i])
-    S_i' = SUM(commitment[0], commitment[t-1]){A_j}: A_j*(i^j)
-    if S_i == S_i':
-      return 1
-    return 0
-</pre><a href="#section-7.4-5" class="pilcrow">¶</a>
+  def encode_group_commitment_list(commitment_list):
+    encoded_group_commitment = nil
+    for (index, hiding_nonce_commitment, binding_nonce_commitment) in commitment_list:
+      encoded_commitment = I2OSP(index, 2) ||
+                           G.SerializeElement(hiding_nonce_commitment) ||
+                           G.SerializeElement(binding_nonce_commitment)
+      encoded_group_commitment = encoded_group_commitment || encoded_commitment
+    return encoded_group_commitment
+</pre><a href="#section-7.3-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1875,10 +1774,9 @@ it will be implementation-specific.<a href="#section-7.4-1" class="pilcrow">¶</
 of at most 2^16-1 bytes long. The protocol assumes that each participant <code>P_i</code>
 knows the following:<a href="#section-8-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-8-2.1">Group public key, denoted <code>PK = s * B</code>, corresponding to the group secret key <code>s</code><a href="#section-8-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-8-2.1">Group public key, denoted <code>PK = G.ScalarMultBase(s)</code>, corresponding to the group secret key <code>s</code>.<a href="#section-8-2.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-8-2.2">Participant signing key, which is the tuple <code>sk = (i, s[i])</code>, where <code>s[i]</code> is
-the i-th secret share of <code>s</code><a href="#section-8-2.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-8-2.2">Participant i signing key, which is the i-th secret share of <code>s</code>.<a href="#section-8-2.2" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="section-8-3">The exact key generation mechanism is out of scope for this specification. In general,
@@ -1890,213 +1788,155 @@ key generation protocol. We highlight key generation mechanism by a trusted deal
 in <a href="#dep-dealer" class="xref">Appendix B</a>, for reference.<a href="#section-8-3" class="pilcrow">¶</a></p>
 <p id="section-8-4">FROST assumes the existence of a <em>Coordinator</em>, which is a Signer responsible for the following:<a href="#section-8-4" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-8-5">
-<li id="section-8-5.1">Determining which signers will participate (at least <code>t</code> in number);<a href="#section-8-5.1" class="pilcrow">¶</a>
+<li id="section-8-5.1">Determining which signers will participate (at least THRESHOLD_LIMIT in number);<a href="#section-8-5.1" class="pilcrow">¶</a>
 </li>
         <li id="section-8-5.2">Coordinating rounds (receiving and forwarding inputs among participants); and<a href="#section-8-5.2" class="pilcrow">¶</a>
 </li>
         <li id="section-8-5.3">Aggregating signature shares output by each participant, and publishing the resulting signature.<a href="#section-8-5.3" class="pilcrow">¶</a>
 </li>
       </ol>
-<p id="section-8-6">We describe the protocol in two rounds: commitment and signing. The first round serves for each
+<p id="section-8-6">Selection of the Coordinator is outside the scope of this specification.<a href="#section-8-6" class="pilcrow">¶</a></p>
+<p id="section-8-7">We describe the protocol in two rounds: commitment and signing. The first round serves for each
 participant to issue a commitment. The second round receives commitments for all signers as well
 as the message, and issues a signature share. The Coordinator performs the coordination of each
 of these rounds. The Coordinator then performs an aggregation round at the end and outputs the
-final signature.<a href="#section-8-6" class="pilcrow">¶</a></p>
-<p id="section-8-7">This protocol assumes reliable message delivery between Coordinator and signing participants
+final signature.<a href="#section-8-7" class="pilcrow">¶</a></p>
+<p id="section-8-8">This protocol assumes reliable message delivery between Coordinator and signing participants
 in order for the protocol to complete. Messages exchanged during signing operations are all within
 the public domain. An attacker masquerading as another participant will result only in an invalid
-signature; see <a href="#sec-considerations" class="xref">Section 10</a>.<a href="#section-8-7" class="pilcrow">¶</a></p>
+signature; see <a href="#sec-considerations" class="xref">Section 10</a>.<a href="#section-8-8" class="pilcrow">¶</a></p>
 <div id="frost-round-one">
 <section id="section-8.1">
-        <h3 id="name-round-one">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-round-one" class="section-name selfRef">Round One</a>
+        <h3 id="name-round-one-commitment">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-round-one-commitment" class="section-name selfRef">Round One - Commitment</a>
         </h3>
-<p id="section-8.1-1">Each signer in round one generates a nonce <code>nonce = (d, e)</code> and commitment
-<code>comm = (D, E)</code> for each signer.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-8.1-2">
+<p id="section-8.1-1">Round one involves each signer generating a pair of nonces and their corresponding public
+commitments. A nonce is a pair of Scalar values, and a commitment is a pair of Element values.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">Each signer in round one generates a nonce <code>nonce = (hiding_nonce, binding_nonce)</code> and commitment
+<code>comm = (hiding_nonce_commitment, binding_nonce_commitment)</code>.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-8.1-3">
 <pre>
-  frost_commit():
-
   Inputs: None
 
-  Outputs: (nonce, comm), a tuple of nonce and nonce commitment pairs
+  Outputs: (nonce, comm), a tuple of nonce and nonce commitment pairs.
 
-  def frost_commit():
-    d = RandomScalar()
-    e = RandomScalar()
-    D = ScalarBaseMult(d)
-    E = ScalarBaseMult(e)
-    nonce = (d, e)
-    comm = (D, E)
-    return nonce, comm
-</pre><a href="#section-8.1-2" class="pilcrow">¶</a>
+  def commit():
+    hiding_nonce = G.RandomScalar()
+    binding_nonce = G.RandomScalar()
+    hiding_nonce_commitment = G.ScalarBaseMult(hiding_nonce)
+    binding_nonce_commitment = G.ScalarBaseMult(binding_nonce)
+    nonce = (hiding_nonce, binding_nonce)
+    comm = (hiding_nonce_commitment, binding_nonce_commitment)
+    return (nonce, comm)
+</pre><a href="#section-8.1-3" class="pilcrow">¶</a>
 </div>
-<p id="section-8.1-3">The output <code>nonce</code> from Participant <code>P_i</code> is stored locally and kept private
-for use in the second round. The output <code>comm</code> from Participant <code>P_i</code> is sent
-to the Coordinator. Both group elements in this tuple are serialized and encoded
-in a <code>SigningCommitment</code>, along with the participant ID, as follows.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-8.1-4">
-<pre>
-  SignerID uint64;
-
-  struct {
-    SignerID id;
-    opaque D[Ne];
-    opaque E[Ne];
-  } SigningCommitment;
-</pre><a href="#section-8.1-4" class="pilcrow">¶</a>
-</div>
-<span class="break"></span><dl class="dlParallel" id="section-8.1-5">
-          <dt id="section-8.1-5.1">
-id  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.1-5.2">
-            <p id="section-8.1-5.2.1">The SignerID.<a href="#section-8.1-5.2.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-8.1-5.3">
-D  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.1-5.4">
-            <p id="section-8.1-5.4.1">The commitment hiding factor encoded as a serialized group element.<a href="#section-8.1-5.4.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-8.1-5.5">
-E  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.1-5.6">
-            <p id="section-8.1-5.6.1">The commitment blinding factor encoded as a serialized group element.<a href="#section-8.1-5.6.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
+<p id="section-8.1-4">The private output <code>nonce</code> from Participant <code>P_i</code> is stored locally and kept private
+for use in the second round. The public output <code>comm</code> from Participant <code>P_i</code>
+is sent to the Coordinator; see <a href="#encode-commitment" class="xref">Appendix C.1</a> for encoding recommendations.<a href="#section-8.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="frost-round-two">
 <section id="section-8.2">
-        <h3 id="name-round-two">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-round-two" class="section-name selfRef">Round Two</a>
+        <h3 id="name-round-two-signature-share-g">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-round-two-signature-share-g" class="section-name selfRef">Round Two - Signature Share Generation</a>
         </h3>
 <p id="section-8.2-1">In round two, the Coordinator is responsible for sending the message to be signed, and
-for choosing which signers will participate (of number at least <code>t</code>). Signers
+for choosing which signers will participate (of number at least THRESHOLD_LIMIT). Signers
 additionally require locally held data; specifically, their private key and the
 nonces corresponding to their commitment issued in round one.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.2-2">The Coordinator begins by sending each signer a <code>SigningPackage</code>, composed as follows.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">The Coordinator begins by sending each signer the message to be signed along with the
+set of signing commitments for other signers in the participant list. Upon receipt,
+each Signer then runs the following procedure to produce its own signature share.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.2-3">
 <pre>
-  struct {
-    SigningCommitment signing_commitments&lt;1..2^16-1&gt;;
-    opaque msg&lt;0..2^16-1&gt;;
-  } SigningPackage;
+  Inputs:
+  - index, Index `i` of the signer. Note index will never equal `0`.
+  - sk_i, Signer secret key share.
+  - group_public_key, public key corresponding to the signer secret key share.
+  - nonce_i, pair of Scalar values (d, e) generated in round one.
+  - comm_i, pair of Element values (D, E) generated in round one.
+  - msg, the message to be signed (sent by the Coordinator).
+  - commitment_list = [(j, x_j, y_j), ...], a list of commitments issued by each signer,
+    where each element in the list indicates the signer index j and their
+    two commitment Element values (x_j, y_j). This list MUST be sorted in ascending order
+    by signer index.
+  - participant_list, a set containing identifiers for each signer, similarly of length
+    NUM_SIGNERS (sent by the Coordinator).
+
+  Outputs: a signature share sig_share and commitment share comm_share, which
+           are Scalar and Element values respectively.
+
+  def sign(index, sk, group_public_key, nonce, comm, msg, commitment_list, participant_list):
+    # Compute the binding factor
+    encoded_commitments = encode_group_commitment_list(commitment_list)
+    msg_hash = H3(msg)
+    binding_factor = H1(encoded_commitments || msg_hash)
+
+    # Compute the group commitment
+    R = G.Identity()
+    for (_, hiding_nonce_commitment, binding_nonce_commitment) in commitment_list:
+      R = R + (hiding_nonce_commitment + (binding_nonce_commitment * binding_factor))
+
+    lambda_i = derive_lagrange_coefficient(index, participant_list)
+
+    # Compute the per-message challenge
+    msg_hash = H3(msg)
+    group_comm_enc = G.SerializeElement(R)
+    group_public_key_enc = G.SerializeElement(group_public_key)
+    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    c = H2(challenge_input)
+
+    # Compute the signature share
+    (hiding_nonce, binding_nonce) = nonce_i
+    sig_share = hiding_nonce + (binding_nonce * binding_factor) + (lambda_i * sk_i * c)
+
+    # Compute the commitment share
+    (hiding_nonce_commitment, binding_nonce_commitment) = comm_i
+    comm_share = hiding_nonce_commitment + (binding_nonce_commitment * binding_factor)
+
+    return sig_share, comm_share
 </pre><a href="#section-8.2-3" class="pilcrow">¶</a>
 </div>
-<span class="break"></span><dl class="dlParallel" id="section-8.2-4">
-          <dt id="section-8.2-4.1">
-signing_commitments  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.2-4.2">
-            <p id="section-8.2-4.2.1">An list of w SigningCommitment values, where t &lt;= w &lt;= n, ordered in ascending order
-by SigningCommitment.id. This list MUST NOT contain more than one SigningCommitment value
-corresponding to each signer. Signers MUST ignore SigningPackage values with
-duplicate SignerIDs.<a href="#section-8.2-4.2.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-8.2-4.3">
-msg  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.2-4.4">
-            <p id="section-8.2-4.4.1">The message to be signed.<a href="#section-8.2-4.4.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<p id="section-8.2-5">Each signer then runs the following procedure.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">The output of this procedure is a signature share and group commitment share.
+Each signer then sends these shares back to the collector; see
+<a href="#encode-sig-share" class="xref">Appendix C.3</a> for encoding recommendations.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5">The Coordinator MUST verify the set of signature shares using the following procedure.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.2-6">
 <pre>
-  frost_sign(sk_i, (d_i, e_i), m, B, L):
-
   Inputs:
-  - sk_i: secret key that is the tuple sk_i= (i, s[i]). Note `i` will never equal `0`.
-  - PK: public key corresponding to the signer secret key share.
-  - nonce (d_i, e_i) generated in round one
-  - m: the message to be signed (sent by the Coordinator).
-  - B={(D_j, E_j), ...}: a set of commitments issued by each signer
-  in round one, of length w, where t &lt;= w &lt;= n (sent by the Coordinator).
-  - L: a set containing identifiers for each signer, similarly of length
-  w (sent by the Coordinator).
-
-  Outputs: a signature share z_i, to be sent to the Coordinator.
-
-  frost_sign(sk_i, PK, (d_i, e_i), m, B, L):
-    binding_factor = H1(B, L)
-    hiding_aggregate = SUM(B[1], B[l]){(j, D_j, _)}: D_j
-    blinding_aggregate = SUM(B[1], B[l]){(j, _, E_j)}: E_j
-    R = hiding_aggregate + (blinding_aggregate * binding_factor)
-    L_i = derive_lagrange_coefficient(i, L)
-    c = H2(R, PK, m)
-    z_i = d_i + (e_i * binding_factor) + L_i + s[i] + c
-    return z_i
-</pre><a href="#section-8.2-6" class="pilcrow">¶</a>
-</div>
-<p id="section-8.2-7">The output of this procedure is a signature share. Each signer then sends this share
-back to the collector in a <code>SignatureShare</code>, which is constructed as follows.<a href="#section-8.2-7" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-8.2-8">
-<pre>
-  struct {
-    SignerID id;
-    opaque package_id[Nh];
-    opaque signature_share[Ns];
-  } SignatureShare;
-</pre><a href="#section-8.2-8" class="pilcrow">¶</a>
-</div>
-<span class="break"></span><dl class="dlParallel" id="section-8.2-9">
-          <dt id="section-8.2-9.1">
-id  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.2-9.2">
-            <p id="section-8.2-9.2.1">The SignerID.<a href="#section-8.2-9.2.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-8.2-9.3">
-package_id  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.2-9.4">
-            <p id="section-8.2-9.4.1">The cryptographic hash of the corresponding SigningPackage,
-i.e., package_id = H(SigningPackage).<a href="#section-8.2-9.4.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-8.2-9.5">
-signature_share  </dt>
-          <dd style="margin-left: 1.5em" id="section-8.2-9.6">
-            <p id="section-8.2-9.6.1">The signature share from this signer encoded as a serialized scalar.<a href="#section-8.2-9.6.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
-<p id="section-8.2-10">The coordinator uses SignatureShare.package_id to group signature shares for
-the same SigningPackage.<a href="#section-8.2-10" class="pilcrow">¶</a></p>
-<p id="section-8.2-11">Given a set of SignatureShare values, the Coordinator MAY elect to verify these
-using the following procedure.<a href="#section-8.2-11" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-8.2-12">
-<pre>
-  frost_verify_signature_share(PK, PK_i, z_i, R, R_i, L_i, m):
-
-  Inputs:
+  - index, Index `i` of the signer. Note index will never equal `0`.
   - PK, the public key for the group
   - PK_i, the public key for the ith signer, where PK_i = ScalarBaseMult(s[i])
-  - z_i, the signature share for the ith signer
-  - R_i, the commitment for the ith signer, where R_i = F_i + E_i * rho
+  - sig_share, the signature share for the ith signer, computed from the signer
+  - comm_share, the commitment for the ith signer, computed from the signer
   - R, the group commitment
-  - L_i, the ith Lagrange coefficient for the signing set.
-  - m, the message to be signed
+  - msg, the message to be signed
+  - participant_list, a set containing identifiers for each signer, similarly of length
+    NUM_SIGNERS (sent by the Coordinator).
 
-  Outputs: 1 if the signature share is valid, and 0 otherwise
+  Outputs: 1 if the signature share is valid, and 0 otherwise.
 
-  frost_verify_signature_share(PK_i, z_i, R_i, L_i, m)
-    c' = H2(R, PK, m)
-    Z_i = ScalarbaseMult(z_i)
-    R_i' =  Z_i + (PK_i * -c')
-    if R_i == R_i':
-      return 1
-    return 0
-</pre><a href="#section-8.2-12" class="pilcrow">¶</a>
+  def verify_signature_share(index, PK, PK_i, sig_share, comm_share, R, msg, participant_list):
+    msg_hash = H3(msg)
+    group_comm_enc = G.SerializeElement(R)
+    group_public_key_enc = G.SerializeElement(group_public_key)
+    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    c = H2(challenge_input)
+
+    l = G.ScalarbaseMult(sig_share)
+
+    lambda_i = derive_lagrange_coefficient(index, participant_list)
+    r = comm_share + (sig_share * c * lambda_i)
+
+    return l == r
+</pre><a href="#section-8.2-6" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
-<div id="aggregate">
+<div id="signature-share-aggregation">
 <section id="section-8.3">
-        <h3 id="name-aggregate">
-<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-aggregate" class="section-name selfRef">Aggregate</a>
+        <h3 id="name-signature-share-aggregation">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-signature-share-aggregation" class="section-name selfRef">Signature Share Aggregation</a>
         </h3>
 <p id="section-8.3-1">After signers perform round two and send their signature shares to the Coordinator,
 the Coordinator performs the <code>aggregate</code> operation and publishes the resulting
@@ -2106,18 +1946,18 @@ signature will similarly be invalid. Deployments that wish to validate signature
 shares can do so using the <code>verify_signature_share</code> function in <a href="#frost-round-two" class="xref">Section 8.2</a><a href="#section-8.3-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-8.3-2">
 <pre>
-  frost_aggregate(R, Z):
-
   Inputs:
   - R: the group commitment.
-  - Z: a set of signature shares z_i for each signer, of length w,
-  where t &lt;= w &lt;= n.
+  - sig_shares: a set of signature shares z_i for each signer, of length NUM_SIGNERS,
+  where THRESHOLD_LIMIT &lt;= NUM_SIGNERS &lt;= MAX_SIGNERS.
 
-  Outputs: sig=(R, z), a Schnorr signature.
+  Outputs: (R, z), a Schnorr signature consisting of an Element and Scalar value.
 
-  frost_aggregate(R, Z):
-    z = SUM(Z[1], Z[w]){z_i}: z_i
-    return sig=(R, z)
+  def frost_aggregate(R, sig_shares):
+    z = 0
+    for z_i in sig_shares:
+      z = z + z_i
+    return (R, z)
 </pre><a href="#section-8.3-2" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2132,56 +1972,117 @@ shares can do so using the <code>verify_signature_share</code> function in <a hr
 <p id="section-9-1">A FROST ciphersuite must specify the underlying prime-order group details
 and cryptographic hash function. Each ciphersuite is denoted as (Group, Hash),
 e.g., (ristretto255, SHA-512). This section contains some ciphersuites.
-The RECOMMENDED ciphersuite is (ristretto255, SHA-512) <a href="#recommended-suite" class="xref">Section 9.1</a>.<a href="#section-9-1" class="pilcrow">¶</a></p>
-<div id="recommended-suite">
+The RECOMMENDED ciphersuite is (ristretto255, SHA-512) <a href="#recommended-suite" class="xref">Section 9.2</a>.
+The (edwards25519, SHA-512) ciphersuite is included for backwards compatibility
+with <span>[<a href="#RFC8032" class="xref">RFC8032</a>]</span>.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<div id="frostedwards25519-sha-512">
 <section id="section-9.1">
-        <h3 id="name-frostristretto255-sha-512">
-<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-frostristretto255-sha-512" class="section-name selfRef">FROST(ristretto255, SHA-512)</a>
+        <h3 id="name-frostedwards25519-sha-512">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-frostedwards25519-sha-512" class="section-name selfRef">FROST(edwards25519, SHA-512)</a>
         </h3>
-<p id="section-9.1-1">This ciphersuite uses ristretto255 for the Group and SHA-512 for the Hash function.
-The value of the contextString parameter is "FROST-RISTRETTO255-SHA512".<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-1">This ciphersuite uses edwards25519 for the Group and SHA-512 for the Hash function <code>H</code>
+meant to produce signatures indistinguishable from Ed25519 as specified in <span>[<a href="#RFC8032" class="xref">RFC8032</a>]</span>.
+The value of the contextString parameter is empty.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-9.1-2.1">
-            <p id="section-9.1-2.1.1">Group: ristretto255 <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>]</span><a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-9.1-2.1.1">Group: ed25519 <span>[<a href="#RFC8032" class="xref">RFC8032</a>]</span><a href="#section-9.1-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.1-2.1.2.1">HashToScalar(): Compute <code>uniform_bytes</code> using <code>expand_message</code> = <code>expand_message_xmd</code>,
-DST = "HashToScalar-" || contextString, and output length 64, interpret
-<code>uniform_bytes</code> as a 512-bit integer in little-endian order, and reduce the integer
-modulo <code>Order()</code>.<a href="#section-9.1-2.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-9.1-2.1.2.1">SerializeElement: Implemented as specified in <span>[<a href="#RFC8032" class="xref">RFC8032</a>], <a href="https://rfc-editor.org/rfc/rfc8032#section-5.1.2" class="relref">Section 5.1.2</a></span>.<a href="#section-9.1-2.1.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-9.1-2.1.2.2">Serialization: Both group elements and scalars are encoded in Ne = Ns = 32
-bytes. For group elements, use the 'Encode' and 'Decode' functions from
-<span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>]</span>. For scalars, ensure they are fully reduced modulo <code>Order()</code>
-and in little-endian order.<a href="#section-9.1-2.1.2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-9.1-2.1.2.2">DeserializeElement: Implemented as specified in <span>[<a href="#RFC8032" class="xref">RFC8032</a>], <a href="https://rfc-editor.org/rfc/rfc8032#section-5.1.3" class="relref">Section 5.1.3</a></span>.<a href="#section-9.1-2.1.2.2" class="pilcrow">¶</a>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-9.1-2.2">Hash: SHA-512, and Nh = 64.<a href="#section-9.1-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-9.1-2.2">
+            <p id="section-9.1-2.2.1">Hash (<code>H</code>): SHA-512, and Nh = 64.<a href="#section-9.1-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.1-2.2.2.1">H1(m): Implemented by computing H("rho" || m), interpreting the lower
+32 bytes as a little-endian integer, and reducing the resulting integer modulo
+L = 2^252+27742317777372353535851937790883648493.<a href="#section-9.1-2.2.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.1-2.2.2.2">H2(m): Implemented by computing H(m), interpreting the lower 32 bytes
+as a little-endian integer, and reducing the resulting integer modulo
+L = 2^252+27742317777372353535851937790883648493.<a href="#section-9.1-2.2.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.1-2.2.2.3">H3(m): Implemented as an alias for H, i.e., H(m).<a href="#section-9.1-2.2.2.3" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+        </ul>
+<p id="section-9.1-3">Normally H2 would also include a domain separator, but for backwards compatibility
+with <span>[<a href="#RFC8032" class="xref">RFC8032</a>]</span>, it is omitted.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="recommended-suite">
+<section id="section-9.2">
+        <h3 id="name-frostristretto255-sha-512">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-frostristretto255-sha-512" class="section-name selfRef">FROST(ristretto255, SHA-512)</a>
+        </h3>
+<p id="section-9.2-1">This ciphersuite uses ristretto255 for the Group and SHA-512 for the Hash function <code>H</code>.
+The value of the contextString parameter is "FROST-RISTRETTO255-SHA512".<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-2.1">
+            <p id="section-9.2-2.1.1">Group: ristretto255 <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>]</span><a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-2.1.2.1">SerializeElement: Implemented using the 'Encode' function from <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>]</span>.<a href="#section-9.2-2.1.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.2-2.1.2.2">DeserializElement: Implemented using the 'Decode' function from <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>]</span>.<a href="#section-9.2-2.1.2.2" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+          <li class="normal" id="section-9.2-2.2">
+            <p id="section-9.2-2.2.1">Hash (<code>H</code>): SHA-512, and Nh = 64.<a href="#section-9.2-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.2-2.2.2.1">H1(m): Implemented by computing H(contextString || "rho" || m) and mapping the
+the output to a Scalar as described in <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01#section-4.4" class="relref">Section 4.4</a></span>.<a href="#section-9.2-2.2.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.2-2.2.2.2">H2(m): Implemented by computing H(contextString || "chal" || m) and mapping the
+the output to a Scalar as described in <span>[<a href="#RISTRETTO" class="xref">RISTRETTO</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01#section-4.4" class="relref">Section 4.4</a></span>.<a href="#section-9.2-2.2.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.2-2.2.2.3">H3(m): Implemented by computing H(contextString || "digest" || m).<a href="#section-9.2-2.2.2.3" class="pilcrow">¶</a>
+</li>
+            </ul>
 </li>
         </ul>
 </section>
 </div>
 <div id="frostp-256-sha-256">
-<section id="section-9.2">
+<section id="section-9.3">
         <h3 id="name-frostp-256-sha-256">
-<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-frostp-256-sha-256" class="section-name selfRef">FROST(P-256, SHA-256)</a>
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-frostp-256-sha-256" class="section-name selfRef">FROST(P-256, SHA-256)</a>
         </h3>
-<p id="section-9.2-1">This ciphersuite uses P-256 for the Group and SHA-256 for the Hash function.
-The value of the contextString parameter is "FROST-P256-SHA256".<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.3-1">This ciphersuite uses P-256 for the Group and SHA-256 for the Hash function <code>H</code>.
+The value of the contextString parameter is "FROST-P256-SHA256".<a href="#section-9.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.2-2.1">
-            <p id="section-9.2-2.1.1">Group: P-256 (secp256r1) <span>[<a href="#x9.62" class="xref">x9.62</a>]</span><a href="#section-9.2-2.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-9.3-2.1">
+            <p id="section-9.3-2.1.1">Group: P-256 (secp256r1) <span>[<a href="#x9.62" class="xref">x9.62</a>]</span><a href="#section-9.3-2.1.1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-9.2-2.1.2.1">HashToScalar(): Use hash_to_field from <span>[<a href="#I-D.irtf-cfrg-hash-to-curve" class="xref">I-D.irtf-cfrg-hash-to-curve</a>]</span>
-using L = 48, <code>expand_message_xmd</code> with SHA-256,
-DST = "HashToScalar-" || contextString, and
-prime modulus equal to <code>Order()</code>.<a href="#section-9.2-2.1.2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-9.3-2.1.2.1">SerializeElement: Implemented using the compressed Elliptic-Curve-Point-to-Octet-String
+method according to <span>[<a href="#SECG" class="xref">SECG</a>]</span>.<a href="#section-9.3-2.1.2.1" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-9.2-2.1.2.2">Serialization: Elements are serialized as Ne = 33 byte string<a href="#section-9.2-2.1.2.2" class="pilcrow">¶</a>
+              <li class="normal" id="section-9.3-2.1.2.2">DeserializeElement: Implemented by attempting to deserialize a public key using
+the compressed Octet-String-to-Elliptic-Curve-Point method according to <span>[<a href="#SECG" class="xref">SECG</a>]</span>,
+and then performs partial public-key validation as defined in section 5.6.2.3.4 of
+<span>[<a href="#KEYAGREEMENT" class="xref">KEYAGREEMENT</a>]</span>.<a href="#section-9.3-2.1.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.3-2.1.2.3">Serialization: Elements are serialized as Ne = 33 byte string<a href="#section-9.3-2.1.2.3" class="pilcrow">¶</a>
 </li>
             </ul>
 </li>
-          <li class="normal" id="section-9.2-2.2">Hash: SHA-256, and Nh = 32.<a href="#section-9.2-2.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-9.3-2.2">
+            <p id="section-9.3-2.2.1">Hash (<code>H</code>): SHA-256, and Nh = 32.<a href="#section-9.3-2.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-9.3-2.2.2.1">H1(m): Implemented using hash_to_field from <span>[<a href="#HASH-TO-CURVE" class="xref">HASH-TO-CURVE</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-13#section-5.3" class="relref">Section 5.3</a></span>
+using L = 48, <code>expand_message_xmd</code> with SHA-256, DST = contextString || "rho", and
+prime modulus equal to <code>Order()</code>.<a href="#section-9.3-2.2.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.3-2.2.2.2">H2(m): Implemented using hash_to_field from <span>[<a href="#HASH-TO-CURVE" class="xref">HASH-TO-CURVE</a>], <a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-13#section-5.3" class="relref">Section 5.3</a></span>
+using L = 48, <code>expand_message_xmd</code> with SHA-256, DST = contextString || "chal", and
+prime modulus equal to <code>Order()</code>.<a href="#section-9.3-2.2.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-9.3-2.2.2.3">H3(m): Implemented by computing H(contextString || "digest" || m).<a href="#section-9.3-2.2.2.3" class="pilcrow">¶</a>
+</li>
+            </ul>
 </li>
         </ul>
 </section>
@@ -2198,7 +2099,7 @@ in this document assumes the following threat model.<a href="#section-10-1" clas
 <ul class="normal">
 <li class="normal" id="section-10-2.1">Trusted dealer. The dealer that performs key generation is trusted to follow
 the protocol, although participants still are able to verify the consistency of their
-shares via a VSS (verifiable secret sharing) step.<a href="#section-10-2.1" class="pilcrow">¶</a>
+shares via a VSS (verifiable secret sharing) step; see <a href="#dep-vss" class="xref">Appendix B.2</a>.<a href="#section-10-2.1" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-10-2.2">Unforgeability assuming less than <code>(t-1)</code> corrupted signers. So long as an adverary
 corrupts fewer than <code>(t-1)</code> participants, the scheme remains secure against EUF-CMA attacks.<a href="#section-10-2.2" class="pilcrow">¶</a>
@@ -2258,35 +2159,77 @@ channel can be used to facilitate key generation and signing.<a href="#section-1
 </div>
 </section>
 </div>
-<div id="contributors">
+<div id="removing-the-coordinator-role">
 <section id="section-11">
+      <h2 id="name-removing-the-coordinator-ro">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-removing-the-coordinator-ro" class="section-name selfRef">Removing the Coordinator Role</a>
+      </h2>
+<p id="section-11-1">In some settings, it may be desirable to omit the role of the coordinator entirely.
+Doing so does not change the security implications of FROST, but instead simply
+requires each participant to communicate with all other participants. We loosely
+describe how to perform FROST signing among signers without this coordinator role.
+We assume that every participant receives as input from an external source the
+message to be signed prior to performing the protocol.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-2">Every participant begins by performing <code>frost_commit()</code> as is done in the setting
+where a coordinator is used. However, instead of sending the commitment
+<code>SigningCommitment</code> to the coordinator, every participant instead will publish
+this commitment to every other participant. Then, in the second round, instead of
+receiving a <code>SigningPackage</code> from the coordinator, signers will already have
+sufficient information to perform signing. They will directly perform <code>frost_sign</code>.
+All participants will then publish a <code>SignatureShare</code> to one another. After having
+received all signature shares from all other signers, each signer will then perform
+<code>frost_verify</code> and then <code>frost_aggregate</code> directly.<a href="#section-11-2" class="pilcrow">¶</a></p>
+<p id="section-11-3">The requirements for the underlying network channel remain the same in the setting
+where all participants play the role of the coordinator, in that all messages that
+are exchanged are public and so the channel simply must be reliable. However, in
+the setting that a player attempts to split the view of all other players by
+sending disjoint values to a subset of players, the signing operation will output
+an invalid signature. To avoid this denial of service, implementations may wish
+to define a mechanism where messages are authenticated, so that cheating players
+can be identified and excluded.<a href="#section-11-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="contributors">
+<section id="section-12">
       <h2 id="name-contributors">
-<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-contributors" class="section-name selfRef">Contributors</a>
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-contributors" class="section-name selfRef">Contributors</a>
       </h2>
 <ul class="normal">
-<li class="normal" id="section-11-1.1">Isis Lovecruft<a href="#section-11-1.1" class="pilcrow">¶</a>
+<li class="normal" id="section-12-1.1">Isis Lovecruft<a href="#section-12-1.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-11-1.2">T. Wilson-Brown<a href="#section-11-1.2" class="pilcrow">¶</a>
+        <li class="normal" id="section-12-1.2">T. Wilson-Brown<a href="#section-12-1.2" class="pilcrow">¶</a>
 </li>
       </ul>
 </section>
 </div>
-<section id="section-12">
+<section id="section-13">
       <h2 id="name-references">
-<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
-<section id="section-12.1">
+<section id="section-13.1">
         <h3 id="name-normative-references">
-<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.irtf-cfrg-hash-to-curve">[I-D.irtf-cfrg-hash-to-curve]</dt>
+<dt id="HASH-TO-CURVE">[HASH-TO-CURVE]</dt>
         <dd>
 <span class="refAuthor">Faz-Hernandez, A.</span>, <span class="refAuthor">Scott, S.</span>, <span class="refAuthor">Sullivan, N.</span>, <span class="refAuthor">Wahby, R. S.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Hashing to Elliptic Curves"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-hash-to-curve-13</span>, <time datetime="2021-11-10" class="refDate">10 November 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-13">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-hash-to-curve-13</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="KEYAGREEMENT">[KEYAGREEMENT]</dt>
+        <dd>
+<span class="refAuthor">Barker, E.</span>, <span class="refAuthor">Chen, L.</span>, <span class="refAuthor">Roginsky, A.</span>, <span class="refAuthor">Vassilev, A.</span>, and <span class="refAuthor">R. Davis</span>, <span class="refTitle">"Recommendation for pair-wise key-establishment schemes using discrete logarithm cryptography"</span>, <span class="seriesInfo">National Institute of Standards and Technology report</span>, <span class="seriesInfo">DOI 10.6028/nist.sp.800-56ar3</span>, <time datetime="2018-04" class="refDate">April 2018</time>, <span>&lt;<a href="https://doi.org/10.6028/nist.sp.800-56ar3">https://doi.org/10.6028/nist.sp.800-56ar3</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8017">[RFC8017]</dt>
+        <dd>
+<span class="refAuthor">Moriarty, K., Ed.</span>, <span class="refAuthor">Kaliski, B.</span>, <span class="refAuthor">Jonsson, J.</span>, and <span class="refAuthor">A. Rusch</span>, <span class="refTitle">"PKCS #1: RSA Cryptography Specifications Version 2.2"</span>, <span class="seriesInfo">RFC 8017</span>, <span class="seriesInfo">DOI 10.17487/RFC8017</span>, <time datetime="2016-11" class="refDate">November 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8017">https://www.rfc-editor.org/rfc/rfc8017</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8032">[RFC8032]</dt>
+        <dd>
+<span class="refAuthor">Josefsson, S.</span> and <span class="refAuthor">I. Liusvaara</span>, <span class="refTitle">"Edwards-Curve Digital Signature Algorithm (EdDSA)"</span>, <span class="seriesInfo">RFC 8032</span>, <span class="seriesInfo">DOI 10.17487/RFC8032</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8032">https://www.rfc-editor.org/rfc/rfc8032</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
@@ -2296,15 +2239,19 @@ channel can be used to facilitate key generation and signing.<a href="#section-1
         <dd>
 <span class="refAuthor">Valence, H. D.</span>, <span class="refAuthor">Grigg, J.</span>, <span class="refAuthor">Tankersley, G.</span>, <span class="refAuthor">Valsorda, F.</span>, <span class="refAuthor">Lovecruft, I.</span>, and <span class="refAuthor">M. Hamburg</span>, <span class="refTitle">"The ristretto255 and decaf448 Groups"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-irtf-cfrg-ristretto255-decaf448-01</span>, <time datetime="2021-08-04" class="refDate">4 August 2021</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01">https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="SECG">[SECG]</dt>
+        <dd>
+<span class="refTitle">"Elliptic Curve Cryptography, Standards for Efficient Cryptography Group, ver. 2"</span>, <time datetime="2009" class="refDate">2009</time>, <span>&lt;<a href="https://secg.org/sec1-v2.pdf">https://secg.org/sec1-v2.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="x9.62">[x9.62]</dt>
       <dd>
 <span class="refAuthor">ANSI</span>, <span class="refTitle">"Public Key Cryptography for the Financial Services Industry: the Elliptic Curve Digital Signature Algorithm (ECDSA)"</span>, <span class="seriesInfo">ANSI X9.62-1998</span>, <time datetime="1998-09" class="refDate">September 1998</time>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
-<section id="section-12.2">
+<section id="section-13.2">
         <h3 id="name-informative-references">
-<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-13.2" class="section-number selfRef">13.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="FROST20">[FROST20]</dt>
@@ -2338,38 +2285,286 @@ we employ a slightly adapted version here.<a href="#appendix-A-1" class="pilcrow
       </h2>
 <p id="appendix-B-1">One possible key generation mechanism is to depend on a trusted dealer, wherein the
 dealer generates a group secret <code>s</code> uniformly at random and uses Shamir and Verifiable
-Secret Sharing as described in Sections <a href="#dep-shamir" class="xref">Section 7.3</a> and <a href="#dep-vss" class="xref">Section 7.4</a> to create secret
+Secret Sharing as described in Sections <a href="#dep-shamir" class="xref">Appendix B.1</a> and <a href="#dep-vss" class="xref">Appendix B.2</a> to create secret
 shares of <code>s</code> to be sent to all other participants. We highlight at a high level how this
 operation can be performed.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B-2">
 <pre>
-  trusted_dealer_keygen(n, t):
-
   Inputs:
   - n, the number of shares to generate, an integer
   - t, the threshold of the secret sharing scheme, an integer
 
-  Outputs: a list of secret keys, each which is an element of F, and a public key which is
-  an element of G. It is assumed the dealer then sends one secret key to each of the n
-  participants, and afterwards deletes the secrets from their local device.
+  Outputs: a secret key Scalar, public key Element, along with `n`
+  shares of the secret key, each a Scalar value.
 
   def trusted_dealer_keygen(n, t):
-    s = RandomScalar()
-    points = secret_share_split(s, n, t)
-    secret_keys = []
-      sk_i = (i, points[i])
-    secret_keys.append(sk_i)
-    public_key = ScalarBaseMult(s)
-    return secret_keys, public_key
+    secret_key = G.RandomScalar()
+    secret_key_shares = secret_share_split(secret_key, n, t)
+    public_key = G.ScalarBaseMult(s)
+    return secret_key, public_key, secret_key_shares
 </pre><a href="#appendix-B-2" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B-3">Use of this method for key generation requires a mutually authenticated secure channel
+<p id="appendix-B-3">It is assumed the dealer then sends one secret key to each of the NUM_SIGNERS participants,
+and afterwards deletes the secrets from their local device.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-4">Use of this method for key generation requires a mutually authenticated secure channel
 between Coordinator and participants, wherein the channel provides confidentiality
-and integrity. Mutually authenticated TLS is one possible deployment option.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+and integrity. Mutually authenticated TLS is one possible deployment option.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
+<div id="dep-shamir">
+<section id="appendix-B.1">
+        <h3 id="name-shamir-secret-sharing">
+<a href="#appendix-B.1" class="section-number selfRef">B.1. </a><a href="#name-shamir-secret-sharing" class="section-name selfRef">Shamir Secret Sharing</a>
+        </h3>
+<p id="appendix-B.1-1">In Shamir secret sharing, a dealer distributes a secret <code>s</code> to <code>n</code> participants
+in such a way that any cooperating subset of <code>t</code> participants can recover the
+secret. There are two basic steps in this scheme: (1) splitting a secret into
+multiple shares, and (2) combining shares to reveal the resulting secret.<a href="#appendix-B.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-2">This secret sharing scheme works over any field <code>F</code>. In this specification, <code>F</code> is
+the scalar field of the prime-order group <code>G</code>.<a href="#appendix-B.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-3">The procedure for splitting a secret into shares is as follows.<a href="#appendix-B.1-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.1-4">
+<pre>
+  secret_share_split(s, n, t):
+
+  Inputs:
+  - s, secret to be shared, an element of F
+  - n, the number of shares to generate, an integer
+  - t, the threshold of the secret sharing scheme, an integer
+
+  Outputs: A list of n secret shares, each of which is an element of F
+
+  Errors:
+  - "invalid parameters", if t &gt; n
+
+  def secret_share(s, n, t):
+    if t &gt; n:
+      raise "invalid parameters"
+
+    # Generate random coefficients for the polynomial, yielding
+    # a polynomial of degree (t - 1)
+    coefficients = [s]
+    for i in range(t - 1):
+      coefficients.append(RandomScalar())
+
+    # Evaluate the polynomial for each point x=1,...,n
+    points = []
+    for x_i in range(1, n+1):
+      y_i = polynomial_evaluate(x_i, coefficients)
+      point_i = (x_i, y_i)
+      points.append(point_i)
+    return points
+</pre><a href="#appendix-B.1-4" class="pilcrow">¶</a>
+</div>
+<p id="appendix-B.1-5">Let <code>points</code> be the output of this function. The i-th element in <code>points</code> is
+the share for the i-th participant, which is the randomly generated polynomial
+evaluated at coordinate <code>i</code>. We denote a secret share as the tuple <code>(i, points[i])</code>,
+and the list of these shares as <code>shares</code>.
+<code>i</code> MUST never equal <code>0</code>.<a href="#appendix-B.1-5" class="pilcrow">¶</a></p>
+<p id="appendix-B.1-6">The procedure for combining a <code>shares</code> list of length <code>t</code> to recover the
+secret <code>s</code> is as follows.<a href="#appendix-B.1-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.1-7">
+<pre>
+  secret_share_combine(shares):
+
+  Inputs:
+  - shares, a list of t secret shares, each a tuple (i, f(i))
+
+  Outputs: A list of n secret shares, each of which is an element of F
+
+  Errors:
+  - "invalid parameters", if less than t input shares are provided
+
+  def secret_share_combine(shares):
+    if len(shares) &lt; t:
+      raise "invalid parameters"
+    s = polynomial_interpolation(shares)
+    return s
+</pre><a href="#appendix-B.1-7" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="dep-vss">
+<section id="appendix-B.2">
+        <h3 id="name-verifiable-secret-sharing">
+<a href="#appendix-B.2" class="section-number selfRef">B.2. </a><a href="#name-verifiable-secret-sharing" class="section-name selfRef">Verifiable Secret Sharing</a>
+        </h3>
+<p id="appendix-B.2-1">Feldman's Verifiable Secret Sharing (VSS) builds upon Shamir secret sharing,
+adding a verification step to demonstrate the consistency of a participant's
+share with a public commitment to the polynomial <code>f</code> for which the secret <code>s</code>
+is the constant term. This check ensure that all participants have a point
+(their share) on the same polynomial, ensuring that they can later reconstruct
+the correct secret. If the validation fails, the participant can issue a complaint
+against the dealer, and take actions such as broadcasting this complaint to all
+other participants. We do not specify the complaint procedure in this draft, as
+it will be implementation-specific.<a href="#appendix-B.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-B.2-2">The procedure for committing to a polynomial <code>f</code> of degree <code>t-1</code> is as follows.<a href="#appendix-B.2-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.2-3">
+<pre>
+  vss_commit(coeffs):
+
+  Inputs:
+  - coeffs, a vector of the t coefficients which uniquely determine
+  a polynomial f.
+
+  Outputs: a commitment C, which is a vector commitment to each of the
+  coefficients in coeffs.
+
+  def vss_commit(coeffs):
+    C = []
+    for coeff in coeffs:
+      A_i = ScalarBaseMult(coeff)
+      C.append(A_i)
+    return C
+</pre><a href="#appendix-B.2-3" class="pilcrow">¶</a>
+</div>
+<p id="appendix-B.2-4">The procedure for verification of a participant's share is as follows.<a href="#appendix-B.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B.2-5">
+<pre>
+  vss_verify(sk_i, C):
+
+  Inputs:
+  - sk_i: A participant's secret key, the tuple sk_i = (i, s[i]),
+  where s[i] is a secret share of the constant term of f.
+  - C: A VSS commitment to a secret polynomial f.
+
+  Outputs: 1 if s[i] is valid, and 0 otherwise
+
+  vss_verify(sk_i, commitment)
+    S_i = ScalarBaseMult(s[i])
+    S_i' = SUM(commitment[0], commitment[t-1]){A_j}: A_j*(i^j)
+    if S_i == S_i':
+      return 1
+    return 0
+</pre><a href="#appendix-B.2-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="wire-format">
+<section id="appendix-C">
+      <h2 id="name-wire-format">
+<a href="#appendix-C" class="section-number selfRef">Appendix C. </a><a href="#name-wire-format" class="section-name selfRef">Wire Format</a>
+      </h2>
+<p id="appendix-C-1">Applications are responsible for encoding protocol messages between peers. This section
+contains RECOMMENDED encodings for different protocol messages as described in <a href="#frost-spec" class="xref">Section 8</a>.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<div id="encode-commitment">
+<section id="appendix-C.1">
+        <h3 id="name-signing-commitment">
+<a href="#appendix-C.1" class="section-number selfRef">C.1. </a><a href="#name-signing-commitment" class="section-name selfRef">Signing Commitment</a>
+        </h3>
+<p id="appendix-C.1-1">A commitment from a signer is a pair of Element values. It can be encoded in the following manner.<a href="#appendix-C.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-C.1-2">
+<pre>
+  SignerID uint64;
+
+  struct {
+    SignerID id;
+    opaque D[Ne];
+    opaque E[Ne];
+  } SigningCommitment;
+</pre><a href="#appendix-C.1-2" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="appendix-C.1-3">
+          <dt id="appendix-C.1-3.1">
+id  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.1-3.2">
+            <p id="appendix-C.1-3.2.1">The SignerID.<a href="#appendix-C.1-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.1-3.3">
+D  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.1-3.4">
+            <p id="appendix-C.1-3.4.1">The commitment hiding factor encoded as a serialized group element.<a href="#appendix-C.1-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.1-3.5">
+E  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.1-3.6">
+            <p id="appendix-C.1-3.6.1">The commitment binding factor encoded as a serialized group element.<a href="#appendix-C.1-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="encode-package">
+<section id="appendix-C.2">
+        <h3 id="name-signing-packages">
+<a href="#appendix-C.2" class="section-number selfRef">C.2. </a><a href="#name-signing-packages" class="section-name selfRef">Signing Packages</a>
+        </h3>
+<p id="appendix-C.2-1">The Coordinator sends "signing packages" to each Signer in Round two. Each package
+contains the list of signing commitments generated during round one along with the
+message to sign. This package can be encoded in the following manner.<a href="#appendix-C.2-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-C.2-2">
+<pre>
+struct {
+  SigningCommitment signing_commitments&lt;1..2^16-1&gt;;
+  opaque msg&lt;0..2^16-1&gt;;
+} SigningPackage;
+</pre><a href="#appendix-C.2-2" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="appendix-C.2-3">
+          <dt id="appendix-C.2-3.1">
+signing_commitments  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.2-3.2">
+            <p id="appendix-C.2-3.2.1">An list of SIGNING_COUNT SigningCommitment values, where THRESHOLD_LIIMT &lt;= SIGNING_COUNT &lt;= NUM_SIGNERS,
+ordered in ascending order by SigningCommitment.id. This list MUST NOT contain more than one
+SigningCommitment value corresponding to each signer. Signers MUST ignore SigningPackage values with
+duplicate SignerIDs.<a href="#appendix-C.2-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.2-3.3">
+msg  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.2-3.4">
+            <p id="appendix-C.2-3.4.1">The message to be signed.<a href="#appendix-C.2-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="encode-sig-share">
+<section id="appendix-C.3">
+        <h3 id="name-signature-share">
+<a href="#appendix-C.3" class="section-number selfRef">C.3. </a><a href="#name-signature-share" class="section-name selfRef">Signature Share</a>
+        </h3>
+<p id="appendix-C.3-1">The output of each signer is a signature share which is sent to the Coordinator. This
+can be constructed as follows.<a href="#appendix-C.3-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-C.3-2">
+<pre>
+  struct {
+    SignerID id;
+    opaque signature_share[Ns];
+    opaque commitment_share[Ne];
+  } SignatureShare;
+</pre><a href="#appendix-C.3-2" class="pilcrow">¶</a>
+</div>
+<span class="break"></span><dl class="dlParallel" id="appendix-C.3-3">
+          <dt id="appendix-C.3-3.1">
+id  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.3-3.2">
+            <p id="appendix-C.3-3.2.1">The SignerID.<a href="#appendix-C.3-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="appendix-C.3-3.3">
+signature_share  </dt>
+          <dd style="margin-left: 1.5em" id="appendix-C.3-3.4">
+            <p id="appendix-C.3-3.4.1">The signature share from this signer encoded as a serialized scalar.<a href="#appendix-C.3-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="test-vectors">
+<section id="appendix-D">
+      <h2 id="name-test-vectors">
+<a href="#appendix-D" class="section-number selfRef">Appendix D. </a><a href="#name-test-vectors" class="section-name selfRef">Test Vectors</a>
+      </h2>
+<p id="appendix-D-1">TODO<a href="#appendix-D-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
-<section id="appendix-C">
+<section id="appendix-E">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
