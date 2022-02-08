@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-06T00:37:42.041663+00:00",
+  "timestamp": "2022-02-08T00:31:42.873775+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -1089,7 +1089,7 @@
       "labels": [],
       "body": "RFC8032 requires that the signature format be in the form (response, challenge) but some implementations would like the format to be (response, commitment)  in order to allow for batched signature verification. We should allow for this alternative format in this draft.",
       "createdAt": "2022-02-03T21:26:36Z",
-      "updatedAt": "2022-02-03T21:27:52Z",
+      "updatedAt": "2022-02-06T01:42:55Z",
       "closedAt": null,
       "comments": [
         {
@@ -1098,8 +1098,71 @@
           "body": "I think this will need to be a ciphersuite-specific detail. How we decide to present that in the draft is not immediately clear to me right now.",
           "createdAt": "2022-02-03T21:27:52Z",
           "updatedAt": "2022-02-03T21:27:52Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Re-reading this, small clarification: RFC8032 signatures are of the form (commitment, response), and this is [what's in the draft now](https://cfrg.github.io/draft-irtf-cfrg-frost/draft-irtf-cfrg-frost.html#name-signature-share-aggregation) (`R` is the group commitment and `z` is the response, to use terminology here). Unless I'm misunderstanding, I think we can close this.",
+          "createdAt": "2022-02-06T01:42:48Z",
+          "updatedAt": "2022-02-06T01:42:55Z"
         }
       ]
+    },
+    {
+      "number": 68,
+      "id": "I_kwDOEpUZs85DD124",
+      "title": "Single-party signature generation and verification",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/68",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The [current verification](https://cfrg.github.io/draft-irtf-cfrg-frost/draft-irtf-cfrg-frost.html#name-schnorr-signature-operation) routine diverges from RFC8032. In particular, it does this:\r\n\r\n~~~\r\ndef schnorr_signature_verify(msg, sig = (R, z), PK):\r\n    msg_hash = H3(msg)\r\n    comm_enc = G.SerializeElement(R)\r\n    pk_enc = G.SerializeElement(PK)\r\n    challenge_input = group_comm_enc || group_public_key_enc || msg_hash\r\n    c = H2(challenge_input)\r\n\r\n    l = ScalarBaseMult(z)\r\n    r = R + (c * PK)\r\n    if l == r:\r\n      return 1\r\n    return 0\r\n~~~\r\n\r\nWhen it should do something like this (partially modified from [ed25519-zebra's ZIP15-based verification check](https://github.com/ZcashFoundation/ed25519-zebra/blob/main/src/verification_key.rs)):\r\n\r\n~~~\r\ndef schnorr_signature_verify(msg, sig = (R, z), PK):\r\n    msg_hash = H3(msg)\r\n    comm_enc = G.SerializeElement(R)\r\n    pk_enc = G.SerializeElement(PK)\r\n    challenge_input = group_comm_enc || group_public_key_enc || msg_hash\r\n    c = H2(challenge_input)\r\n\r\n    # Check that [8][Z]B = [8]R + [8][c]PK:\r\n    # <=> 0 == [8](R - ([z]B - [c]PK))\r\n    # <=> 0 == [8](R - R'), where R' = [z]B - [c]PK\r\n    \r\n    Z = ScalarBaseMult(z)\r\n    Rp = c * PK\r\n    D = 8 * (R - Rp)\r\n    return D == Identity()\r\n~~~\r\n\r\nThis is specific to RFC8032 and Ed25519, where the cofactor of the curve is 8, so we probably need to write this in terms of a more general cofactor `h`. This probably relates to #12, so cc @dconnolly for a sanity check. =)",
+      "createdAt": "2022-02-06T01:53:30Z",
+      "updatedAt": "2022-02-06T01:54:13Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 69,
+      "id": "I_kwDOEpUZs85DD16k",
+      "title": "Add Ed448 ciphersuite and test vector",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/69",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The adoption call for this draft indicated that we'd need to support specializations for all RFC8032 signatures, including Ed25519 and Ed448. This should be a trivial extension now that we have the ed25519 suite. ",
+      "createdAt": "2022-02-06T01:55:19Z",
+      "updatedAt": "2022-02-06T01:58:30Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Also, maybe we need to add ciphersuites for other curves that are used for Schnorr signatures? I _think_ this would include, e.g., secp256k1?",
+          "createdAt": "2022-02-06T01:58:30Z",
+          "updatedAt": "2022-02-06T01:58:30Z"
+        }
+      ]
+    },
+    {
+      "number": 70,
+      "id": "I_kwDOEpUZs85DD1_q",
+      "title": "Signature encoding",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/70",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft doesn't take an opinionated stance on how to encode signatures -- it currently just spits out the commitment and response pair `(R, z)`. On the contrary, RFC8032 signatures are represented as the concatenation of `R` and `z`, both serialized. It seems like the RFC8032 suite ought to produce signatures in this format. But what about other ciphersuites?",
+      "createdAt": "2022-02-06T01:57:49Z",
+      "updatedAt": "2022-02-06T01:57:49Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -3417,6 +3480,32 @@
           "updatedAt": "2022-02-04T22:22:02Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 71,
+      "id": "PR_kwDOEpUZs84yLokI",
+      "title": "Add Ed448 suite",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/71",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #69.",
+      "createdAt": "2022-02-07T16:13:49Z",
+      "updatedAt": "2022-02-07T16:13:56Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "caw/format-vectors",
+      "baseRefOid": "3f4b408327cf8d4aabf299da41ac80941f10f3dd",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/add-ed448",
+      "headRefOid": "5353338acc3e464275b6fcb136cb5fa8177ec70a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
