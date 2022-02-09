@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 12 August 2022         University of Waterloo, Zcash Foundation
+Expires: 13 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                                C.A. Wood
                                                               Cloudflare
-                                                         8 February 2022
+                                                         9 February 2022
 
 
                Two-Round Threshold Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 August 2022.
+   This Internet-Draft will expire on 13 August 2022.
 
 Copyright Notice
 
@@ -797,9 +797,9 @@ Table of Contents
 9.3.  FROST(edwards448, SHAKE256)
 
    This ciphersuite uses edwards448 for the Group and SHA256 for the
-   Hash function H meant to produce signatures indistinguishable from
-   Ed448 as specified in [RFC8032].  The value of the contextString
-   parameter is empty.
+   Hash function H meant to produce signatures compatible with Ed448 as
+   specified in [RFC8032].  The value of the contextString parameter is
+   empty.
 
    *  Group: ed448 [RFC8032]
 
