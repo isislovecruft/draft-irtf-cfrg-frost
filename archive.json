@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-08T00:31:42.873775+00:00",
+  "timestamp": "2022-02-10T00:32:08.852548+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -951,7 +951,7 @@
       ],
       "body": "Currently messages are limited to the `2^16` length in a `SigningPackage`, but instead this should be limited by the underlying hash function minus minus overhead such as public key, commitment set, etc. \r\n\r\n\r\n",
       "createdAt": "2022-01-28T21:24:43Z",
-      "updatedAt": "2022-02-01T17:42:12Z",
+      "updatedAt": "2022-02-09T20:47:22Z",
       "closedAt": null,
       "comments": [
         {
@@ -988,6 +988,20 @@
           "body": "I would hold off until we have a larger discussion about it. I think this relates to the interface that this specification should expose, which is something I raised in #62.",
           "createdAt": "2022-02-01T16:00:47Z",
           "updatedAt": "2022-02-01T16:00:47Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can we close as resolved?",
+          "createdAt": "2022-02-09T19:31:05Z",
+          "updatedAt": "2022-02-09T19:31:05Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think we can, yeah. The message limit was lifted since the API no longer operates in terms of SignaturePackages and the like. @chelseakomlo, if you're OK with this, can you please close?",
+          "createdAt": "2022-02-09T20:47:22Z",
+          "updatedAt": "2022-02-09T20:47:22Z"
         }
       ]
     },
@@ -1082,15 +1096,15 @@
       "id": "I_kwDOEpUZs85C-Far",
       "title": "Define alternative signature format with (response, commitment) ",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/64",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "RFC8032 requires that the signature format be in the form (response, challenge) but some implementations would like the format to be (response, commitment)  in order to allow for batched signature verification. We should allow for this alternative format in this draft.",
       "createdAt": "2022-02-03T21:26:36Z",
-      "updatedAt": "2022-02-06T01:42:55Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-09T19:30:00Z",
+      "closedAt": "2022-02-09T19:30:00Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -1105,6 +1119,13 @@
           "body": "Re-reading this, small clarification: RFC8032 signatures are of the form (commitment, response), and this is [what's in the draft now](https://cfrg.github.io/draft-irtf-cfrg-frost/draft-irtf-cfrg-frost.html#name-signature-share-aggregation) (`R` is the group commitment and `z` is the response, to use terminology here). Unless I'm misunderstanding, I think we can close this.",
           "createdAt": "2022-02-06T01:42:48Z",
           "updatedAt": "2022-02-06T01:42:55Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yeah i think we can close",
+          "createdAt": "2022-02-09T19:29:50Z",
+          "updatedAt": "2022-02-09T19:29:50Z"
         }
       ]
     },
@@ -1120,14 +1141,29 @@
       "labels": [],
       "body": "The [current verification](https://cfrg.github.io/draft-irtf-cfrg-frost/draft-irtf-cfrg-frost.html#name-schnorr-signature-operation) routine diverges from RFC8032. In particular, it does this:\r\n\r\n~~~\r\ndef schnorr_signature_verify(msg, sig = (R, z), PK):\r\n    msg_hash = H3(msg)\r\n    comm_enc = G.SerializeElement(R)\r\n    pk_enc = G.SerializeElement(PK)\r\n    challenge_input = group_comm_enc || group_public_key_enc || msg_hash\r\n    c = H2(challenge_input)\r\n\r\n    l = ScalarBaseMult(z)\r\n    r = R + (c * PK)\r\n    if l == r:\r\n      return 1\r\n    return 0\r\n~~~\r\n\r\nWhen it should do something like this (partially modified from [ed25519-zebra's ZIP15-based verification check](https://github.com/ZcashFoundation/ed25519-zebra/blob/main/src/verification_key.rs)):\r\n\r\n~~~\r\ndef schnorr_signature_verify(msg, sig = (R, z), PK):\r\n    msg_hash = H3(msg)\r\n    comm_enc = G.SerializeElement(R)\r\n    pk_enc = G.SerializeElement(PK)\r\n    challenge_input = group_comm_enc || group_public_key_enc || msg_hash\r\n    c = H2(challenge_input)\r\n\r\n    # Check that [8][Z]B = [8]R + [8][c]PK:\r\n    # <=> 0 == [8](R - ([z]B - [c]PK))\r\n    # <=> 0 == [8](R - R'), where R' = [z]B - [c]PK\r\n    \r\n    Z = ScalarBaseMult(z)\r\n    Rp = c * PK\r\n    D = 8 * (R - Rp)\r\n    return D == Identity()\r\n~~~\r\n\r\nThis is specific to RFC8032 and Ed25519, where the cofactor of the curve is 8, so we probably need to write this in terms of a more general cofactor `h`. This probably relates to #12, so cc @dconnolly for a sanity check. =)",
       "createdAt": "2022-02-06T01:53:30Z",
-      "updatedAt": "2022-02-06T01:54:13Z",
+      "updatedAt": "2022-02-09T19:59:36Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes the 8 is because the Edwards curve has that cofactor. In the p256 and Ristretto cases, that h = 1. One way to handle this is to make the h explicit in our formulas and explicit in the ciphersuites, so h = 1, or h = 8, or whatever. ",
+          "createdAt": "2022-02-09T19:29:00Z",
+          "updatedAt": "2022-02-09T19:29:00Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Relatedly : https://github.com/cfrg/draft-irtf-cfrg-frost/issues/12",
+          "createdAt": "2022-02-09T19:59:35Z",
+          "updatedAt": "2022-02-09T19:59:35Z"
+        }
+      ]
     },
     {
       "number": 69,
       "id": "I_kwDOEpUZs85DD16k",
-      "title": "Add Ed448 ciphersuite and test vector",
+      "title": "Add other Schnorr use ciphersuites and test vectors",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/69",
       "state": "OPEN",
       "author": "chris-wood",
@@ -1136,7 +1172,7 @@
       "labels": [],
       "body": "The adoption call for this draft indicated that we'd need to support specializations for all RFC8032 signatures, including Ed25519 and Ed448. This should be a trivial extension now that we have the ed25519 suite. ",
       "createdAt": "2022-02-06T01:55:19Z",
-      "updatedAt": "2022-02-06T01:58:30Z",
+      "updatedAt": "2022-02-09T20:46:38Z",
       "closedAt": null,
       "comments": [
         {
@@ -1145,6 +1181,20 @@
           "body": "Also, maybe we need to add ciphersuites for other curves that are used for Schnorr signatures? I _think_ this would include, e.g., secp256k1?",
           "createdAt": "2022-02-06T01:58:30Z",
           "updatedAt": "2022-02-06T01:58:30Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Also, maybe we need to add ciphersuites for other curves that are used for Schnorr signatures? I _think_ this would include, e.g., secp256k1?\n\nI had vague plans to implement this anyway for our FROST impls but wasn't sure if we had interest in standardizing it. I was under the impression that secp256k1 is usually used in ECDSA, and that standardizing a Schnorr signature using it would be going against the grain (imo in a good direction, but). Are there other Schnorr systems using it out there?",
+          "createdAt": "2022-02-09T19:57:44Z",
+          "updatedAt": "2022-02-09T19:57:44Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Are there other Schnorr systems using it out there?\r\n\r\nI dunno! That's the question, I guess. We should make sure we show how to implement FROST for all curves that folks care about.",
+          "createdAt": "2022-02-09T20:46:26Z",
+          "updatedAt": "2022-02-09T20:46:26Z"
         }
       ]
     },
@@ -1160,9 +1210,64 @@
       "labels": [],
       "body": "The draft doesn't take an opinionated stance on how to encode signatures -- it currently just spits out the commitment and response pair `(R, z)`. On the contrary, RFC8032 signatures are represented as the concatenation of `R` and `z`, both serialized. It seems like the RFC8032 suite ought to produce signatures in this format. But what about other ciphersuites?",
       "createdAt": "2022-02-06T01:57:49Z",
-      "updatedAt": "2022-02-06T01:57:49Z",
+      "updatedAt": "2022-02-09T20:45:45Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I lean towards this, we have Signature types that are just the bytes of those elements and can easily be serialized to a concatenation",
+          "createdAt": "2022-02-09T19:26:00Z",
+          "updatedAt": "2022-02-09T19:26:00Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "To clarify, by \"this\" you mean what's currently in the draft?",
+          "createdAt": "2022-02-09T20:45:45Z",
+          "updatedAt": "2022-02-09T20:45:45Z"
+        }
+      ]
+    },
+    {
+      "number": 72,
+      "id": "I_kwDOEpUZs85DN_tU",
+      "title": "Add check for valid points",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/72",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chelseakomlo"
+      ],
+      "labels": [],
+      "body": "The FROST paper assumes a prime order group. However, when we interoperate with curves that can have  invalid points, we'll need to identify places in the draft where these checks should occur. ",
+      "createdAt": "2022-02-08T20:47:44Z",
+      "updatedAt": "2022-02-09T20:48:00Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chelseakomlo I think this is already addressed [in this section](https://cfrg.github.io/draft-irtf-cfrg-frost/draft-irtf-cfrg-frost.html#section-6.1.1). Can you please confirm?",
+          "createdAt": "2022-02-08T20:55:55Z",
+          "updatedAt": "2022-02-08T20:55:55Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Just in case, is there any danger to not checking for valid points when verifying? I think not because it's verification and everything is public but I was working on this  recently and was curious",
+          "createdAt": "2022-02-09T19:54:56Z",
+          "updatedAt": "2022-02-09T19:54:56Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Good question. I don't think so? It seems harmless to add a check, just to be safe, but... here be dragons.",
+          "createdAt": "2022-02-09T20:48:00Z",
+          "updatedAt": "2022-02-09T20:48:00Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -3460,13 +3565,13 @@
       "labels": [],
       "body": "Closes #49.",
       "createdAt": "2022-02-04T15:38:44Z",
-      "updatedAt": "2022-02-04T22:22:02Z",
+      "updatedAt": "2022-02-09T22:43:40Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
       "baseRefOid": "21471bbd339579da93ba14c0b1a4a79e6279c45a",
       "headRepository": "cfrg/draft-irtf-cfrg-frost",
       "headRefName": "caw/format-vectors",
-      "headRefOid": "3f4b408327cf8d4aabf299da41ac80941f10f3dd",
+      "headRefOid": "47f24f75c0208ed0d20f4254866f684b1588fb76",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -3480,33 +3585,539 @@
           "updatedAt": "2022-02-04T22:22:02Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840Pvkn",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:21:47Z",
+          "updatedAt": "2022-02-08T19:21:48Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "Should we include these here if we're not using them rn? Maybe if we expand the defined ciphersuites we can bring them back",
+              "createdAt": "2022-02-08T19:21:48Z",
+              "updatedAt": "2022-02-08T19:21:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840PvsJ",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:22:14Z",
+          "updatedAt": "2022-02-08T19:22:14Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-02-08T19:22:14Z",
+              "updatedAt": "2022-02-08T19:22:14Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Pvvs",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:22:27Z",
+          "updatedAt": "2022-02-08T19:22:27Z",
+          "comments": [
+            {
+              "originalPosition": 1,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-02-08T19:22:27Z",
+              "updatedAt": "2022-02-08T19:22:27Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840PwNp",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:24:16Z",
+          "updatedAt": "2022-02-08T19:24:17Z",
+          "comments": [
+            {
+              "originalPosition": 86,
+              "body": "Should this go after the Signer round one outputs?",
+              "createdAt": "2022-02-08T19:24:17Z",
+              "updatedAt": "2022-02-08T19:24:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840PxLQ",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:27:58Z",
+          "updatedAt": "2022-02-08T19:27:59Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "I think this needs a better name as it's different than just the public commitments being used",
+              "createdAt": "2022-02-08T19:27:59Z",
+              "updatedAt": "2022-02-08T19:27:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Py9b",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:34:57Z",
+          "updatedAt": "2022-02-08T19:34:58Z",
+          "comments": [
+            {
+              "originalPosition": 44,
+              "body": "```suggestion\r\n  output signature share and group commitment share as produced in {{frost-round-two}}.\r\n```",
+              "createdAt": "2022-02-08T19:34:57Z",
+              "updatedAt": "2022-02-08T19:34:58Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P6S6",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T20:03:21Z",
+          "updatedAt": "2022-02-08T20:03:21Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "Yeah, probably. But let's do that in a separate PR.",
+              "createdAt": "2022-02-08T20:03:21Z",
+              "updatedAt": "2022-02-08T20:03:21Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P63V",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T20:05:36Z",
+          "updatedAt": "2022-02-08T20:05:37Z",
+          "comments": [
+            {
+              "originalPosition": 86,
+              "body": "Eh, I don't feel strongly. It could.",
+              "createdAt": "2022-02-08T20:05:37Z",
+              "updatedAt": "2022-02-08T20:05:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P692",
+          "commit": {
+            "abbreviatedOid": "3f4b408"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T20:06:00Z",
+          "updatedAt": "2022-02-08T20:06:00Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "What is \"this\"? Are you referring to `commitment_list` or `participants`?",
+              "createdAt": "2022-02-08T20:06:00Z",
+              "updatedAt": "2022-02-08T20:06:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Vx38",
+          "commit": {
+            "abbreviatedOid": "dc3e2d2"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This looks good to me",
+          "createdAt": "2022-02-09T22:23:44Z",
+          "updatedAt": "2022-02-09T22:30:42Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "I would say \"compatible with\" here.",
+              "createdAt": "2022-02-09T22:23:44Z",
+              "updatedAt": "2022-02-09T22:30:42Z"
+            },
+            {
+              "originalPosition": 92,
+              "body": "Why is this value needed? If it is purely for testing, you might add something about how this value is obtained by performing Shamir.Recover with the participant's secrets. ",
+              "createdAt": "2022-02-09T22:26:53Z",
+              "updatedAt": "2022-02-09T22:30:42Z"
+            },
+            {
+              "originalPosition": 307,
+              "body": "Should we have a test for a different number of signers, just in case? ",
+              "createdAt": "2022-02-09T22:27:55Z",
+              "updatedAt": "2022-02-09T22:30:42Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840V1be",
+          "commit": {
+            "abbreviatedOid": "dc3e2d2"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-09T22:42:19Z",
+          "updatedAt": "2022-02-09T22:42:19Z",
+          "comments": [
+            {
+              "originalPosition": 16,
+              "body": "```suggestion\r\nmeant to produce signatures compatible with Ed448 as specified in {{!RFC8032}}.\r\n```",
+              "createdAt": "2022-02-09T22:42:19Z",
+              "updatedAt": "2022-02-09T22:42:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840V1lV",
+          "commit": {
+            "abbreviatedOid": "47f24f7"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-09T22:43:08Z",
+          "updatedAt": "2022-02-09T22:43:08Z",
+          "comments": [
+            {
+              "originalPosition": 307,
+              "body": "Do you mean a different number for `MAX_SIGNERS`, or `NUM_SIGNERS`? I don't think changing `MAX_SIGNERS` increases test coverage. Changing `NUM_SIGNERS` might, however. I would prefer to do that in a separate PR.",
+              "createdAt": "2022-02-09T22:43:08Z",
+              "updatedAt": "2022-02-09T22:43:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840V1r6",
+          "commit": {
+            "abbreviatedOid": "47f24f7"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-09T22:43:40Z",
+          "updatedAt": "2022-02-09T22:43:40Z",
+          "comments": [
+            {
+              "originalPosition": 92,
+              "body": "Right -- one can test that Shamir recovery yields this group secret. ",
+              "createdAt": "2022-02-09T22:43:40Z",
+              "updatedAt": "2022-02-09T22:43:40Z"
+            }
+          ]
+        }
+      ]
     },
     {
       "number": 71,
       "id": "PR_kwDOEpUZs84yLokI",
       "title": "Add Ed448 suite",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/71",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #69.",
       "createdAt": "2022-02-07T16:13:49Z",
-      "updatedAt": "2022-02-07T16:13:56Z",
+      "updatedAt": "2022-02-08T23:44:55Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "caw/format-vectors",
       "baseRefOid": "3f4b408327cf8d4aabf299da41ac80941f10f3dd",
       "headRepository": "cfrg/draft-irtf-cfrg-frost",
       "headRefName": "caw/add-ed448",
       "headRefOid": "5353338acc3e464275b6fcb136cb5fa8177ec70a",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-02-08T23:44:55Z",
+      "mergedAt": "2022-02-08T23:44:55Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "dc3e2d258ff1c9cd51f48a06e067b2ceaf6cd42d"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840PDVl",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This looks good to me, thank you!",
+          "createdAt": "2022-02-08T17:03:06Z",
+          "updatedAt": "2022-02-08T17:03:06Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs840PzeN",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:37:00Z",
+          "updatedAt": "2022-02-08T19:37:00Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "This is `edwards448` here and `ed448` below, should we pick one?",
+              "createdAt": "2022-02-08T19:37:00Z",
+              "updatedAt": "2022-02-08T19:37:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P0yq",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:41:50Z",
+          "updatedAt": "2022-02-08T19:41:51Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "So Edwards448 by definition has a cofactor. Should we clarify that we are still trying to do these Schnorr signatures in the prime order subgroup, not 'just' the composite-order group defined by the whole elliptic curve?",
+              "createdAt": "2022-02-08T19:41:51Z",
+              "updatedAt": "2022-02-08T19:41:51Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P2dp",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T19:48:23Z",
+          "updatedAt": "2022-02-08T19:48:23Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": "This is also to retain compat with Ed448 signatures? EDIT: hah yes as mentioned below \ud83d\ude48",
+              "createdAt": "2022-02-08T19:48:23Z",
+              "updatedAt": "2022-02-08T19:48:50Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P3rx",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Non-blocking q's, looks good",
+          "createdAt": "2022-02-08T19:53:13Z",
+          "updatedAt": "2022-02-08T19:53:13Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P7dU",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T20:07:52Z",
+          "updatedAt": "2022-02-08T20:07:52Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Heh, yeah. Do you have a preference? \ud83e\udd37 ",
+              "createdAt": "2022-02-08T20:07:52Z",
+              "updatedAt": "2022-02-08T20:07:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P7kA",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T20:08:17Z",
+          "updatedAt": "2022-02-08T20:08:17Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "That's not a bad idea. Can we do this in a followup PR? (And would you be willing to do that?)",
+              "createdAt": "2022-02-08T20:08:17Z",
+              "updatedAt": "2022-02-08T20:08:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840P7lS",
+          "commit": {
+            "abbreviatedOid": "5353338"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-08T20:08:21Z",
+          "updatedAt": "2022-02-08T20:08:21Z",
+          "comments": [
+            {
+              "originalPosition": 19,
+              "body": ":) ",
+              "createdAt": "2022-02-08T20:08:21Z",
+              "updatedAt": "2022-02-08T20:08:21Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 73,
+      "id": "PR_kwDOEpUZs84yQ4cJ",
+      "title": "Update single-signer Schnorr signature operations names",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/73",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "They were talking about 'group' commitments and keys ",
+      "createdAt": "2022-02-08T22:07:21Z",
+      "updatedAt": "2022-02-08T22:08:30Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "21471bbd339579da93ba14c0b1a4a79e6279c45a",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "dconnolly-patch-1",
+      "headRefOid": "81b6b3cd8e34516470f9289755e9835bb80a8d26",
+      "closedAt": "2022-02-08T22:08:01Z",
+      "mergedAt": "2022-02-08T22:08:01Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "890f446ba5d1be1ab3ff01b8ac542205c9d3a91a"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840QXd3",
+          "commit": {
+            "abbreviatedOid": "81b6b3c"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-08T22:07:48Z",
+          "updatedAt": "2022-02-08T22:07:48Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 74,
+      "id": "PR_kwDOEpUZs84yRZes",
+      "title": "fix output documentation for secret_share_combine",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/74",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-09T02:25:01Z",
+      "updatedAt": "2022-02-09T12:40:49Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "890f446ba5d1be1ab3ff01b8ac542205c9d3a91a",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "doc-fix",
+      "headRefOid": "174d537271401add1ddb5004609f12bafe298c8c",
+      "closedAt": "2022-02-09T03:04:20Z",
+      "mergedAt": "2022-02-09T03:04:19Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "b4fedc870e3b07055db9f9086972ef2981b8609a"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840RA9e",
+          "commit": {
+            "abbreviatedOid": "174d537"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thank you! \ud83d\ude4f",
+          "createdAt": "2022-02-09T03:04:16Z",
+          "updatedAt": "2022-02-09T03:04:16Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
