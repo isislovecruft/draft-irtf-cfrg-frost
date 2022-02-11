@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 14 August 2022         University of Waterloo, Zcash Foundation
+Expires: 15 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                                C.A. Wood
                                                               Cloudflare
-                                                        10 February 2022
+                                                        11 February 2022
 
 
                Two-Round Threshold Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 August 2022.
+   This Internet-Draft will expire on 15 August 2022.
 
 Copyright Notice
 
@@ -474,7 +474,7 @@ Table of Contents
    *  Group public key, denoted PK = G.ScalarMultBase(s), corresponding
       to the group secret key s.
 
-   *  Participant i signing key, which is the i-th secret share of s.
+   *  Participant is signing key, which is the i-th secret share of s.
 
    The exact key generation mechanism is out of scope for this
    specification.  In general, key generation is a protocol that outputs
