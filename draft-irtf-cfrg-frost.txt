@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 13 August 2022         University of Waterloo, Zcash Foundation
+Expires: 15 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                                C.A. Wood
                                                               Cloudflare
-                                                         9 February 2022
+                                                        11 February 2022
 
 
                Two-Round Threshold Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 August 2022.
+   This Internet-Draft will expire on 15 August 2022.
 
 Copyright Notice
 
@@ -459,21 +459,21 @@ Table of Contents
    f(0), given a set of t other points, where f is represented as a set
    of coefficients.
 
-     derive_lagrange_coefficient(i, L):
+     derive_lagrange_coefficient(x_i, L):
 
      Inputs:
-     - i, an index contained in L, a scalar
+     - x_i, an x-coordinate contained in L, a scalar
      - L, the set of x-coordinates, each a scalar
 
      Outputs: L_i, the i-th Lagrange coefficient
 
-     def derive_lagrange_coefficient(i, L):
+     def derive_lagrange_coefficient(x_i, L):
        numerator = 1
        denominator = 1
-       for j in L:
-         if j == i: continue
-         numerator *= j
-         denominator *= j - i
+       for x_j in L:
+         if x_j == x_i: continue
+         numerator *= x_j
+         denominator *= x_j - x_i
 
        L_i = numerator / denominator
        return L_i
