@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 15 August 2022         University of Waterloo, Zcash Foundation
+Expires: 16 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                                C.A. Wood
                                                               Cloudflare
-                                                        11 February 2022
+                                                        12 February 2022
 
 
                Two-Round Threshold Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2022.
+   This Internet-Draft will expire on 16 August 2022.
 
 Copyright Notice
 
@@ -491,12 +491,12 @@ Table of Contents
    commitment.  The second round receives commitments for all signers as
    well as the message, and issues a signature share.  The Coordinator
    performs the coordination of each of these rounds.  At the end of the
-   second round, the Coordinator then performs an aggregation round at
+   second round, the Coordinator then performs an aggregation step at
    the end and outputs the final signature.  This complete interaction
    is shown in Figure 1.
 
            (group info)             (group info,     (group info,
-               |                     signing key)     signing key)
+               |               signing key share)   signing key share)
                |                         |                |
                v                         v                v
            Coordinator               Signer-1   ...   Signer-n
