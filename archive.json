@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-10T00:32:08.852548+00:00",
+  "timestamp": "2022-02-13T00:35:19.711211+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -820,7 +820,7 @@
       "id": "I_kwDOEpUZs85Bt_C3",
       "title": "Test Vectors",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/49",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -829,8 +829,8 @@
       "labels": [],
       "body": "Here are the test vectors that we would like for each ciphersuite:\r\n\r\n- Success case\r\n1. (2,3), where the threshold is 2 and number of participants are 3\r\n2. Inputs should be deterministic, outputs should be the defined serialized structs. \r\n3. Tests should validate for the (2,3) signers and (3,3) signers\r\n\r\n- Failure cases: \r\n1. Participant index of 0\r\n2. When t is one",
       "createdAt": "2022-01-13T23:30:26Z",
-      "updatedAt": "2022-02-01T20:24:14Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-12T01:38:54Z",
+      "closedAt": "2022-02-12T01:38:54Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -1243,7 +1243,7 @@
       "labels": [],
       "body": "The FROST paper assumes a prime order group. However, when we interoperate with curves that can have  invalid points, we'll need to identify places in the draft where these checks should occur. ",
       "createdAt": "2022-02-08T20:47:44Z",
-      "updatedAt": "2022-02-09T20:48:00Z",
+      "updatedAt": "2022-02-10T22:02:02Z",
       "closedAt": null,
       "comments": [
         {
@@ -1266,6 +1266,27 @@
           "body": "Good question. I don't think so? It seems harmless to add a check, just to be safe, but... here be dragons.",
           "createdAt": "2022-02-09T20:48:00Z",
           "updatedAt": "2022-02-09T20:48:00Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "It looks like RFC8032 checks for valid points when verifying, so we should probably as well in the places where we define single-party verification. \r\n\r\nhttps://datatracker.ietf.org/doc/html/rfc8032#section-3.4\r\n\r\nGood catch @dconnolly ! ",
+          "createdAt": "2022-02-10T21:35:16Z",
+          "updatedAt": "2022-02-10T21:46:26Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chelseakomlo will you have time to prepare a PR for this, or would you like me to do it?",
+          "createdAt": "2022-02-10T21:53:44Z",
+          "updatedAt": "2022-02-10T21:53:44Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@chris-wood If you have time to do this, that would be fantastic ",
+          "createdAt": "2022-02-10T22:02:02Z",
+          "updatedAt": "2022-02-10T22:02:02Z"
         }
       ]
     }
@@ -3558,24 +3579,26 @@
       "id": "PR_kwDOEpUZs84yFxqg",
       "title": "Format test vectors and include them in the draft",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/67",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #49.",
       "createdAt": "2022-02-04T15:38:44Z",
-      "updatedAt": "2022-02-09T22:43:40Z",
+      "updatedAt": "2022-02-12T01:38:57Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
       "baseRefOid": "21471bbd339579da93ba14c0b1a4a79e6279c45a",
       "headRepository": "cfrg/draft-irtf-cfrg-frost",
       "headRefName": "caw/format-vectors",
-      "headRefOid": "47f24f75c0208ed0d20f4254866f684b1588fb76",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "9cd6bf88fba6f7b2197a971124130eafc4e096ca",
+      "closedAt": "2022-02-12T01:38:54Z",
+      "mergedAt": "2022-02-12T01:38:54Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "e6767854decbe72ea4b9e9838f7056dd21d795d9"
+      },
       "comments": [
         {
           "author": "chris-wood",
@@ -3583,6 +3606,27 @@
           "body": "Rebased.",
           "createdAt": "2022-02-04T22:22:02Z",
           "updatedAt": "2022-02-04T22:22:02Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly I made your suggested name change in this PR. Please have a look!",
+          "createdAt": "2022-02-10T14:42:48Z",
+          "updatedAt": "2022-02-10T14:42:48Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Is this name change also happening here?\n\nhttps://github.com/cfrg/draft-irtf-cfrg-frost/pull/67#discussion_r803715421",
+          "createdAt": "2022-02-10T15:16:21Z",
+          "updatedAt": "2022-02-10T15:16:21Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly yep -- see the latest changes! (I pushed locally but didn't see that I had a conflict, so the commits you see just now are me resolving those conflicts.)",
+          "createdAt": "2022-02-10T16:19:40Z",
+          "updatedAt": "2022-02-10T16:26:06Z"
         }
       ],
       "reviews": [
@@ -3857,6 +3901,59 @@
               "updatedAt": "2022-02-09T22:43:40Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Wg35",
+          "commit": {
+            "abbreviatedOid": "47f24f7"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-10T04:30:38Z",
+          "updatedAt": "2022-02-10T04:30:38Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "Sorry, `commitment_list`",
+              "createdAt": "2022-02-10T04:30:38Z",
+              "updatedAt": "2022-02-10T04:30:38Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840Yume",
+          "commit": {
+            "abbreviatedOid": "47f24f7"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-10T14:13:06Z",
+          "updatedAt": "2022-02-10T14:13:07Z",
+          "comments": [
+            {
+              "originalPosition": 67,
+              "body": "True -- it's the encoded group commitment list plus the message hash. I'll change the name to `binding_factor_input`.",
+              "createdAt": "2022-02-10T14:13:06Z",
+              "updatedAt": "2022-02-10T14:13:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840f_xd",
+          "commit": {
+            "abbreviatedOid": "9cd6bf8"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks fantastic, thanks @chris-wood ",
+          "createdAt": "2022-02-12T01:38:46Z",
+          "updatedAt": "2022-02-12T01:38:46Z",
+          "comments": []
         }
       ]
     },
@@ -4115,6 +4212,637 @@
           "body": "Thank you! \ud83d\ude4f",
           "createdAt": "2022-02-09T03:04:16Z",
           "updatedAt": "2022-02-09T03:04:16Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 75,
+      "id": "PR_kwDOEpUZs84yb8Aq",
+      "title": "Refactor the document for better flow",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/75",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There was a bit of redundant information, so I cleaned that up and (I think) improved the flow.\r\n\r\nI think we still need to do a pass over variable names in the main protocol doc, but that can happen later.",
+      "createdAt": "2022-02-10T21:52:46Z",
+      "updatedAt": "2022-02-12T17:48:06Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "623333798381a5be5ed65381e860119f8023ca1f",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/refactor-doc",
+      "headRefOid": "0f66b72ee658ac4d3436c9bf11d33025557c68f6",
+      "closedAt": "2022-02-12T17:48:06Z",
+      "mergedAt": "2022-02-12T17:48:06Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "b4e659166de32ff18632ddfdb3d81471ca36a73e"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks! @chelseakomlo, please review and merge when convenient.",
+          "createdAt": "2022-02-11T21:16:44Z",
+          "updatedAt": "2022-02-11T21:16:44Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840fhiO",
+          "commit": {
+            "abbreviatedOid": "b8d7f3f"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-11T21:06:54Z",
+          "updatedAt": "2022-02-11T21:06:54Z",
+          "comments": [
+            {
+              "originalPosition": 173,
+              "body": "```suggestion\r\n- Participant `i`s signing key, which is the i-th secret share of `s`.\r\n```",
+              "createdAt": "2022-02-11T21:06:54Z",
+              "updatedAt": "2022-02-11T21:06:54Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840fipi",
+          "commit": {
+            "abbreviatedOid": "843fa42"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-11T21:13:02Z",
+          "updatedAt": "2022-02-11T21:13:03Z",
+          "comments": [
+            {
+              "originalPosition": 266,
+              "body": "```suggestion\r\nThe protocol as specified in this document does not target the following goals:\r\n```",
+              "createdAt": "2022-02-11T21:13:02Z",
+              "updatedAt": "2022-02-11T21:13:03Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840fi3x",
+          "commit": {
+            "abbreviatedOid": "843fa42"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-11T21:13:48Z",
+          "updatedAt": "2022-02-11T21:13:48Z",
+          "comments": [
+            {
+              "originalPosition": 268,
+              "body": "```suggestion\r\n* Post quantum security. FROST, like generic Schnorr signatures, requires the hardness of the Discrete Logarithm Problem.\r\n```",
+              "createdAt": "2022-02-11T21:13:48Z",
+              "updatedAt": "2022-02-11T21:13:48Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840fjF0",
+          "commit": {
+            "abbreviatedOid": "843fa42"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-11T21:15:01Z",
+          "updatedAt": "2022-02-11T21:15:01Z",
+          "comments": [
+            {
+              "originalPosition": 268,
+              "body": "I only make this comment because the Shamir secret sharing is in fact quantum resilient, but the group actions like the additive group stuff to generate the group Schnorr signature, is not ",
+              "createdAt": "2022-02-11T21:15:01Z",
+              "updatedAt": "2022-02-11T21:15:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840fjQK",
+          "commit": {
+            "abbreviatedOid": "315832b"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM!",
+          "createdAt": "2022-02-11T21:15:56Z",
+          "updatedAt": "2022-02-11T21:15:56Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gRk6",
+          "commit": {
+            "abbreviatedOid": "315832b"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks great, and added a few nitpicky changes. Thanks @chris-wood ",
+          "createdAt": "2022-02-12T17:38:36Z",
+          "updatedAt": "2022-02-12T17:43:24Z",
+          "comments": [
+            {
+              "originalPosition": 187,
+              "body": "I wouldn't call this a round, it is more of an aggregation step.",
+              "createdAt": "2022-02-12T17:38:36Z",
+              "updatedAt": "2022-02-12T17:43:24Z"
+            },
+            {
+              "originalPosition": 194,
+              "body": "This is `signing key share`",
+              "createdAt": "2022-02-12T17:39:06Z",
+              "updatedAt": "2022-02-12T17:43:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gRsw",
+          "commit": {
+            "abbreviatedOid": "6068fac"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:44:04Z",
+          "updatedAt": "2022-02-12T17:44:04Z",
+          "comments": [
+            {
+              "originalPosition": 194,
+              "body": "Copy-pasted from existing text. We can update it.",
+              "createdAt": "2022-02-12T17:44:04Z",
+              "updatedAt": "2022-02-12T17:44:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gRxR",
+          "commit": {
+            "abbreviatedOid": "a400482"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:47:33Z",
+          "updatedAt": "2022-02-12T17:47:33Z",
+          "comments": [
+            {
+              "originalPosition": 234,
+              "body": "```suggestion\r\n{{frost-aggregation}}.\r\n```",
+              "createdAt": "2022-02-12T17:47:33Z",
+              "updatedAt": "2022-02-12T17:47:33Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gRxe",
+          "commit": {
+            "abbreviatedOid": "a400482"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:47:41Z",
+          "updatedAt": "2022-02-12T17:47:41Z",
+          "comments": [
+            {
+              "originalPosition": 256,
+              "body": "```suggestion\r\n## Signature Share Aggregation {#frost-aggregation}\r\n```",
+              "createdAt": "2022-02-12T17:47:41Z",
+              "updatedAt": "2022-02-12T17:47:41Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 76,
+      "id": "PR_kwDOEpUZs84ydf7E",
+      "title": "improved pseudo code for derive_lagrange_coefficient",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/76",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "the rationale is that in order to understand \"index\", you need to read the whole document. This change makes `derive_lagrange_coefficient` more self-contained.",
+      "createdAt": "2022-02-11T02:18:59Z",
+      "updatedAt": "2022-02-11T14:08:29Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "b4fedc870e3b07055db9f9086972ef2981b8609a",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "doc-lagrange",
+      "headRefOid": "d63dc8dcdd4373a13e763ee7c28248018817d47c",
+      "closedAt": "2022-02-11T03:15:25Z",
+      "mergedAt": "2022-02-11T03:15:25Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "bc2a318d4d5f713bae6d68dafd7fdb6014017aaf"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Another solid improvement :) keep them coming, @aldenml!",
+          "createdAt": "2022-02-11T03:15:20Z",
+          "updatedAt": "2022-02-11T03:15:20Z"
+        },
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "thanks :)",
+          "createdAt": "2022-02-11T14:08:28Z",
+          "updatedAt": "2022-02-11T14:08:28Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840b9Fi",
+          "commit": {
+            "abbreviatedOid": "d63dc8d"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-11T03:15:02Z",
+          "updatedAt": "2022-02-11T03:15:02Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 77,
+      "id": "PR_kwDOEpUZs84yjJye",
+      "title": "Add Schnorr to the title",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/77",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "So as to distinguish it from solutions for RSA or ECDSA signatures, which can be dealt with separately.",
+      "createdAt": "2022-02-11T21:09:30Z",
+      "updatedAt": "2022-02-11T21:17:17Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "bc2a318d4d5f713bae6d68dafd7fdb6014017aaf",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/add-schnorr-to-title",
+      "headRefOid": "4531a2d86041039a8b66d6de50a0e26e0f532bde",
+      "closedAt": "2022-02-11T21:17:13Z",
+      "mergedAt": "2022-02-11T21:17:13Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "51664a77b0e02b86fa2cddccacc13fb5055c4d5d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840fjXh",
+          "commit": {
+            "abbreviatedOid": "4531a2d"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "\ud83d\udcaf",
+          "createdAt": "2022-02-11T21:16:37Z",
+          "updatedAt": "2022-02-11T21:16:37Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 78,
+      "id": "PR_kwDOEpUZs84yjLrv",
+      "title": "Only trigger Sage workflow when the poc/ files change",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/78",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "dconnolly"
+      ],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-11T21:19:37Z",
+      "updatedAt": "2022-02-11T21:20:17Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "51664a77b0e02b86fa2cddccacc13fb5055c4d5d",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "dconnolly-patch-1",
+      "headRefOid": "f2d75123d4abb18dd119636f7160751d1117d940",
+      "closedAt": "2022-02-11T21:20:13Z",
+      "mergedAt": "2022-02-11T21:20:13Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "b494082f0ebc6726f081548265f1be165a911dca"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840fkAW",
+          "commit": {
+            "abbreviatedOid": "f2d7512"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-11T21:20:09Z",
+          "updatedAt": "2022-02-11T21:20:09Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 79,
+      "id": "PR_kwDOEpUZs84ykUDT",
+      "title": "Add change log",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/79",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-12T00:54:48Z",
+      "updatedAt": "2022-02-12T19:39:36Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "b494082f0ebc6726f081548265f1be165a911dca",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/change-log",
+      "headRefOid": "6dd537fcf2d0d38ff57c214f9dcb436819341de3",
+      "closedAt": "2022-02-12T19:39:33Z",
+      "mergedAt": "2022-02-12T19:39:33Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "c7308703401a26953881f08af2a855618f625ebe"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840gT1n",
+          "commit": {
+            "abbreviatedOid": "6dd537f"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Thanks @chris-wood, looks great to me.",
+          "createdAt": "2022-02-12T19:39:25Z",
+          "updatedAt": "2022-02-12T19:39:25Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 80,
+      "id": "PR_kwDOEpUZs84ynWnu",
+      "title": "some fixes in pseudo code for sign",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/80",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- the statement `msg_hash = H3(msg)` was repeated, it's done near the beginning.",
+      "createdAt": "2022-02-12T16:31:52Z",
+      "updatedAt": "2022-02-12T17:53:33Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "e6767854decbe72ea4b9e9838f7056dd21d795d9",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "doc-sign",
+      "headRefOid": "b5555cfd086902f7ae9f17a8e86f43056868a461",
+      "closedAt": "2022-02-12T17:44:37Z",
+      "mergedAt": "2022-02-12T17:44:37Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "623333798381a5be5ed65381e860119f8023ca1f"
+      },
+      "comments": [
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@chris-wood I made the changes, waiting for the next review",
+          "createdAt": "2022-02-12T17:08:24Z",
+          "updatedAt": "2022-02-12T17:08:24Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Can you please also update the description used in `encode_group_commitment_list`?",
+          "createdAt": "2022-02-12T17:08:56Z",
+          "updatedAt": "2022-02-12T17:08:56Z"
+        },
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "yes, and also\r\n```\r\n- nonce_i, pair of Scalar values (d, e) generated in round one.\r\n- comm_i, pair of Element values (D, E) generated in round one\r\n```",
+          "createdAt": "2022-02-12T17:09:50Z",
+          "updatedAt": "2022-02-12T17:09:50Z"
+        },
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "done, waiting for next review",
+          "createdAt": "2022-02-12T17:17:24Z",
+          "updatedAt": "2022-02-12T17:17:24Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840gQXa",
+          "commit": {
+            "abbreviatedOid": "d751b5b"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T16:39:33Z",
+          "updatedAt": "2022-02-12T16:45:01Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "This is noted in the inputs of `derive_lagrange_coefficients()`",
+              "createdAt": "2022-02-12T16:39:34Z",
+              "updatedAt": "2022-02-12T16:45:01Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "I think your branch is behind, we renamed these",
+              "createdAt": "2022-02-12T16:40:17Z",
+              "updatedAt": "2022-02-12T16:45:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gQuj",
+          "commit": {
+            "abbreviatedOid": "d751b5b"
+          },
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T16:57:13Z",
+          "updatedAt": "2022-02-12T16:57:13Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "I just checked again, and it's `(x_j, y_j)` in `master`, and my branch is `1` commit ahead of `cfrg:master`. Let me know if I'm missing something, thanks.",
+              "createdAt": "2022-02-12T16:57:13Z",
+              "updatedAt": "2022-02-12T16:57:13Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gQyP",
+          "commit": {
+            "abbreviatedOid": "d751b5b"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:00:29Z",
+          "updatedAt": "2022-02-12T17:00:30Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "We're referring to these as `hiding_nonce_commitment` and `binding_nonce_commitment` -- I'd prefer we use those names.",
+              "createdAt": "2022-02-12T17:00:29Z",
+              "updatedAt": "2022-02-12T17:00:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gQye",
+          "commit": {
+            "abbreviatedOid": "d751b5b"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:00:37Z",
+          "updatedAt": "2022-02-12T17:00:37Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "Yeah, I'd prefer we drop this comment.",
+              "createdAt": "2022-02-12T17:00:37Z",
+              "updatedAt": "2022-02-12T17:00:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gQzE",
+          "commit": {
+            "abbreviatedOid": "d751b5b"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "Thanks for dropping the redundant `msg_hash` computation! I'd like to see some other changes before we land this, though.",
+          "createdAt": "2022-02-12T17:01:01Z",
+          "updatedAt": "2022-02-12T17:01:01Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gQ05",
+          "commit": {
+            "abbreviatedOid": "d751b5b"
+          },
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:02:17Z",
+          "updatedAt": "2022-02-12T17:02:17Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "OK, I will change to those names",
+              "createdAt": "2022-02-12T17:02:17Z",
+              "updatedAt": "2022-02-12T17:02:17Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gQ2w",
+          "commit": {
+            "abbreviatedOid": "d751b5b"
+          },
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:03:59Z",
+          "updatedAt": "2022-02-12T17:04:00Z",
+          "comments": [
+            {
+              "originalPosition": 25,
+              "body": "OK, I will drop this comment",
+              "createdAt": "2022-02-12T17:04:00Z",
+              "updatedAt": "2022-02-12T17:04:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gRkZ",
+          "commit": {
+            "abbreviatedOid": "87a0433"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-12T17:38:11Z",
+          "updatedAt": "2022-02-12T17:38:12Z",
+          "comments": [
+            {
+              "originalPosition": 34,
+              "body": "```suggestion\r\n  def sign(index, sk_i, group_public_key, nonce_i, comm_i, msg, commitment_list, participant_list):\r\n```",
+              "createdAt": "2022-02-12T17:38:12Z",
+              "updatedAt": "2022-02-12T17:38:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840gRku",
+          "commit": {
+            "abbreviatedOid": "87a0433"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-12T17:38:28Z",
+          "updatedAt": "2022-02-12T17:38:28Z",
           "comments": []
         }
       ]
