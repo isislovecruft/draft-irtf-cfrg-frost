@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-13T00:35:19.711211+00:00",
+  "timestamp": "2022-02-15T00:34:33.985135+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -112,7 +112,7 @@
     {
       "number": 12,
       "id": "I_kwDOEpUZs84-1li8",
-      "title": "Add a security considerations section for curves with a cofactor != 1",
+      "title": "Always compute with a cofactor h, even if h = 1 for the ciphersuite",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/12",
       "state": "OPEN",
       "author": "dconnolly",
@@ -125,7 +125,7 @@
       ],
       "body": "",
       "createdAt": "2021-11-15T23:15:09Z",
-      "updatedAt": "2021-12-13T23:33:03Z",
+      "updatedAt": "2022-02-14T18:33:07Z",
       "closedAt": null,
       "comments": []
     },
@@ -942,7 +942,7 @@
       "id": "I_kwDOEpUZs85CoTG3",
       "title": "Length of message to be signed should be larger",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/55",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
@@ -951,8 +951,8 @@
       ],
       "body": "Currently messages are limited to the `2^16` length in a `SigningPackage`, but instead this should be limited by the underlying hash function minus minus overhead such as public key, commitment set, etc. \r\n\r\n\r\n",
       "createdAt": "2022-01-28T21:24:43Z",
-      "updatedAt": "2022-02-09T20:47:22Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-14T18:28:01Z",
+      "closedAt": "2022-02-14T18:28:01Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -1163,16 +1163,18 @@
     {
       "number": 69,
       "id": "I_kwDOEpUZs85DD16k",
-      "title": "Add other Schnorr use ciphersuites and test vectors",
+      "title": "Add secp256k1 ciphersuite and test vectors",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/69",
       "state": "OPEN",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "chris-wood"
+      ],
       "labels": [],
       "body": "The adoption call for this draft indicated that we'd need to support specializations for all RFC8032 signatures, including Ed25519 and Ed448. This should be a trivial extension now that we have the ed25519 suite. ",
       "createdAt": "2022-02-06T01:55:19Z",
-      "updatedAt": "2022-02-09T20:46:38Z",
+      "updatedAt": "2022-02-14T18:30:15Z",
       "closedAt": null,
       "comments": [
         {
@@ -1206,11 +1208,13 @@
       "state": "OPEN",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
-      "assignees": [],
+      "assignees": [
+        "chris-wood"
+      ],
       "labels": [],
       "body": "The draft doesn't take an opinionated stance on how to encode signatures -- it currently just spits out the commitment and response pair `(R, z)`. On the contrary, RFC8032 signatures are represented as the concatenation of `R` and `z`, both serialized. It seems like the RFC8032 suite ought to produce signatures in this format. But what about other ciphersuites?",
       "createdAt": "2022-02-06T01:57:49Z",
-      "updatedAt": "2022-02-09T20:45:45Z",
+      "updatedAt": "2022-02-14T18:26:30Z",
       "closedAt": null,
       "comments": [
         {
@@ -1226,6 +1230,13 @@
           "body": "To clarify, by \"this\" you mean what's currently in the draft?",
           "createdAt": "2022-02-09T20:45:45Z",
           "updatedAt": "2022-02-09T20:45:45Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "per meeting: \r\n\r\n` Serialize: Ciphersuite.SerializeElement(R) || Ciphersuite.SerializeScalar(z)\r\n`",
+          "createdAt": "2022-02-14T18:26:30Z",
+          "updatedAt": "2022-02-14T18:26:30Z"
         }
       ]
     },
@@ -1243,7 +1254,7 @@
       "labels": [],
       "body": "The FROST paper assumes a prime order group. However, when we interoperate with curves that can have  invalid points, we'll need to identify places in the draft where these checks should occur. ",
       "createdAt": "2022-02-08T20:47:44Z",
-      "updatedAt": "2022-02-10T22:02:02Z",
+      "updatedAt": "2022-02-14T18:21:20Z",
       "closedAt": null,
       "comments": [
         {
@@ -1287,6 +1298,39 @@
           "body": "@chris-wood If you have time to do this, that would be fantastic ",
           "createdAt": "2022-02-10T22:02:02Z",
           "updatedAt": "2022-02-10T22:02:02Z"
+        },
+        {
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Leaving open as a reminder to ourselves to review this again after the draft is more stable. ",
+          "createdAt": "2022-02-14T18:21:20Z",
+          "updatedAt": "2022-02-14T18:21:20Z"
+        }
+      ]
+    },
+    {
+      "number": 82,
+      "id": "I_kwDOEpUZs85Dvo1F",
+      "title": "Question regarding the concatenation of contextString in POC code",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/82",
+      "state": "OPEN",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [],
+      "body": "Hi, looking at the POC code, I see there is a space between the `contextString` and the `rho`, `chal` and `digest` words\r\n```python\r\ndef H1(self, m):\r\n        hash_input = _as_bytes(\"FROST-RISTRETTO255-SHA512 rho\") + m\r\n...\r\n```\r\nbut in the document there is no space (see `H(contextString || \"rho\" || m)`).\r\n\r\nJust looking for clarification, thanks",
+      "createdAt": "2022-02-14T00:19:41Z",
+      "updatedAt": "2022-02-14T18:26:22Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let's go with no space -- thanks @aldenml!",
+          "createdAt": "2022-02-14T18:19:48Z",
+          "updatedAt": "2022-02-14T18:19:48Z"
         }
       ]
     }
@@ -4843,6 +4887,88 @@
           "body": "",
           "createdAt": "2022-02-12T17:38:28Z",
           "updatedAt": "2022-02-12T17:38:28Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 81,
+      "id": "PR_kwDOEpUZs84yvwEI",
+      "title": "removed PK input from schnorr_signature_generate, renamed r var to k",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/81",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "this change matches the POC code and the rename from `r` to `k` is an improvement code-wise IMO",
+      "createdAt": "2022-02-13T23:51:26Z",
+      "updatedAt": "2022-02-15T00:08:01Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "c7308703401a26953881f08af2a855618f625ebe",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "code-schnorr",
+      "headRefOid": "73e1645ffc1d0f0433cb763413c087b1170b9537",
+      "closedAt": "2022-02-14T22:58:30Z",
+      "mergedAt": "2022-02-14T22:58:30Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "5c4bb72a084656c153a2b37b12051c8339af8fb5"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840g_vC",
+          "commit": {
+            "abbreviatedOid": "308dc0f"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-02-14T00:03:02Z",
+          "updatedAt": "2022-02-14T00:03:10Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "`s` is not defined",
+              "createdAt": "2022-02-14T00:03:02Z",
+              "updatedAt": "2022-02-14T00:03:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840g_yd",
+          "commit": {
+            "abbreviatedOid": "308dc0f"
+          },
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-14T00:04:10Z",
+          "updatedAt": "2022-02-14T00:04:10Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "right, was a copy&paste from POC code, fixing it right now",
+              "createdAt": "2022-02-14T00:04:10Z",
+              "updatedAt": "2022-02-14T00:04:10Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840ljF7",
+          "commit": {
+            "abbreviatedOid": "73e1645"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-14T22:25:08Z",
+          "updatedAt": "2022-02-14T22:25:08Z",
           "comments": []
         }
       ]
