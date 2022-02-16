@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 19 August 2022         University of Waterloo, Zcash Foundation
+Expires: 20 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                                C.A. Wood
                                                               Cloudflare
-                                                        15 February 2022
+                                                        16 February 2022
 
 
            Two-Round Threshold Schnorr Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 August 2022.
+   This Internet-Draft will expire on 20 August 2022.
 
 Copyright Notice
 
@@ -1023,8 +1023,8 @@ Appendix B.  Trusted Dealer Key Generation
 
      def trusted_dealer_keygen(n, t):
        secret_key = G.RandomScalar()
-       secret_key_shares = secret_share_split(secret_key, n, t)
-       public_key = G.ScalarBaseMult(s)
+       secret_key_shares = secret_share_shard(secret_key, n, t)
+       public_key = G.ScalarBaseMult(secret_key)
        return secret_key, public_key, secret_key_shares
 
    It is assumed the dealer then sends one secret key to each of the
@@ -1049,7 +1049,7 @@ B.1.  Shamir Secret Sharing
 
    The procedure for splitting a secret into shares is as follows.
 
-    secret_share_split(s, n, t):
+    secret_share_shard(s, n, t):
 
     Inputs:
     - s, secret to be shared, an element of F
@@ -1061,7 +1061,7 @@ B.1.  Shamir Secret Sharing
     Errors:
     - "invalid parameters", if t > n
 
-    def secret_share(s, n, t):
+    def secret_share_shard(s, n, t):
       if t > n:
         raise "invalid parameters"
 
@@ -1069,11 +1069,11 @@ B.1.  Shamir Secret Sharing
       # a polynomial of degree (t - 1)
       coefficients = [s]
       for i in range(t - 1):
-        coefficients.append(RandomScalar())
+        coefficients.append(G.RandomScalar())
 
       # Evaluate the polynomial for each point x=1,...,n
       points = []
-      for x_i in range(1, n+1):
+      for x_i in range(1, n + 1):
         y_i = polynomial_evaluate(x_i, coefficients)
         point_i = (x_i, y_i)
         points.append(point_i)
