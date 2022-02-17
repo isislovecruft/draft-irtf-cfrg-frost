@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-15T00:34:33.985135+00:00",
+  "timestamp": "2022-02-17T00:30:02.524000+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -1313,7 +1313,7 @@
       "id": "I_kwDOEpUZs85Dvo1F",
       "title": "Question regarding the concatenation of contextString in POC code",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/82",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "aldenml",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [
@@ -1322,8 +1322,8 @@
       "labels": [],
       "body": "Hi, looking at the POC code, I see there is a space between the `contextString` and the `rho`, `chal` and `digest` words\r\n```python\r\ndef H1(self, m):\r\n        hash_input = _as_bytes(\"FROST-RISTRETTO255-SHA512 rho\") + m\r\n...\r\n```\r\nbut in the document there is no space (see `H(contextString || \"rho\" || m)`).\r\n\r\nJust looking for clarification, thanks",
       "createdAt": "2022-02-14T00:19:41Z",
-      "updatedAt": "2022-02-14T18:26:22Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-15T00:42:54Z",
+      "closedAt": "2022-02-15T00:42:54Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -4972,6 +4972,184 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 83,
+      "id": "PR_kwDOEpUZs84y0tBm",
+      "title": "remove trailing space in context string in H1, H2 and H3 (test vectors update)",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/83",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "an attempt to fix #82",
+      "createdAt": "2022-02-15T00:42:07Z",
+      "updatedAt": "2022-02-15T00:50:11Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "5c4bb72a084656c153a2b37b12051c8339af8fb5",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "fix-h-ctx-str",
+      "headRefOid": "5085f5c14ce5b46f13a81f71447e744cd195ac94",
+      "closedAt": "2022-02-15T00:42:54Z",
+      "mergedAt": "2022-02-15T00:42:54Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "e4996bcfced76748206f4bdfd1032832f0f227cc"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840l4Hz",
+          "commit": {
+            "abbreviatedOid": "5085f5c"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-15T00:42:49Z",
+          "updatedAt": "2022-02-15T00:42:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 84,
+      "id": "PR_kwDOEpUZs84y5CSi",
+      "title": "minor fixes in secret_share_split pseudo code",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/84",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-16T00:12:08Z",
+      "updatedAt": "2022-02-16T18:57:50Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "e4996bcfced76748206f4bdfd1032832f0f227cc",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "fix-sss",
+      "headRefOid": "7a6a70a911a192ab0d20859ffc255f48a9f418c6",
+      "closedAt": "2022-02-16T18:50:45Z",
+      "mergedAt": "2022-02-16T18:50:45Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "83184ef84efd7c277ec7d63a9e40640abec14546"
+      },
+      "comments": [
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "done, waiting for next review",
+          "createdAt": "2022-02-16T18:29:38Z",
+          "updatedAt": "2022-02-16T18:29:38Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840vLP6",
+          "commit": {
+            "abbreviatedOid": "7a7b996"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "One minor nit, otherwise thanks!",
+          "createdAt": "2022-02-16T16:11:29Z",
+          "updatedAt": "2022-02-16T16:12:04Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\n  def secret_share_shard(s, n, t):\r\n```\r\n\r\nCan we also update the Sage code to match? The \"shard\" terminology comes from the [VDAF spec](https://cjpatton.github.io/vdaf/draft-patton-cfrg-vdaf.html#name-sharding), which I quite like.",
+              "createdAt": "2022-02-16T16:11:29Z",
+              "updatedAt": "2022-02-16T16:12:04Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840v0Wq",
+          "commit": {
+            "abbreviatedOid": "7a7b996"
+          },
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-16T18:19:36Z",
+          "updatedAt": "2022-02-16T18:19:36Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "Sure, I will also change one more minor thing in `trusted_dealer_keygen`",
+              "createdAt": "2022-02-16T18:19:36Z",
+              "updatedAt": "2022-02-16T18:19:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840v1j1",
+          "commit": {
+            "abbreviatedOid": "7a7b996"
+          },
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-16T18:24:05Z",
+          "updatedAt": "2022-02-16T18:24:05Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "and thanks for linking `VDAFs`, in my list of TODO to read :)",
+              "createdAt": "2022-02-16T18:24:05Z",
+              "updatedAt": "2022-02-16T18:24:05Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840v8vs",
+          "commit": {
+            "abbreviatedOid": "7a6a70a"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-16T18:50:40Z",
+          "updatedAt": "2022-02-16T18:50:40Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 85,
+      "id": "PR_kwDOEpUZs84y9Jmc",
+      "title": "Specify signature encoding based on group Element and Scalar serialization",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/85",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Let's address the cofactor verification check in #12.\r\n\r\nCloses #72.\r\nCloses #70.",
+      "createdAt": "2022-02-16T22:32:48Z",
+      "updatedAt": "2022-02-16T22:32:49Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "83184ef84efd7c277ec7d63a9e40640abec14546",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/signature-encoding",
+      "headRefOid": "962edfecc46f0e5a5efa486a746cf7e159c2b9d7",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
