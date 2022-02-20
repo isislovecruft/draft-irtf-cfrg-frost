@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-17T00:30:02.524000+00:00",
+  "timestamp": "2022-02-20T00:39:38.204226+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -1205,7 +1205,7 @@
       "id": "I_kwDOEpUZs85DD1_q",
       "title": "Signature encoding",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/70",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1214,8 +1214,8 @@
       "labels": [],
       "body": "The draft doesn't take an opinionated stance on how to encode signatures -- it currently just spits out the commitment and response pair `(R, z)`. On the contrary, RFC8032 signatures are represented as the concatenation of `R` and `z`, both serialized. It seems like the RFC8032 suite ought to produce signatures in this format. But what about other ciphersuites?",
       "createdAt": "2022-02-06T01:57:49Z",
-      "updatedAt": "2022-02-14T18:26:30Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-19T03:11:33Z",
+      "closedAt": "2022-02-19T03:11:33Z",
       "comments": [
         {
           "author": "dconnolly",
@@ -1245,7 +1245,7 @@
       "id": "I_kwDOEpUZs85DN_tU",
       "title": "Add check for valid points",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/72",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -1254,8 +1254,8 @@
       "labels": [],
       "body": "The FROST paper assumes a prime order group. However, when we interoperate with curves that can have  invalid points, we'll need to identify places in the draft where these checks should occur. ",
       "createdAt": "2022-02-08T20:47:44Z",
-      "updatedAt": "2022-02-14T18:21:20Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-19T03:11:33Z",
+      "closedAt": "2022-02-19T03:11:33Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -5130,20 +5130,142 @@
       "id": "PR_kwDOEpUZs84y9Jmc",
       "title": "Specify signature encoding based on group Element and Scalar serialization",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/85",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Let's address the cofactor verification check in #12.\r\n\r\nCloses #72.\r\nCloses #70.",
       "createdAt": "2022-02-16T22:32:48Z",
-      "updatedAt": "2022-02-16T22:32:49Z",
+      "updatedAt": "2022-02-19T03:11:33Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
       "baseRefOid": "83184ef84efd7c277ec7d63a9e40640abec14546",
       "headRepository": "cfrg/draft-irtf-cfrg-frost",
       "headRefName": "caw/signature-encoding",
-      "headRefOid": "962edfecc46f0e5a5efa486a746cf7e159c2b9d7",
+      "headRefOid": "25f4a086ff6ae5c4a0b5ab069d0b26068ee3d696",
+      "closedAt": "2022-02-19T03:11:33Z",
+      "mergedAt": "2022-02-19T03:11:33Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "6093adc7d9e3ea507ffb124db532261db2cd484e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs840680S",
+          "commit": {
+            "abbreviatedOid": "962edfe"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-19T01:13:12Z",
+          "updatedAt": "2022-02-19T01:13:12Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "Should we say all commitments in general? ",
+              "createdAt": "2022-02-19T01:13:12Z",
+              "updatedAt": "2022-02-19T01:13:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs840681z",
+          "commit": {
+            "abbreviatedOid": "962edfe"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-19T01:13:45Z",
+          "updatedAt": "2022-02-19T01:13:45Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "```suggestion\r\nUpon receipt from each Signer, the Coordinator MUST validate the input\r\n```",
+              "createdAt": "2022-02-19T01:13:45Z",
+              "updatedAt": "2022-02-19T01:13:45Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs84068_v",
+          "commit": {
+            "abbreviatedOid": "962edfe"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-19T01:17:47Z",
+          "updatedAt": "2022-02-19T01:17:47Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs8407AFa",
+          "commit": {
+            "abbreviatedOid": "25f4a08"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-19T03:10:58Z",
+          "updatedAt": "2022-02-19T03:10:59Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "I think that's implied by validating the list.",
+              "createdAt": "2022-02-19T03:10:59Z",
+              "updatedAt": "2022-02-19T03:10:59Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs8407AF6",
+          "commit": {
+            "abbreviatedOid": "25f4a08"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-19T03:11:28Z",
+          "updatedAt": "2022-02-19T03:11:28Z",
+          "comments": [
+            {
+              "originalPosition": 72,
+              "body": "Thanks!",
+              "createdAt": "2022-02-19T03:11:28Z",
+              "updatedAt": "2022-02-19T03:11:28Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 86,
+      "id": "PR_kwDOEpUZs84zFNTl",
+      "title": "changed poc code to use message hash (as specified in the draft)",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/86",
+      "state": "OPEN",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-18T13:02:31Z",
+      "updatedAt": "2022-02-18T13:05:28Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "83184ef84efd7c277ec7d63a9e40640abec14546",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "poc-msg-hash",
+      "headRefOid": "7b1a26ebd6babe91c25ca01dce5db6d4a5b6028e",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
