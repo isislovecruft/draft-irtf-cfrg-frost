@@ -1812,11 +1812,11 @@ set of signing commitments for other signers in the participant list. Each signe
 MUST validate the inputs before processing the Coordinator's request. In particular,
 the Signer MUST validate commitment_list, deserializing each group Element in the
 list using DeserializeElement from <a href="#dep-pog" class="xref">Section 3.1</a>. If deserialization fails, the Signer
-MUST abort the protocol.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+MUST abort the protocol. Further, the signer MUST ensure that the message to be signed
+is in fact appropriate. However, doing so requires application-level logic, and so we
+omit this check here.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">Upon receipt and successful input validation, each Signer then runs the following procedure
-to produce its own signature share.
-Each signer should also verify that the message to be signed is in fact valid;
-however, this check is application-specific and so we omit this step below.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+to produce its own signature share.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.2-4">
 <pre>
   Inputs:

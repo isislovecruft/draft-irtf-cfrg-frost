@@ -581,13 +581,13 @@ Table of Contents
    processing the Coordinator's request.  In particular, the Signer MUST
    validate commitment_list, deserializing each group Element in the
    list using DeserializeElement from Section 3.1.  If deserialization
-   fails, the Signer MUST abort the protocol.
+   fails, the Signer MUST abort the protocol.  Further, the signer MUST
+   ensure that the message to be signed is in fact appropriate.
+   However, doing so requires application-level logic, and so we omit
+   this check here.
 
    Upon receipt and successful input validation, each Signer then runs
-   the following procedure to produce its own signature share.  Each
-   signer should also verify that the message to be signed is in fact
-   valid; however, this check is application-specific and so we omit
-   this step below.
+   the following procedure to produce its own signature share.
 
   Inputs:
   - index, Index `i` of the signer. Note index will never equal `0`.
