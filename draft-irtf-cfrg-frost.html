@@ -1025,7 +1025,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Connolly, et al.</td>
-<td class="center">Expires 23 August 2022</td>
+<td class="center">Expires 27 August 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1038,12 +1038,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-irtf-cfrg-frost-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-02-19" class="published">19 February 2022</time>
+<time datetime="2022-02-23" class="published">23 February 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-08-23">23 August 2022</time></dd>
+<dd class="expires"><time datetime="2022-08-27">27 August 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1106,7 +1106,7 @@ key-recovery attack that is possible when even only one participant is malicious
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 August 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1501,10 +1501,9 @@ following operation.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
     k = G.RandomScalar()
     R = G.ScalarBaseMult(k)
 
-    msg_hash = H3(msg)
     comm_enc = G.SerializeElement(R)
     pk_enc = G.SerializeElement(PK)
-    challenge_input = comm_enc || pk_enc || msg_hash
+    challenge_input = comm_enc || pk_enc || msg
     c = H2(challenge_input)
 
     z = k + (c * SK)
@@ -1524,10 +1523,9 @@ following operation.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
   Outputs: 1 if signature is valid, and 0 otherwise
 
   def schnorr_signature_verify(msg, sig = (R, z), PK):
-    msg_hash = H3(msg)
     comm_enc = G.SerializeElement(R)
     pk_enc = G.SerializeElement(PK)
-    challenge_input = comm_enc || pk_enc || msg_hash
+    challenge_input = comm_enc || pk_enc || msg
     c = H2(challenge_input)
 
     l = ScalarBaseMult(z)
@@ -1874,29 +1872,28 @@ Coordinator then verifies the set of signature shares using the following proced
 <div class="alignLeft art-text artwork" id="section-5.2-7">
 <pre>
   Inputs:
-  - index, Index `i` of the signer. Note index will never equal `0`.
-  - PK, the public key for the group
-  - PK_i, the public key for the ith signer, where PK_i = ScalarBaseMult(s[i])
-  - sig_share, the signature share for the ith signer, computed from the signer
-  - comm_share, the commitment for the ith signer, computed from the signer
-  - R, the group commitment
-  - msg, the message to be signed
+  - group_comm, the group commitment
   - participant_list, a set containing identifiers for each signer, similarly of length
     NUM_SIGNERS (sent by the Coordinator).
+  - index, Index `i` of the signer. Note index will never equal `0`.
+  - group_public_key, the public key for the group
+  - public_key_share, the public key for the ith signer, where PK_i = ScalarBaseMult(s[i])
+  - sig_share, the signature share for the ith signer, computed from the signer
+  - comm_share, the commitment for the ith signer, computed from the signer
+  - msg, the message to be signed
 
   Outputs: 1 if the signature share is valid, and 0 otherwise.
 
-  def verify_signature_share(index, PK, PK_i, sig_share, comm_share, R, msg, participant_list):
-    msg_hash = H3(msg)
-    group_comm_enc = G.SerializeElement(R)
+  def verify_signature_share(group_comm, participant_list, index, group_public_key, public_key_share, sig_share, comm_share, msg):
+    group_comm_enc = G.SerializeElement(group_comm)
     group_public_key_enc = G.SerializeElement(group_public_key)
-    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    challenge_input = group_comm_enc || group_public_key_enc || msg
     c = H2(challenge_input)
 
     l = G.ScalarbaseMult(sig_share)
 
     lambda_i = derive_lagrange_coefficient(index, participant_list)
-    r = comm_share + (sig_share * c * lambda_i)
+    r = comm_share + (public_key_share * c * lambda_i)
 
     return l == r
 </pre><a href="#section-5.2-7" class="pilcrow">¶</a>
