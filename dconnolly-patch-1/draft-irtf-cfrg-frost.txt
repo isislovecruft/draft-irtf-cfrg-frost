@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 15 August 2022         University of Waterloo, Zcash Foundation
+Expires: 27 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
-                                                               C.A. Wood
+                                                              C. A. Wood
                                                               Cloudflare
-                                                        11 February 2022
+                                                        23 February 2022
 
 
            Two-Round Threshold Schnorr Signatures with FROST
@@ -23,11 +23,11 @@ Abstract
    signatures can be issued after a threshold number of entities
    cooperate to issue a signature, allowing for improved distribution of
    trust and redundancy with respect to a secret key.  Further, this
-   draft specifies signatures that are compatible with EdDSA
-   verification of signatures.  However, this draft does not generate
-   deterministic nonces as defined by EdDSA, to ensure protection
-   against a key-recovery attack that is possible when even only one
-   participant is malicious.
+   draft specifies signatures that are compatible with [RFC8032].
+   However, unlike [RFC8032], the protocol for producing signatures in
+   this draft is not deterministic, so as to ensure protection against a
+   key-recovery attack that is possible when even only one participant
+   is malicious.
 
 Discussion Venues
 
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2022.
+   This Internet-Draft will expire on 27 August 2022.
 
 Copyright Notice
 
@@ -74,38 +74,36 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
-   2.  Change Log
-   3.  Terminology
-   4.  Overview
-   5.  Conventions and Terminology
-   6.  Cryptographic Dependencies
-     6.1.  Prime-Order Group
-       6.1.1.  Input Validation
-     6.2.  Cryptographic Hash Function
-   7.  Helper functions
-     7.1.  Schnorr Signature Operations
-     7.2.  Polynomial Operations
-       7.2.1.  Evaluation of a polynomial
-       7.2.2.  Lagrange coefficients
-       7.2.3.  Deriving the constant term of a polynomial
-     7.3.  Encoding Operations
-   8.  Two-Round FROST
-     8.1.  Round One - Commitment
-     8.2.  Round Two - Signature Share Generation
-     8.3.  Signature Share Aggregation
-   9.  Ciphersuites
-     9.1.  FROST(edwards25519, SHA-512)
-     9.2.  FROST(ristretto255, SHA-512)
-     9.3.  FROST(P-256, SHA-256)
-   10. Security Considerations
-     10.1.  Nonce Reuse Attacks
-     10.2.  Protocol Failures
-     10.3.  External Requirements / Non-Goals
-   11. Removing the Coordinator Role
-   12. Contributors
-   13. References
-     13.1.  Normative References
-     13.2.  Informative References
+     1.1.  Change Log
+   2.  Conventions and Definitions
+   3.  Cryptographic Dependencies
+     3.1.  Prime-Order Group
+     3.2.  Cryptographic Hash Function
+   4.  Helper functions
+     4.1.  Schnorr Signature Operations
+     4.2.  Polynomial Operations
+       4.2.1.  Evaluation of a polynomial
+       4.2.2.  Lagrange coefficients
+       4.2.3.  Deriving the constant term of a polynomial
+     4.3.  Encoding Operations
+   5.  Two-Round FROST
+     5.1.  Round One - Commitment
+     5.2.  Round Two - Signature Share Generation
+     5.3.  Signature Share Aggregation
+   6.  Ciphersuites
+     6.1.  FROST(Ed25519, SHA-512)
+     6.2.  FROST(ristretto255, SHA-512)
+     6.3.  FROST(Ed448, SHAKE256)
+     6.4.  FROST(P-256, SHA-256)
+   7.  Security Considerations
+     7.1.  Nonce Reuse Attacks
+     7.2.  Protocol Failures
+     7.3.  Removing the Coordinator Role
+     7.4.  Input Message Validation
+   8.  Contributors
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Appendix A.  Acknowledgments
    Appendix B.  Trusted Dealer Key Generation
      B.1.  Shamir Secret Sharing
@@ -115,6 +113,10 @@ Table of Contents
      C.2.  Signing Packages
      C.3.  Signature Share
    Appendix D.  Test Vectors
+     D.1.  FROST(Ed25519, SHA-512)
+     D.2.  FROST(Ed448, SHAKE256)
+     D.3.  FROST(ristretto255, SHA-512)
+     D.4.  FROST(P-256, SHA-256)
    Authors' Addresses
 
 1.  Introduction
@@ -136,98 +138,44 @@ Table of Contents
    Optimized Schnorr Threshold signature scheme.  FROST reduces network
    overhead during threshold signing operations while employing a novel
    technique to protect against forgery attacks applicable to prior
-   Schnorr-based threshold signature constructions.
+   Schnorr-based threshold signature constructions.  FROST requires two
+   rounds to compute a signature.
 
-   This draft specifies only two-round signing operations.  This draft
-   specifies signatures that are compatible with EdDSA verification of
-   signatures, but not EdDSA nonce generation.  EdDSA-style nonce-
-   generation, where the nonce is derived deterministically, is insecure
-   in a multi-party signature setting.
+   For select ciphersuites, the signatures produced by this draft are
+   compatible with [RFC8032].  However, unlike [RFC8032], signatures
+   produced by FROST are not deterministic, since deriving nonces
+   deterministically, is insecure in a multi-party signature setting.
 
    Further, this draft implements signing efficiency improvements for
    FROST described by Crites, Komlo, and Maller in [Schnorr21].
 
-2.  Change Log
+1.1.  Change Log
+
+   draft-02
+
+   *  Fully specify both rounds of FROST, as well as trusted dealer key
+      generation.
+
+   *  Add ciphersuites and corresponding test vectors, including suites
+      for RFC8032 compatibility.
+
+   *  Refactor document for editorial clarity.
 
    draft-01
 
-   *  Submitted a draft that specifies operations, notation and
-      cryptographic dependencies.
+   *  Specify operations, notation and cryptographic dependencies.
 
    draft-00
 
-   *  Submitted a basic draft after adoption of draft-komlo-frost as a
-      working group item.
+   *  Outline CFRG draft based on draft-komlo-frost.
 
-3.  Terminology
+2.  Conventions and Definitions
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in BCP
-   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
-
-4.  Overview
-
-   FROST is a threshold signature protocol involving the following
-   parties:
-
-   *  Signers: Entities with signing key shares that participate in the
-      threshold signing protocol
-
-   *  Coordinator: An entity responsible for performing coordination
-      among signers and for aggregating signature shares at the end of
-      the protocol, resulting in the final signature.  This party may be
-      a signer themselves or an external party.
-
-   FROST assumes the selection of all participants, including the
-   dealer, signer, and Coordinator are all chosen external to the
-   protocol.
-
-   In FROST, Signers participate in two rounds to sign an input message
-   and produce a single, aggregate signature.  All signers are assumed
-   to have the group state and their corresponding signing keys; see
-   Section 8 for details about how this state is generated.  At the end
-   of the second round, the Coordinator performs an aggregation function
-   to produce the final signature This is sketched below.
-
-           (group info)             (group info,     (group info,
-               |                     signing key)     signing key)
-               |                         |                |
-               v                         v                v
-           Coordinator               Signer-1   ...   Signer-n
-       ------------------------------------------------------------
-      message
-   ------------>
-               |
-         == Round 1 (Commitment) ==
-               |    SigningCommitment   |                 |
-               |<-----------------------+                 |
-               |          ...                             |
-               |    SigningCommitment                     |
-               |<-----------------------------------------+
-
-         == Round 2 (Signing) ==
-               |
-               |    SigningPackage      |                 |
-               +------------------------>                 |
-               |    SignatureShare      |                 |
-               |<-----------------------+                 |
-               |          ...                             |
-               |    SigningPackage                        |
-               +------------------------------------------>
-               |    SignatureShare                        |
-               <------------------------------------------+
-               |
-         == Aggregation ==
-               |
-     signature |
-   <-----------+
-
-   Details about each of these rounds and the corresponding protocol
-   messages is in Section 8.
-
-5.  Conventions and Terminology
 
    The following notation and terminology are used throughout this
    document.
@@ -258,34 +206,17 @@ Table of Contents
    generator (CSPRNG); see [RFC4086] for additional guidance on the
    generation of random numbers.
 
-   Let B be a generator, or distiguished element, of G, a finite group
-   of with order l, a large prime.  Throughout this document, and in
-   practice, we assume this group to be instantiated as an arbitrary
-   abstraction of an elliptic curve subgroup, defined over a finite
-   field; however, that does not restrict an implementation from
-   instantiating FROST signatures over other groups, provided their
-   order be prime.
-
-   We denote group elements with capital Roman letters, and scalars with
-   lower-cased Roman letters.  We use + to denote the group operation,
-   and - to denote inversion.  We use * to denote multiplication of a
-   scalar by a group element, that is, the group element added to itself
-   in succession a number of times equal to the value of the scalar.
-   Testing equality between two group elements is denoted as ?=, where
-   it is assumed that the elements are in some canonical, serialised
-   form.
-
-6.  Cryptographic Dependencies
+3.  Cryptographic Dependencies
 
    FROST depends on the following cryptographic constructs:
 
-   *  Prime-order Group, Section 6.1;
+   *  Prime-order Group, Section 3.1;
 
-   *  Cryptographic hash function, Section 6.2;
+   *  Cryptographic hash function, Section 3.2;
 
    These are described in the following sections.
 
-6.1.  Prime-Order Group
+3.1.  Prime-Order Group
 
    FROST depends on an abelian group G of prime order p.  The
    fundamental group operation is addition + with identity element I.
@@ -311,65 +242,52 @@ Table of Contents
    *  Identity(): Outputs the identity element of the group (i.e.  I).
 
    *  RandomScalar(): A member function of G that chooses at random a
-      non-zero element in GF(p).
+      non-zero Scalar element in GF(p).
 
-   *  SerializeElement(A): A member function of G that maps a group
-      element A to a unique byte array buf of fixed length Ne.  The
-      output type of this function is SerializedElement.
+   *  SerializeElement(A): A member function of G that maps an Element A
+      to a unique byte array buf of fixed length Ne.
 
-   *  DeserializeElement(buf): A member function of G that maps a byte
-      array buf to a group element A, or fails if the input is not a
-      valid byte representation of an element.  This function can raise
-      a DeserializeError if deserialization fails or A is the identity
-      element of the group; see Section 6.1.1.
+   *  DeserializeElement(buf): A member function of G that attempts to
+      map a byte array buf to an Element A, and fails if the input is
+      not a valid byte representation of an element of the group.  This
+      function can raise a DeserializeError if deserialization fails or
+      A is the identity element of the group; see Section 6 for group-
+      specific input validation steps.
 
-6.1.1.  Input Validation
+   *  SerializeScalar(s): A member function of G that maps a Scalar s to
+      a unique byte array buf of fixed length Ns.
 
-   The DeserializeElement function recovers a group element from an
-   arbitrary byte array.  This function validates that the element is a
-   proper member of the group and is not the identity element, and
-   returns an error if either condition is not met.
+   *  DeserializeScalar(buf): A member function of G that attempts to
+      map a byte array buf to a Scalar s.  This function can raise a
+      DeserializeError if deserialization fails; see Section 6 for
+      group-specific input validation steps.
 
-   For ristretto255, elements are deserialized by invoking the Decode
-   function from [RISTRETTO], Section 4.3.1, which returns false if the
-   element is invalid.  If this function returns false, deserialization
-   returns an error.
-
-   The DeserializeScalar function recovers a scalar field element from
-   an arbitrary byte array.  Like DeserializeElement, this function
-   validates that the element is a member of the scalar field and
-   returns an error if this condition is not met.
-
-   For ristretto255, this function ensures that the input, when treated
-   as a little-endian integer, is a value greater than or equal to 0,
-   and less than Order().
-
-6.2.  Cryptographic Hash Function
+3.2.  Cryptographic Hash Function
 
    FROST requires the use of a cryptographically secure hash function,
    generically written as H, which functions effectively as a random
    oracle.  For concrete recommendations on hash functions which SHOULD
-   BE used in practice, see Section 9.  Using H, we introduce three
+   BE used in practice, see Section 6.  Using H, we introduce three
    separate domain-separated hashes, H1, H2, and H3, where H1 and H2 map
    arbitrary inputs to non-zero Scalar elements of the prime-order group
    scalar field, and H3 is an alias for H with domain separation
    applied.  The details of H1, H2, and H3 vary based on ciphersuite.
-   See Section 9 for more details about each.
+   See Section 6 for more details about each.
 
-7.  Helper functions
+4.  Helper functions
 
    Beyond the core dependencies, the protocol in this document depends
    on the following helper operations:
 
-   *  Schnorr signatures, Section 7.1;
+   *  Schnorr signatures, Section 4.1;
 
-   *  Polynomial operations, Section 7.2;
+   *  Polynomial operations, Section 4.2;
 
-   *  Encoding operations, Section 7.3
+   *  Encoding operations, Section 4.3
 
    This sections describes these operations in more detail.
 
-7.1.  Schnorr Signature Operations
+4.1.  Schnorr Signature Operations
 
    In the single-party setting, a Schnorr signature is generated with
    the following operation.
@@ -379,21 +297,20 @@ Table of Contents
      Inputs:
      - msg, message to be signed, an octet string
      - SK, private key, a scalar
-     - PK, public key, a group element
 
      Outputs: signature (R, z), a pair of scalar values
 
-     def schnorr_signature_generate(msg, SK, PK):
-       r = G.RandomScalar()
-       R = G.ScalarBaseMult(r)
+     def schnorr_signature_generate(msg, SK):
+       PK = G.ScalarBaseMult(SK)
+       k = G.RandomScalar()
+       R = G.ScalarBaseMult(k)
 
-       msg_hash = H3(msg)
        comm_enc = G.SerializeElement(R)
        pk_enc = G.SerializeElement(PK)
-       challenge_input = comm_enc || pk_enc || msg_hash
+       challenge_input = comm_enc || pk_enc || msg
        c = H2(challenge_input)
 
-       z = r + (c * SK)
+       z = k + (c * SK)
        return (R, z)
 
    The corresponding verification operation is as follows.
@@ -408,19 +325,18 @@ Table of Contents
    Outputs: 1 if signature is valid, and 0 otherwise
 
    def schnorr_signature_verify(msg, sig = (R, z), PK):
-     msg_hash = H3(msg)
      comm_enc = G.SerializeElement(R)
      pk_enc = G.SerializeElement(PK)
-     challenge_input = comm_enc || pk_enc || msg_hash
+     challenge_input = comm_enc || pk_enc || msg
      c = H2(challenge_input)
 
-     l = ScalarBaseMult(z)
+     l = G.ScalarBaseMult(z)
      r = R + (c * PK)
      if l == r:
        return 1
      return 0
 
-7.2.  Polynomial Operations
+4.2.  Polynomial Operations
 
    This section describes operations on and associated with polynomials
    that are used in the main signing protocol.  A polynomial of degree t
@@ -429,7 +345,7 @@ Table of Contents
    convenience, we refer to the x-coordinate and y-coordinate of a point
    p as p.x and p.y, respectively.
 
-7.2.1.  Evaluation of a polynomial
+4.2.1.  Evaluation of a polynomial
 
    This section describes a method for evaluating a polynomial f at a
    particular input x, i.e., y = f(x) using Horner's method.
@@ -453,7 +369,7 @@ Table of Contents
 
        return value
 
-7.2.2.  Lagrange coefficients
+4.2.2.  Lagrange coefficients
 
    Lagrange coefficients are used in FROST to evaluate a polynomial f at
    f(0), given a set of t other points, where f is represented as a set
@@ -478,7 +394,7 @@ Table of Contents
        L_i = numerator / denominator
        return L_i
 
-7.2.3.  Deriving the constant term of a polynomial
+4.2.3.  Deriving the constant term of a polynomial
 
    Secret sharing requires "splitting" a secret, which is represented as
    a constant term of some polynomial f of degree t.  Recovering the
@@ -503,16 +419,16 @@ Table of Contents
 
       return f_zero
 
-7.3.  Encoding Operations
+4.3.  Encoding Operations
 
    This section describes various helper functions used for encoding
    data structures into values that can be processed with hash
    functions.
 
   Inputs:
-  - commitment_list = [(i, x_i, y_i), ...], a list of commitments issued by each signer,
+  - commitment_list = [(i, hiding_nonce_commitment_i, binding_nonce_commitment_i), ...], a list of commitments issued by each signer,
     where each element in the list indicates the signer index i and their
-    two commitment Element values (x_i, y_i). This list MUST be sorted in ascending order
+    two commitment Element values (hiding_nonce_commitment_i, binding_nonce_commitment_i). This list MUST be sorted in ascending order
     by signer index.
 
   Outputs: A byte string containing the serialized representation of commitment_list.
@@ -526,16 +442,37 @@ Table of Contents
       encoded_group_commitment = encoded_group_commitment || encoded_commitment
     return encoded_group_commitment
 
-8.  Two-Round FROST
+5.  Two-Round FROST
 
-   The FROST protocol produces a standard Schnorr signature over an
-   input message of at most 2^16-1 bytes long.  The protocol assumes
-   that each participant P_i knows the following:
+   FROST is a two-round threshold signature protocol for producing
+   Schnorr signatures.  It involves signer participants and a
+   coordinator.  Signing participants are entities with signing key
+   shares that participate in the threshold signing protocol.  The
+   coordinator is a distinguished signer with the following
+   responsibilities:
+
+   1.  Determining which signers will participate (at least
+       THRESHOLD_LIMIT in number);
+
+   2.  Coordinating rounds (receiving and forwarding inputs among
+       participants); and
+
+   3.  Aggregating signature shares output by each participant, and
+       publishing the resulting signature.
+
+   FROST assumes the selection of all participants, including the
+   dealer, signer, and Coordinator are all chosen external to the
+   protocol.  Note that it is possible to deploy the protocol without a
+   distinguished Coordinator; see Section 7.3 for more information.
+
+   In FROST, all signers are assumed to have the group state and their
+   corresponding signing key shares.  In particular, FROST assumes that
+   each signing participant P_i knows the following:
 
    *  Group public key, denoted PK = G.ScalarMultBase(s), corresponding
       to the group secret key s.
 
-   *  Participant i signing key, which is the i-th secret share of s.
+   *  Participant is signing key, which is the i-th secret share of s.
 
    The exact key generation mechanism is out of scope for this
    specification.  In general, key generation is a protocol that outputs
@@ -547,35 +484,61 @@ Table of Contents
    generation mechanism by a trusted dealer in Appendix B, for
    reference.
 
-   FROST assumes the existence of a _Coordinator_, which is a Signer
-   responsible for the following:
+   There are two rounds in FROST: commitment and signature share
+   generation.  The first round serves for each participant to issue a
+   commitment.  The second round receives commitments for all signers as
+   well as the message, and issues a signature share.  The Coordinator
+   performs the coordination of each of these rounds.  At the end of the
+   second round, the Coordinator then performs an aggregation step at
+   the end and outputs the final signature.  This complete interaction
+   is shown in Figure 1.
 
-   1.  Determining which signers will participate (at least
-       THRESHOLD_LIMIT in number);
+           (group info)             (group info,     (group info,
+               |               signing key share)   signing key share)
+               |                         |                |
+               v                         v                v
+           Coordinator               Signer-1   ...   Signer-n
+       ------------------------------------------------------------
+      message
+   ------------>
+               |
+         == Round 1 (Commitment) ==
+               |    signer commitment   |                 |
+               |<-----------------------+                 |
+               |          ...                             |
+               |    signer commitment                     |
+               |<-----------------------------------------+
 
-   2.  Coordinating rounds (receiving and forwarding inputs among
-       participants); and
+         == Round 2 (Signature Share Generation) ==
+               |
+               |     signer input       |                 |
+               +------------------------>                 |
+               |     signature share    |                 |
+               |<-----------------------+                 |
+               |          ...                             |
+               |     signer input                         |
+               +------------------------------------------>
+               |     signature share                      |
+               <------------------------------------------+
+               |
+         == Aggregation ==
+               |
+     signature |
+   <-----------+
 
-   3.  Aggregating signature shares output by each participant, and
-       publishing the resulting signature.
+                     Figure 1: FROST signature overview
 
-   Selection of the Coordinator is outside the scope of this
-   specification.
+   Details for round one are described in Section 5.1, and details for
+   round two are described in Section 5.2.  The final Aggregation step
+   is described in Section 5.3.
 
-   We describe the protocol in two rounds: commitment and signing.  The
-   first round serves for each participant to issue a commitment.  The
-   second round receives commitments for all signers as well as the
-   message, and issues a signature share.  The Coordinator performs the
-   coordination of each of these rounds.  The Coordinator then performs
-   an aggregation round at the end and outputs the final signature.
+   FROST assumes reliable message delivery between Coordinator and
+   signing participants in order for the protocol to complete.  Messages
+   exchanged during signing operations are all within the public domain.
+   An attacker masquerading as another participant will result only in
+   an invalid signature; see Section 7.
 
-   This protocol assumes reliable message delivery between Coordinator
-   and signing participants in order for the protocol to complete.
-   Messages exchanged during signing operations are all within the
-   public domain.  An attacker masquerading as another participant will
-   result only in an invalid signature; see Section 10.
-
-8.1.  Round One - Commitment
+5.1.  Round One - Commitment
 
    Round one involves each signer generating a pair of nonces and their
    corresponding public commitments.  A nonce is a pair of Scalar
@@ -603,7 +566,7 @@ Table of Contents
    from Participant P_i is sent to the Coordinator; see Appendix C.1 for
    encoding recommendations.
 
-8.2.  Round Two - Signature Share Generation
+5.2.  Round Two - Signature Share Generation
 
    In round two, the Coordinator is responsible for sending the message
    to be signed, and for choosing which signers will participate (of
@@ -613,19 +576,28 @@ Table of Contents
 
    The Coordinator begins by sending each signer the message to be
    signed along with the set of signing commitments for other signers in
-   the participant list.  Upon receipt, each Signer then runs the
-   following procedure to produce its own signature share.
+   the participant list.  Each signer MUST validate the inputs before
+   processing the Coordinator's request.  In particular, the Signer MUST
+   validate commitment_list, deserializing each group Element in the
+   list using DeserializeElement from Section 3.1.  If deserialization
+   fails, the Signer MUST abort the protocol.  Applications which
+   require that signers not process arbitrary input messages are also
+   required to also perform relevant application-layer input validation
+   checks; see Section 7.4 for more details.
+
+   Upon receipt and successful input validation, each Signer then runs
+   the following procedure to produce its own signature share.
 
   Inputs:
   - index, Index `i` of the signer. Note index will never equal `0`.
   - sk_i, Signer secret key share.
   - group_public_key, public key corresponding to the signer secret key share.
-  - nonce_i, pair of Scalar values (d, e) generated in round one.
-  - comm_i, pair of Element values (D, E) generated in round one.
+  - nonce_i, pair of Scalar values (hiding_nonce, binding_nonce) generated in round one.
+  - comm_i, pair of Element values (hiding_nonce_commitment, binding_nonce_commitment) generated in round one.
   - msg, the message to be signed (sent by the Coordinator).
-  - commitment_list = [(j, x_j, y_j), ...], a list of commitments issued by each signer,
+  - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a list of commitments issued by each signer,
     where each element in the list indicates the signer index j and their
-    two commitment Element values (x_j, y_j). This list MUST be sorted in ascending order
+    two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j). This list MUST be sorted in ascending order
     by signer index.
   - participant_list, a set containing identifiers for each signer, similarly of length
     NUM_SIGNERS (sent by the Coordinator).
@@ -633,7 +605,7 @@ Table of Contents
   Outputs: a signature share sig_share and commitment share comm_share, which
            are Scalar and Element values respectively.
 
-  def sign(index, sk, group_public_key, nonce, comm, msg, commitment_list, participant_list):
+  def sign(index, sk_i, group_public_key, nonce_i, comm_i, msg, commitment_list, participant_list):
     # Compute the binding factor
     encoded_commitments = encode_group_commitment_list(commitment_list)
     msg_hash = H3(msg)
@@ -647,7 +619,6 @@ Table of Contents
     lambda_i = derive_lagrange_coefficient(index, participant_list)
 
     # Compute the per-message challenge
-    msg_hash = H3(msg)
     group_comm_enc = G.SerializeElement(R)
     group_public_key_enc = G.SerializeElement(group_public_key)
     challenge_input = group_comm_enc || group_public_key_enc || msg_hash
@@ -667,46 +638,45 @@ Table of Contents
    commitment share.  Each signer then sends these shares back to the
    collector; see Appendix C.3 for encoding recommendations.
 
-   The Coordinator MUST verify the set of signature shares using the
-   following procedure.
+   Upon receipt from each Signer, the Coordinator MUST validate the
+   input signature and commitment shares using DeserializeElement for
+   each.  If validation fails, the Coordinator MUST abort the protocol.
+   If validation succeeds, the Coordinator then verifies the set of
+   signature shares using the following procedure.
 
   Inputs:
-  - index, Index `i` of the signer. Note index will never equal `0`.
-  - PK, the public key for the group
-  - PK_i, the public key for the ith signer, where PK_i = ScalarBaseMult(s[i])
-  - sig_share, the signature share for the ith signer, computed from the signer
-  - comm_share, the commitment for the ith signer, computed from the signer
-  - R, the group commitment
-  - msg, the message to be signed
+  - group_comm, the group commitment
   - participant_list, a set containing identifiers for each signer, similarly of length
     NUM_SIGNERS (sent by the Coordinator).
+  - index, Index `i` of the signer. Note index will never equal `0`.
+  - group_public_key, the public key for the group
+  - public_key_share, the public key for the ith signer, where public_key_share = G.ScalarBaseMult(s[i])
+  - sig_share, the signature share for the ith signer, computed from the signer
+  - comm_share, the commitment for the ith signer, computed from the signer
+  - msg, the message to be signed
 
   Outputs: 1 if the signature share is valid, and 0 otherwise.
 
-  def verify_signature_share(index, PK, PK_i, sig_share, comm_share, R, msg, participant_list):
-    msg_hash = H3(msg)
-    group_comm_enc = G.SerializeElement(R)
+  def verify_signature_share(group_comm, participant_list, index, group_public_key, public_key_share, sig_share, comm_share, msg):
+    group_comm_enc = G.SerializeElement(group_comm)
     group_public_key_enc = G.SerializeElement(group_public_key)
-    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    challenge_input = group_comm_enc || group_public_key_enc || msg
     c = H2(challenge_input)
 
-    l = G.ScalarbaseMult(sig_share)
+    l = G.ScalarBaseMult(sig_share)
 
     lambda_i = derive_lagrange_coefficient(index, participant_list)
-    r = comm_share + (sig_share * c * lambda_i)
+    r = comm_share + (public_key_share * c * lambda_i)
 
     return l == r
 
-8.3.  Signature Share Aggregation
+5.3.  Signature Share Aggregation
 
    After signers perform round two and send their signature shares to
    the Coordinator, the Coordinator performs the aggregate operation and
-   publishes the resulting signature.  Note that here we do not specify
-   the Coordinator as validating each signature schare, as if any
-   signature share is invalid, the resulting joint signature will
-   similarly be invalid.  Deployments that wish to validate signature
-   shares can do so using the verify_signature_share function in
-   Section 8.2
+   publishes the resulting signature.  As described in Section 5.2, the
+   Coordinator MUST validate each Signer's signature share before
+   aggregation.
 
   Inputs:
   - R: the group commitment.
@@ -721,29 +691,58 @@ Table of Contents
       z = z + z_i
     return (R, z)
 
-9.  Ciphersuites
+   The output signature (R, z) from the aggregation step MUST be encoded
+   as follows:
+
+     struct {
+       opaque R_encoded[Ne];
+       opaque z_encoded[Ns];
+     } Signature;
+
+   Where Signature.R_encoded is G.SerializeElement(R) and
+   Signature.z_encoded is G.SerializeScalar(z).
+
+6.  Ciphersuites
 
    A FROST ciphersuite must specify the underlying prime-order group
    details and cryptographic hash function.  Each ciphersuite is denoted
    as (Group, Hash), e.g., (ristretto255, SHA-512).  This section
-   contains some ciphersuites.  The RECOMMENDED ciphersuite is
-   (ristretto255, SHA-512) Section 9.2.  The (edwards25519, SHA-512)
-   ciphersuite is included for backwards compatibility with [RFC8032].
+   contains some ciphersuites.
 
-9.1.  FROST(edwards25519, SHA-512)
+   The RECOMMENDED ciphersuite is (ristretto255, SHA-512) Section 6.2.
+   The (Ed25519, SHA-512) ciphersuite is included for backwards
+   compatibility with [RFC8032].
+
+   The DeserializeElement and DeserializeScalar functions instantiated
+   for a particular prime-order group corresponding to a ciphersuite
+   MUST adhere to the description in Section 3.1.  Validation steps for
+   these functions are described for each the ciphersuites below.
+   Future ciphersuites MUST describe how input validation is done for
+   DeserializeElement and DeserializeScalar.
+
+6.1.  FROST(Ed25519, SHA-512)
 
    This ciphersuite uses edwards25519 for the Group and SHA-512 for the
    Hash function H meant to produce signatures indistinguishable from
    Ed25519 as specified in [RFC8032].  The value of the contextString
    parameter is empty.
 
-   *  Group: ed25519 [RFC8032]
+   *  Group: edwards25519 [RFC8032]
 
       -  SerializeElement: Implemented as specified in [RFC8032],
          Section 5.1.2.
 
       -  DeserializeElement: Implemented as specified in [RFC8032],
-         Section 5.1.3.
+         Section 5.1.3.  Additionally, this function validates that the
+         resulting element is not the group identity element.
+
+      -  SerializeScalar: Implemented by outputting the little-endian
+         32-byte encoding of the Scalar value.
+
+      -  DeserializeScalar: Implemented by attempting to deserialize a
+         Scalar from a 32-byte string.  This function can fail if the
+         input does not represent a Scalar between the value 0 and
+         G.Order() - 1.
 
    *  Hash (H): SHA-512, and Nh = 64.
 
@@ -762,7 +761,7 @@ Table of Contents
    Normally H2 would also include a domain separator, but for backwards
    compatibility with [RFC8032], it is omitted.
 
-9.2.  FROST(ristretto255, SHA-512)
+6.2.  FROST(ristretto255, SHA-512)
 
    This ciphersuite uses ristretto255 for the Group and SHA-512 for the
    Hash function H.  The value of the contextString parameter is "FROST-
@@ -775,6 +774,14 @@ Table of Contents
 
       -  DeserializElement: Implemented using the 'Decode' function from
          [RISTRETTO].
+
+      -  SerializeScalar: Implemented by outputting the little-endian
+         32-byte encoding of the Scalar value.
+
+      -  DeserializeScalar: Implemented by attempting to deserialize a
+         Scalar from a 32-byte string.  This function can fail if the
+         input does not represent a Scalar between the value 0 and
+         G.Order() - 1.
 
    *  Hash (H): SHA-512, and Nh = 64.
 
@@ -789,7 +796,48 @@ Table of Contents
       -  H3(m): Implemented by computing H(contextString || "digest" ||
          m).
 
-9.3.  FROST(P-256, SHA-256)
+6.3.  FROST(Ed448, SHAKE256)
+
+   This ciphersuite uses edwards448 for the Group and SHA256 for the
+   Hash function H meant to produce signatures indistinguishable from
+   Ed448 as specified in [RFC8032].  The value of the contextString
+   parameter is empty.
+
+   *  Group: edwards448 [RFC8032]
+
+      -  SerializeElement: Implemented as specified in [RFC8032],
+         Section 5.2.2.
+
+      -  DeserializeElement: Implemented as specified in [RFC8032],
+         Section 5.2.3.  Additionally, this function validates that the
+         resulting element is not the group identity element.
+
+      -  SerializeScalar: Implemented by outputting the little-endian
+         48-byte encoding of the Scalar value.
+
+      -  DeserializeScalar: Implemented by attempting to deserialize a
+         Scalar from a 48-byte string.  This function can fail if the
+         input does not represent a Scalar between the value 0 and
+         G.Order() - 1.
+
+   *  Hash (H): SHAKE256, and Nh = 117.
+
+      -  H1(m): Implemented by computing H("rho" || m), interpreting the
+         lower 57 bytes as a little-endian integer, and reducing the
+         resulting integer modulo L = 2^446 - 13818066809895115352007386
+         748515426880336692474882178609894547503885.
+
+      -  H2(m): Implemented by computing H(m), interpreting the lower 57
+         bytes as a little-endian integer, and reducing the resulting
+         integer modulo L = 2^446 - 138180668098951153520073867485154268
+         80336692474882178609894547503885.
+
+      -  H3(m): Implemented as an alias for H, i.e., H(m).
+
+   Normally H2 would also include a domain separator, but for backwards
+   compatibility with [RFC8032], it is omitted.
+
+6.4.  FROST(P-256, SHA-256)
 
    This ciphersuite uses P-256 for the Group and SHA-256 for the Hash
    function H.  The value of the contextString parameter is "FROST-
@@ -804,9 +852,20 @@ Table of Contents
          public key using the compressed Octet-String-to-Elliptic-Curve-
          Point method according to [SECG], and then performs partial
          public-key validation as defined in section 5.6.2.3.4 of
-         [KEYAGREEMENT].
+         [KEYAGREEMENT].  This includes checking that the coordinates of
+         the resulting point are in the correct range, that the point is
+         on the curve, and that the point is not the point at infinity.
+         Additionally, this function validates that the resulting
+         element is not the group identity element.  If these checks
+         fail, deserialization returns an error.
 
-      -  Serialization: Elements are serialized as Ne = 33 byte string
+      -  SerializeScalar: Implemented using the Field-Element-to-Octet-
+         String conversion according to [SECG].
+
+      -  DeserializeScalar: Implemented by attempting to deserialize a
+         Scalar from a 32-byte string using Octet-String-to-Field-
+         Element from [SECG].  This function can fail if the input does
+         not represent a Scalar between the value 0 and G.Order() - 1.
 
    *  Hash (H): SHA-256, and Nh = 32.
 
@@ -821,7 +880,7 @@ Table of Contents
       -  H3(m): Implemented by computing H(contextString || "digest" ||
          m).
 
-10.  Security Considerations
+7.  Security Considerations
 
    A security analysis of FROST exists in [FROST20].  The protocol as
    specified in this document assumes the following threat model.
@@ -845,32 +904,11 @@ Table of Contents
       private information and communication at the time of signing can
       be performed over a public but reliable channel.
 
-   The rest of this section documents issues particular to
-   implementations or deployments.
+   The protocol as specified in this document does not target the
+   following goals:
 
-10.1.  Nonce Reuse Attacks
-
-   Nonces generated by each participant in the first round of signing
-   must be sampled uniformly at random and cannot be derived from some
-   determinstic function.  This is to avoid replay attacks initiated by
-   other signers, which allows for a complete key-recovery attack.
-   Coordinates MAY further hedge against nonce reuse attacks by tracking
-   signer nonce commitments used for a given group key, at the cost of
-   additional state.
-
-10.2.  Protocol Failures
-
-   We do not specify what implementations should do when the protocol
-   fails, other than requiring that the protocol abort.  Examples of
-   viable failure include when a verification check returns invalid or
-   if the underlying transport failed to deliver the required messages.
-
-10.3.  External Requirements / Non-Goals
-
-   FROST does not target the following goals.
-
-   *  Post quantum security.  FROST requires the hardness of the
-      Discrete Logarithm Problem.
+   *  Post quantum security.  FROST, like generic Schnorr signatures,
+      requires the hardness of the Discrete Logarithm Problem.
 
    *  Robustness.  In the case of failure, FROST requires aborting the
       protocol.
@@ -882,7 +920,27 @@ Table of Contents
       higher-level communication channel can be used to facilitate key
       generation and signing.
 
-11.  Removing the Coordinator Role
+   The rest of this section documents issues particular to
+   implementations or deployments.
+
+7.1.  Nonce Reuse Attacks
+
+   Nonces generated by each participant in the first round of signing
+   must be sampled uniformly at random and cannot be derived from some
+   determinstic function.  This is to avoid replay attacks initiated by
+   other signers, which allows for a complete key-recovery attack.
+   Coordinates MAY further hedge against nonce reuse attacks by tracking
+   signer nonce commitments used for a given group key, at the cost of
+   additional state.
+
+7.2.  Protocol Failures
+
+   We do not specify what implementations should do when the protocol
+   fails, other than requiring that the protocol abort.  Examples of
+   viable failure include when a verification check returns invalid or
+   if the underlying transport failed to deliver the required messages.
+
+7.3.  Removing the Coordinator Role
 
    In some settings, it may be desirable to omit the role of the
    coordinator entirely.  Doing so does not change the security
@@ -915,23 +973,41 @@ Table of Contents
    authenticated, so that cheating players can be identified and
    excluded.
 
-12.  Contributors
+7.4.  Input Message Validation
+
+   Some applications may require that signers only process messages of a
+   certain structure.  For example, in digital currency applications
+   wherein multiple signers may collectively sign a transaction, it is
+   reasonable to require that each signer check the input message to be
+   a syntactically valid transaction.  As another example, use of
+   threshold signatures in TLS [TLS] to produce signatures of transcript
+   hashes might require that signers check that the input message is a
+   valid TLS transcript from which the corresponding transcript hash can
+   be derived.
+
+   In general, input message validation is an application-specific
+   consideration that varies based on the use case and threat model.
+   However, it is RECOMMENDED that applications take additional
+   precautions and validate inputs so that signers do not operate as
+   signing oracles for arbitrary messages.
+
+8.  Contributors
 
    *  Isis Lovecruft
 
    *  T.  Wilson-Brown
 
-13.  References
+9.  References
 
-13.1.  Normative References
+9.1.  Normative References
 
    [HASH-TO-CURVE]
               Faz-Hernandez, A., Scott, S., Sullivan, N., Wahby, R. S.,
               and C. A. Wood, "Hashing to Elliptic Curves", Work in
               Progress, Internet-Draft, draft-irtf-cfrg-hash-to-curve-
-              13, 10 November 2021,
+              14, 18 February 2022,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              hash-to-curve-13>.
+              hash-to-curve-14>.
 
    [KEYAGREEMENT]
               Barker, E., Chen, L., Roginsky, A., Vassilev, A., and R.
@@ -961,12 +1037,12 @@ Table of Contents
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
    [RISTRETTO]
-              Valence, H. D., Grigg, J., Tankersley, G., Valsorda, F.,
-              Lovecruft, I., and M. Hamburg, "The ristretto255 and
+              Valence, H. D., Grigg, J., Hamburg, M., Lovecruft, I.,
+              Tankersley, G., and F. Valsorda, "The ristretto255 and
               decaf448 Groups", Work in Progress, Internet-Draft, draft-
-              irtf-cfrg-ristretto255-decaf448-01, 4 August 2021,
+              irtf-cfrg-ristretto255-decaf448-02, 17 February 2022,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              ristretto255-decaf448-01>.
+              ristretto255-decaf448-02>.
 
    [SECG]     "Elliptic Curve Cryptography, Standards for Efficient
               Cryptography Group, ver. 2", 2009,
@@ -976,7 +1052,7 @@ Table of Contents
               Industry: the Elliptic Curve Digital Signature Algorithm
               (ECDSA)", ANSI X9.62-1998, September 1998.
 
-13.2.  Informative References
+9.2.  Informative References
 
    [FROST20]  Komlo, C. and I. Goldberg, "Two-Round Threshold Signatures
               with FROST", 22 December 2020,
@@ -991,6 +1067,10 @@ Table of Contents
               Crites, E., Komlo, C., and M. Maller, "How to Prove
               Schnorr Assuming Schnorr", 11 October 2021,
               <https://eprint.iacr.org/2021/1375>.
+
+   [TLS]      Rescorla, E., "The Transport Layer Security (TLS) Protocol
+              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
+              <https://www.rfc-editor.org/rfc/rfc8446>.
 
 Appendix A.  Acknowledgments
 
@@ -1015,8 +1095,8 @@ Appendix B.  Trusted Dealer Key Generation
 
      def trusted_dealer_keygen(n, t):
        secret_key = G.RandomScalar()
-       secret_key_shares = secret_share_split(secret_key, n, t)
-       public_key = G.ScalarBaseMult(s)
+       secret_key_shares = secret_share_shard(secret_key, n, t)
+       public_key = G.ScalarBaseMult(secret_key)
        return secret_key, public_key, secret_key_shares
 
    It is assumed the dealer then sends one secret key to each of the
@@ -1041,7 +1121,7 @@ B.1.  Shamir Secret Sharing
 
    The procedure for splitting a secret into shares is as follows.
 
-    secret_share_split(s, n, t):
+    secret_share_shard(s, n, t):
 
     Inputs:
     - s, secret to be shared, an element of F
@@ -1053,7 +1133,7 @@ B.1.  Shamir Secret Sharing
     Errors:
     - "invalid parameters", if t > n
 
-    def secret_share(s, n, t):
+    def secret_share_shard(s, n, t):
       if t > n:
         raise "invalid parameters"
 
@@ -1061,11 +1141,11 @@ B.1.  Shamir Secret Sharing
       # a polynomial of degree (t - 1)
       coefficients = [s]
       for i in range(t - 1):
-        coefficients.append(RandomScalar())
+        coefficients.append(G.RandomScalar())
 
       # Evaluate the polynomial for each point x=1,...,n
       points = []
-      for x_i in range(1, n+1):
+      for x_i in range(1, n + 1):
         y_i = polynomial_evaluate(x_i, coefficients)
         point_i = (x_i, y_i)
         points.append(point_i)
@@ -1151,7 +1231,7 @@ Appendix C.  Wire Format
 
    Applications are responsible for encoding protocol messages between
    peers.  This section contains RECOMMENDED encodings for different
-   protocol messages as described in Section 8.
+   protocol messages as described in Section 5.
 
 C.1.  Signing Commitment
 
@@ -1211,31 +1291,347 @@ C.3.  Signature Share
    signature_share  The signature share from this signer encoded as a
       serialized scalar.
 
+   commitmentshare  The signature commitment share from this signer
+      encoded as a serialized element.
+
 Appendix D.  Test Vectors
 
-   TODO
+   This section contains test vectors for all ciphersuites listed in
+   Section 6.  All Element and Scalar values are represented in
+   serialized form and encoded in hexadecimal strings.  Signatures are
+   represented as the concatenation of their constituent parts.  The
+   input message to be signed is also encoded as a hexadecimal string.
+
+   Each test vector consists of the following information.
+
+   *  Configuration: This lists the fixed parameters for the particular
+      instantiation of FROST, including MAX_SIGNERS, THRESHOLD_LIMIT,
+      and NUM_SIGNERS.
+
+   *  Group input parameters: This lists the group secret key and shared
+      public key, generated by a trusted dealer as described in
+      Appendix B, as well as the input message to be signed.  All values
+      are encoded as hexadecimal strings.
+
+   *  Signer input parameters: This lists the signing key share for each
+      of the NUM_SIGNERS signers.
+
+   *  Round one parameters and outputs: This lists the NUM_SIGNERS
+      participants engaged in the protocol, identified by their integer
+      index, the hiding and binding commitment values produced in
+      Section 5.1, as well as the resulting group binding factor input,
+      computed in part from the group commitment list encoded as
+      described in Section 4.3, and group binding factor as computed in
+      Section 5.2).
+
+   *  Round two parameters and outputs: This lists the NUM_SIGNERS
+      participants engaged in the protocol, identified by their integer
+      index, along with their corresponding output signature share and
+      group commitment share as produced in Section 5.2.
+
+   *  Final output: This lists the aggregate signature as produced in
+      Section 5.3.
+
+D.1.  FROST(Ed25519, SHA-512)
+
+   // Configuration information
+   MAX_SIGNERS: 3
+   THRESHOLD_LIMIT: 2
+   NUM_SIGNERS: 2
+
+   // Group input parameters
+   group_secret_key: 7c1c33d3f5291d85de664833beb1ad469f7fb6025a0ec78b3a7
+   90c6e13a98304
+   group_public_key: 377a6acb3b9b5f642c5ce355d23cac0568aad0da63c633d59d4
+   168bdcbce35af
+   message: 74657374
+
+   // Signer input parameters
+   S1 signer_share: 949dcc590407aae7d388761cddb0c0db6f5627aea8e217f4a033
+   f2ec83d93509
+   S2 signer_share: ac1e66e012e4364ac9aaa405fcafd370402d9859f7b6685c07ee
+   d76bf409e80d
+   S3 signer_share: d7cb090a075eb154e82fdb4b3cb507f110040905468bb9c46da8
+   bdea643a9a02
+
+   // Round one parameters
+   participants: 1,2
+   group_binding_factor_input: 000178e175d15cb5cec1257e0d84d797ba8c3dd9b
+   4c7bc50f3fa527c200bcc6c4a954cdad16ae67ac5919159d655b681bd038574383bab
+   423614f8967396ee12ca62000288a4e6c3d8353dc3f4aca2e10d10a75fb98d9fbea98
+   981bfb25375996c5767c932bbf10c41feb17d41cc6433e69f16cceccc42a00aedf72f
+   eb5f44929fdf2e2fee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a
+   5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f500
+   28a8ff
+   group_binding_factor: c4d7668d793ff4c6ec424fb493cdab3ef5b625eefffe775
+   71ff28a345e5f700a
+
+   // Signer round one outputs
+   S1 hiding_nonce: 570f27bfd808ade115a701eeee997a488662bca8c2a073143e66
+   2318f1ed8308
+   S1 binding_nonce: 6720f0436bd135fe8dddc3fadd6e0d13dbd58a1981e587d377d
+   48e0b8f1c3c01
+   S1 hiding_nonce_commitment: 78e175d15cb5cec1257e0d84d797ba8c3dd9b4c7b
+   c50f3fa527c200bcc6c4a95
+   S1 binding_nonce_commitment: 4cdad16ae67ac5919159d655b681bd038574383b
+   ab423614f8967396ee12ca62
+   S2 hiding_nonce: 2a67c5e85884d0275a7a740ba8f53617527148418797345071dd
+   cf1a1bd37206
+   S2 binding_nonce: a0609158eeb448abe5b0df27f5ece96196df5722c01a999e8a4
+   5d2d5dfc5620c
+   S2 hiding_nonce_commitment: 88a4e6c3d8353dc3f4aca2e10d10a75fb98d9fbea
+   98981bfb25375996c5767c9
+   S2 binding_nonce_commitment: 32bbf10c41feb17d41cc6433e69f16cceccc42a0
+   0aedf72feb5f44929fdf2e2f
+
+   // Round two parameters
+   participants: 1,2
+
+   // Signer round two outputs
+   S1 sig_share: f8bbaf924e1c90e11dec1eb679194aade084f92fbf52fdd436ba0a0
+   7f71ab708
+   S1 group_commitment_share: 11bb9777aa393b92e814e415039adf62687a0be543
+   c2322d817e4934bc5a7cf2
+   S2 sig_share: 80f589405714ca0e6adc87c2c0186a0ae4d6e352f7b248b23149a5d
+   cd3fe4704
+   S2 group_commitment_share: 4af85179d17ed031b767ab579e59c7018dac09ae40
+   0b1700623d0af1129a9c55
+
+   sig: ebe7efbb42c4b1c55106b5536fb5e9ac7a6d0803ea4ae9c8c629ca51e05c230e
+   78b139d3a5305af087c8a6783a32b4b7c45bdd82b60546876803b0e3ca19ff0c
+
+D.2.  FROST(Ed448, SHAKE256)
+
+   // Configuration information
+   MAX_SIGNERS: 3
+   THRESHOLD_LIMIT: 2
+   NUM_SIGNERS: 2
+
+   // Group input parameters
+   group_secret_key: cef4a803a21d82fa90692e86541e08d878c9f688e5d71a2bd35
+   4a9a3af62b8c7c89753055949cab8fd044c17c94211f167672b053659420b00
+   group_public_key: 005f23508a78131aee4d6cb027f967d89557ec5f24dc3ebeede
+   b550466fcc1411283ff5d9c605d9a8b36e6eea36b67ceba047d57968896db80
+   message: 74657374
+
+   // Signer input parameters
+   S1 signer_share: d408a2f1d9ead0cc4b4b9b2e84a22f8e2aa2ab4ee715febe7a08
+   175d4298dd6bbe2e1c0b29aaa972c78555ea3b3d7308b248994780219e0800
+   S2 signer_share: da1c9bdf11b81f9f062d08d7b3265744dc7a6014e953e15222bc
+   8416d5cd0210b4c5e410f90a892c91065fbdae37d51ffc29078acae9f90500
+   S3 signer_share: e03094cd49856e71c10e757fe3aa7efa8d5315daea91c4e6c96f
+   f2cf670328b4a95cad16c96b68e65a87689021323737460b75cc14b2550300
+
+   // Round one parameters
+   participants: 1,2
+   group_binding_factor_input: 00016d8ef55145bab18c129311f1d07bef2110d0b
+   6841aae919eb6abf5e523d26f819d3695d78f8aa246c6b6d6fd6c2b8a63dd1cf8e8c8
+   9a870400a0c29f750605b10c52e347fc538af0d4ebddd23a1e0300482a7d98a39d408
+   356b9041d5fbaa274c2dc3f248601f21cee912e2f5700c1753a80000242c2fdc11e5f
+   726d4c897ed118f668a27bfb0d5946b5f513e975638b7c4b0a46cf5184d4a9c1f6310
+   fd3c10f84d9de704a33aab2af976d60804fa4ecba88458bcf7677a3952f540e20556d
+   5e90d5aa7e8f226d303ef7b88fb33a63f6cac6a9d638089b1739a5d2564d15fb3e43e
+   1b0b28a80b54ff7255705a71ee2925e4a3e30e41aed489a579d5595e0df13e32e1e4d
+   d202a7c7f68b31d6418d9845eb4d757adda6ab189e1bb340db818e5b3bc725d992faf
+   63e9b0500db10517fe09d3f566fba3a80e46a403e0c7d41548fbf75cf2662b00225b5
+   02961f98d8c9ff937de0b24c231845
+   group_binding_factor: 2716e157c3da80b65149b1c2cb546723516272ccf75e111
+   334533e2840a9bf85f3c71478ade11be26d26d8e4b9a1667af88f7df61670f60a00
+
+   // Signer round one outputs
+   S1 hiding_nonce: 04eccfe12348a5a2e4b30e95efcf4e494ce64b89f6504de46b3d
+   67a5341baaa931e455c57c6c5c81f4895e333da9d71f7d119fcfbd0d7d2000
+   S1 binding_nonce: 80bcd1b09e82d7d2ff6dd433b0f81e012cadd4661011c44d929
+   1269cf24820f5c5086d4363dc67450f24ebe560eb4c2059883545d54aa43a00
+   S1 hiding_nonce_commitment: 6d8ef55145bab18c129311f1d07bef2110d0b6841
+   aae919eb6abf5e523d26f819d3695d78f8aa246c6b6d6fd6c2b8a63dd1cf8e8c89a87
+   0400
+   S1 binding_nonce_commitment: a0c29f750605b10c52e347fc538af0d4ebddd23a
+   1e0300482a7d98a39d408356b9041d5fbaa274c2dc3f248601f21cee912e2f5700c17
+   53a80
+   S2 hiding_nonce: 3b3bbe82babf2a67ded81b308ba45f73b88f6cf3f6aaa4442256
+   b7a0354d1567478cfde0a2bba98ba4c3e65645e1b77386eb4063f925e00700
+   S2 binding_nonce: bcbd112a88bebf463e3509076c5ef280304cb4f1b3a7499cca1
+   d5e282cc2010a92ff56a3bdcf5ba352e0f4241ba2e54c1431a895c19fff0600
+   S2 hiding_nonce_commitment: 42c2fdc11e5f726d4c897ed118f668a27bfb0d594
+   6b5f513e975638b7c4b0a46cf5184d4a9c1f6310fd3c10f84d9de704a33aab2af976d
+   6080
+   S2 binding_nonce_commitment: 4fa4ecba88458bcf7677a3952f540e20556d5e90
+   d5aa7e8f226d303ef7b88fb33a63f6cac6a9d638089b1739a5d2564d15fb3e43e1b0b
+   28a80
+
+   // Round two parameters
+   participants: 1,2
+
+   // Signer round two outputs
+   S1 sig_share: ad41cd3320c82edd20c344769bd7b250105d9d0516109b7f774c297
+   faaf8b3b6065b19bbae2afb6c34cce460b40e15655fb8ad0bcc26e21e00
+   S1 group_commitment_share: 086d4d2ff2555fab65afc8eb473cc708f37cdb9c5d
+   e74d8e12a1a9d1a086a8914175e4db77e5d281f10441913aa680fedb207c954afdd88
+   380
+   S2 sig_share: 5dcc0aec7d0a71eddd5ba2dd0f185ba7990bcd39b6fc0e4b0470c35
+   6ed0deb736d7f2652e87e932a0c176cc4bc5ba0ef756cc62081e4f51900
+   S2 group_commitment_share: 7e91f66097b6450c52c89c14400a506ee1d37f5e52
+   a8d4c3fc9733c23d0b27cd6cfce55a8aee692262e5815be341e8d0b9d240a9630c9f0
+   600
+
+   sig: 4d9883057726b029d042418600abe88ad3fec06d6a48dca289482e9d51c10353
+   37e4d1aae5fd1c73a55701133238602f423886fc134a3c65800a0ed81f9ed29fcafe1
+   ee753abef0df8a9686a3fcc0caaca7bbcecd597069f2a74da3f0d97a98e9740e35025
+   716ab554d524742c4d0bd83800
+
+D.3.  FROST(ristretto255, SHA-512)
+
+   // Configuration information
+   MAX_SIGNERS: 3
+   THRESHOLD_LIMIT: 2
+   NUM_SIGNERS: 2
+
+   // Group input parameters
+   group_secret_key: b120be204b5e758960458ca9c4675b56b12a8faff2be9c94891
+   d5e1cd75c880e
+   group_public_key: 563b80013f337deaa2a282af7b281bd70d2f501928a89c1aa48
+   b379a5ac4202b
+   message: 74657374
+
+   // Signer input parameters
+   S1 signer_share: 94ae65bb90030a89507fa00fff08dfed841cf996de5a0c574f1f
+   4693ddcb6705
+   S2 signer_share: 641003b3f00bb1e01656ac1818a4419a580e637ecaf67b191521
+   2e0ae43a470c
+   S3 signer_share: 479eaa4d36b145e00690c07e5245c5312c00cd65b692ebdbda22
+   1681eaa92603
+
+   // Round one parameters
+   participants: 1,2
+   group_binding_factor_input: 0001824e9eddddf02b2a9caf5859825e999d791ca
+   094f65b814a8bca6013d9cc312774c7e1271d2939a84a9a867e3a06579b4d25659b42
+   7439ccf0d745b43f75b76600028013834ff4d48e7d6b76c2e732bc611f54720ef8933
+   c4ca4de7eaaa77ff5cd125e056ecc4f7c4657d3a742354430d768f945db229c335d25
+   8e9622ad99f3e7582d07b35bd9849ce4af6ad403090d69a7d0eb88bba669a9f985175
+   d70cd15ad5f1ef5b734c98a32b4aab7b43a57e93fc09281f2e7a207076b31e416ba63
+   f53d9d
+   group_binding_factor: f00ae6007f2d74a1507c962cf30006be77596106db28f2d
+   5443fd66d755e780c
+
+   // Signer round one outputs
+   S1 hiding_nonce: 349b3bb8464a1d87f7d6b56f4559a3f9a6335261a3266089a9b1
+   2d9d6f6ce209
+   S1 binding_nonce: ce7406016a854be4291f03e7d24fe30e77994c3465de031515a
+   4c116f22ca901
+   S1 hiding_nonce_commitment: 824e9eddddf02b2a9caf5859825e999d791ca094f
+   65b814a8bca6013d9cc3127
+   S1 binding_nonce_commitment: 74c7e1271d2939a84a9a867e3a06579b4d25659b
+   427439ccf0d745b43f75b766
+   S2 hiding_nonce: 4d66d319f20a728ec3d491cbf260cc6be687bd87cc2b5fdb4d5f
+   528f65fd650d
+   S2 binding_nonce: 278b9b1e04632e6af3f1a3c144d07922ffcf5efd3a341b47abc
+   19c43f48ce306
+   S2 hiding_nonce_commitment: 8013834ff4d48e7d6b76c2e732bc611f54720ef89
+   33c4ca4de7eaaa77ff5cd12
+   S2 binding_nonce_commitment: 5e056ecc4f7c4657d3a742354430d768f945db22
+   9c335d258e9622ad99f3e758
+
+   // Round two parameters
+   participants: 1,2
+
+   // Signer round two outputs
+   S1 sig_share: ec6b075f17c5670e80b1fda8f6de1cfe3c79db06a852f8d5650fb71
+   eaad69501
+   S1 group_commitment_share: bc7e792fce347a15d547935652377c406cc721965c
+   58d3003dbd947a6dfddc0c
+   S2 sig_share: 87ceccc477069aa9b751b307f25955daaf943a3abc51f214a114781
+   de0f58e03
+   S2 group_commitment_share: 92c4f352ec392ba779271dc2ed09cda37f38d8c283
+   747d4a85b4c9ce7289cb07
+
+   sig: 7e92309bf40993141acd5f2c7680a302cc5aa5dd291a833906da8e35bc39b03e
+   733ad4238fcb01b83703b1b0e83872d8ec0d164164a4eaea06242f3c8acc2405
+
+D.4.  FROST(P-256, SHA-256)
+
+   // Configuration information
+   MAX_SIGNERS: 3
+   THRESHOLD_LIMIT: 2
+   NUM_SIGNERS: 2
+
+   // Group input parameters
+   group_secret_key: 6f090d1393ff53bbcbba036c00b8830ab4546c251dece199eb0
+   3a6a51a5a5929
+   group_public_key: 03db0945167b62e6472ad46373b6cbbca88e2a9a4883071f0b3
+   fde4b2b6d7b6ba6
+   message: 74657374
+
+   // Signer input parameters
+   S1 signer_share: 738552e18ea4f2090597aca6c23c1666845c21c676813f9e2678
+   6f1e410dcecf
+   S2 signer_share: 780198af894a90563f7555e183bfa9c25463d767cf159da261ed
+   379767c14475
+   S3 signer_share: 7c7dde7d83f02ea37952ff1c45433d1e246b8d0927a9fba69d62
+   00108e74ba1b
+
+   // Round one parameters
+   participants: 1,2
+   group_binding_factor_input: 000102f34caab210d59324e12ba41f0802d9545f7
+   f702906930766b86c462bb8ff7f3402b724640ea9e262469f401c9006991ba3247c2c
+   91b97cdb1f0eeab1a777e24e1e0002037f8a998dfc2e60a7ad63bc987cb27b8abf78a
+   68bd924ec6adb9f251850cbe711024a4e90422a19dd8463214e997042206c39d3df56
+   168b458592462090c89dbcf84efca0c54f70a585d6aae28679482b4aed03ae5d38297
+   b9092ab3376d46fdf55
+   group_binding_factor: 9df349a9f34bf01627f6b4f8b376e8c8261d55508d1cac2
+   919cdaf7f9cb20e70
+
+   // Signer round one outputs
+   S1 hiding_nonce: 3da92a503cf7e3f72f62dabedbb3ffcc9f555f1c1e78527940fe
+   3fed6d45e56f
+   S1 binding_nonce: ec97c41fc77ae7e795067976b2edd8b679f792abb062e4d0c33
+   f0f37d2e363eb
+   S1 hiding_nonce_commitment: 02f34caab210d59324e12ba41f0802d9545f7f702
+   906930766b86c462bb8ff7f34
+   S1 binding_nonce_commitment: 02b724640ea9e262469f401c9006991ba3247c2c
+   91b97cdb1f0eeab1a777e24e1e
+   S2 hiding_nonce: 06cb4425031e695d1f8ac61320717d63918d3edc7a02fcd3f23a
+   de47532b1fd9
+   S2 binding_nonce: 2d965a4ea73115b8065c98c1d95c7085db247168012a834d828
+   5a7c02f11e3e0
+   S2 hiding_nonce_commitment: 037f8a998dfc2e60a7ad63bc987cb27b8abf78a68
+   bd924ec6adb9f251850cbe711
+   S2 binding_nonce_commitment: 024a4e90422a19dd8463214e997042206c39d3df
+   56168b458592462090c89dbcf8
+
+   // Round two parameters
+   participants: 1,2
+
+   // Signer round two outputs
+   S1 sig_share: 120a8ef8a5936444d8087cb10df5648629895e94582720760a10c8c
+   217e3417b
+   S1 group_commitment_share: 0314cc3c03885953b3a15482d0ef4716eba9aca439
+   fa541a37489a146dd383d07e
+   S2 sig_share: 2a7ff42d849f1bcc0e5f75d5810900a3e8f68ab717ff10d7a6da89f
+   8bb0c16aa
+   S2 group_commitment_share: 034f4516676fe414883397fc5e150375c9937b3b77
+   3c9ac57a11b2b6574e6bf452
+
+   sig: 035cfbd148da711bbc823455b682ed01a1be3c5415cf692f4a91b7fe22d1dec3
+   453c8a83262a328010e667f2868efe652a127fe94b7026314db0eb52bad2ef5825
 
 Authors' Addresses
 
    Deirdre Connolly
    Zcash Foundation
-
    Email: durumcrustulum@gmail.com
 
 
    Chelsea Komlo
    University of Waterloo, Zcash Foundation
-
    Email: ckomlo@uwaterloo.ca
 
 
    Ian Goldberg
    University of Waterloo
-
    Email: iang@uwaterloo.ca
 
 
    Christopher A. Wood
    Cloudflare
-
    Email: caw@heapingbits.net
