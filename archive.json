@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-20T00:39:38.204226+00:00",
+  "timestamp": "2022-02-24T00:36:46.028048+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -125,9 +125,17 @@
       ],
       "body": "",
       "createdAt": "2021-11-15T23:15:09Z",
-      "updatedAt": "2022-02-14T18:33:07Z",
+      "updatedAt": "2022-02-23T23:27:24Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly are we OK to close this out?",
+          "createdAt": "2022-02-23T23:27:24Z",
+          "updatedAt": "2022-02-23T23:27:24Z"
+        }
+      ]
     },
     {
       "number": 13,
@@ -608,15 +616,15 @@
       "id": "I_kwDOEpUZs85BoFcw",
       "title": "Review inputs to frost_sign",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/40",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Should we rewrite inputs as a function of the SigningPackage, or have SigningPackage deserialization done externally to these functions?",
       "createdAt": "2022-01-13T01:44:47Z",
-      "updatedAt": "2022-01-29T01:11:04Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-23T23:27:12Z",
+      "closedAt": "2022-02-23T23:27:12Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -762,7 +770,7 @@
       "id": "I_kwDOEpUZs85BtdCy",
       "title": "Signing participants should verify message before signing",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/47",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "chelseakomlo",
       "authorAssociation": "COLLABORATOR",
       "assignees": [
@@ -771,8 +779,8 @@
       "labels": [],
       "body": "The draft assumes that all participants verify the message that they are signing before they sign it. We should make this assumption explicit in the draft. ",
       "createdAt": "2022-01-13T21:49:30Z",
-      "updatedAt": "2022-02-01T17:44:04Z",
-      "closedAt": null,
+      "updatedAt": "2022-02-23T16:08:33Z",
+      "closedAt": "2022-02-23T16:08:33Z",
       "comments": [
         {
           "author": "chris-wood",
@@ -5250,26 +5258,481 @@
     {
       "number": 86,
       "id": "PR_kwDOEpUZs84zFNTl",
-      "title": "changed poc code to use message hash (as specified in the draft)",
+      "title": "remove non-pre-hash message in pseudo-code",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/86",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "aldenml",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2022-02-18T13:02:31Z",
-      "updatedAt": "2022-02-18T13:05:28Z",
+      "updatedAt": "2022-02-23T13:32:31Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
-      "baseRefOid": "83184ef84efd7c277ec7d63a9e40640abec14546",
+      "baseRefOid": "08087b582ffc94bb0b5fb8ff486f13c9204dbd34",
       "headRepository": "aldenml/draft-irtf-cfrg-frost",
       "headRefName": "poc-msg-hash",
-      "headRefOid": "7b1a26ebd6babe91c25ca01dce5db6d4a5b6028e",
+      "headRefOid": "0d2c75821e732e3e3a9acfd671cc96d4e392f8d0",
+      "closedAt": "2022-02-23T13:10:41Z",
+      "mergedAt": "2022-02-23T13:10:41Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "4dde4866b9ec2226726ab15e5be42a9f73a926a5"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Good catch, but I think we want to switch this around. In particular, I think the code is correct, but the pseudocode is wrong. @dconnolly, please correct me if I'm mistaken, but I thought we concluded that the \"non-pre-hash\" variant of EdDSA is most common.",
+          "createdAt": "2022-02-22T16:34:40Z",
+          "updatedAt": "2022-02-22T16:34:40Z"
+        },
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Well, I can tell you that there is a benefit to having the pre-hash variant of the pseudo-code, in terms of not allocating memory, but maybe there is a way around it. Either way, I'm waiting for your decision, since I need it to match the vectors \ud83d\ude09, thanks for the review",
+          "createdAt": "2022-02-22T18:16:40Z",
+          "updatedAt": "2022-02-22T18:16:40Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Well, I can tell you that there is a benefit to having the pre-hash variant of the pseudo-code, in terms of not allocating memory, but maybe there is a way around it\r\n\r\nI don't think this is true. In fact, I would claim the opposite is true! The application _has_ to allocate memory for the message in either case, and since the hash incrementally folds the message into its internal state, there's no benefit to be gained from pre-hashing the message before computing the challenge. In contrast, pre-hashing means you now need to allocate memory for the message digest somewhere. ",
+          "createdAt": "2022-02-22T18:19:09Z",
+          "updatedAt": "2022-02-22T18:19:09Z"
+        },
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "right, I meant to say _dynamically_ allocate in a line-by-line replication of the pseudo-code (In hindsight I shouldn't even mention that). Actually, I was already thinking of using the hash fold variant if you decide to use the \"non-pre-hash\" variant.\r\n\r\nI'm willing to work on the changes to this PR.",
+          "createdAt": "2022-02-22T18:30:07Z",
+          "updatedAt": "2022-02-22T18:30:07Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> right, I meant to say dynamically allocate in a line-by-line replication of the pseudo-code (In hindsight I shouldn't even mention that)\r\n\r\nWell, I would hope that implementations that are memory pressured would do the sensible thing here =) Let's use this PR to make the pseudocode changes per the comment above.",
+          "createdAt": "2022-02-22T19:28:35Z",
+          "updatedAt": "2022-02-22T19:28:35Z"
+        },
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Hi @chris-wood , I made the changes, rebased and squashed, waiting for your review",
+          "createdAt": "2022-02-23T13:04:30Z",
+          "updatedAt": "2022-02-23T13:04:30Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841HHXi",
+          "commit": {
+            "abbreviatedOid": "0d2c758"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-23T13:10:33Z",
+          "updatedAt": "2022-02-23T13:10:33Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 87,
+      "id": "PR_kwDOEpUZs84zTCod",
+      "title": "Fix verify_signature_share",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/87",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-22T16:48:59Z",
+      "updatedAt": "2022-02-22T17:03:51Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "6093adc7d9e3ea507ffb124db532261db2cd484e",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/fix-verify-sig-share",
+      "headRefOid": "a8cddf0811de3d084095613e79adf43d537f935e",
+      "closedAt": "2022-02-22T17:03:51Z",
+      "mergedAt": "2022-02-22T17:03:50Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "08087b582ffc94bb0b5fb8ff486f13c9204dbd34"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841DYxo",
+          "commit": {
+            "abbreviatedOid": "a8cddf0"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-22T16:50:30Z",
+          "updatedAt": "2022-02-22T16:50:30Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 88,
+      "id": "PR_kwDOEpUZs84zTF1g",
+      "title": "Drop I2OSP",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/88",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-22T17:03:59Z",
+      "updatedAt": "2022-02-22T21:30:01Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "08087b582ffc94bb0b5fb8ff486f13c9204dbd34",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/drop-I2OSP",
+      "headRefOid": "99b228de22e47bebeb54cd7b18b96bd6bf3e95ee",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841DeW8",
+          "commit": {
+            "abbreviatedOid": "99b228d"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-22T17:07:08Z",
+          "updatedAt": "2022-02-22T17:07:16Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Does this need to be defined further in the spec or link to such a description? ",
+              "createdAt": "2022-02-22T17:07:09Z",
+              "updatedAt": "2022-02-22T17:07:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841Def1",
+          "commit": {
+            "abbreviatedOid": "99b228d"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-22T17:07:35Z",
+          "updatedAt": "2022-02-22T17:07:35Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Is it not clearly defined already as-is? ",
+              "createdAt": "2022-02-22T17:07:35Z",
+              "updatedAt": "2022-02-22T17:07:35Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841Ei13",
+          "commit": {
+            "abbreviatedOid": "99b228d"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-22T21:29:06Z",
+          "updatedAt": "2022-02-22T21:29:07Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "In the POC code it is, in the spec pseudocode it's a bit fuzzy",
+              "createdAt": "2022-02-22T21:29:07Z",
+              "updatedAt": "2022-02-22T21:29:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841EjEH",
+          "commit": {
+            "abbreviatedOid": "99b228d"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-02-22T21:30:01Z",
+          "updatedAt": "2022-02-22T21:30:01Z",
+          "comments": [
+            {
+              "originalPosition": 8,
+              "body": "Can you elaborate on how it's fuzzy, or offer a suggestion to clarify?",
+              "createdAt": "2022-02-22T21:30:01Z",
+              "updatedAt": "2022-02-22T21:30:01Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 89,
+      "id": "PR_kwDOEpUZs84zTocc",
+      "title": "Add note about applications needing to verify the message before signing",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/89",
+      "state": "CLOSED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We assume that messages to be signed are in fact valid for the higher-level application. This PR adds this as a note as a reminder to implementors. \r\n\r\nAddresses #47",
+      "createdAt": "2022-02-22T20:10:43Z",
+      "updatedAt": "2022-02-23T16:08:27Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "08087b582ffc94bb0b5fb8ff486f13c9204dbd34",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "verify-msg",
+      "headRefOid": "a80ddbc70e6ad5566cd817d28d44f913a3d76108",
+      "closedAt": "2022-02-23T16:08:27Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841EQyF",
+          "commit": {
+            "abbreviatedOid": "76d9eb3"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-02-22T20:12:18Z",
+          "updatedAt": "2022-02-22T20:12:28Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "\"Valid\" isn't really well-defined, so I would either remove it entirely, or put it in the security considerations.",
+              "createdAt": "2022-02-22T20:12:18Z",
+              "updatedAt": "2022-02-22T20:12:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841ESyQ",
+          "commit": {
+            "abbreviatedOid": "a80ddbc"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2022-02-22T20:20:58Z",
+          "updatedAt": "2022-02-22T20:21:00Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "Sorry, but I don't think my prior comment was clear. I don't think this is an appropriate MUST for the main protocol. It's not enforceable. This text belongs in the security considerations section.",
+              "createdAt": "2022-02-22T20:20:58Z",
+              "updatedAt": "2022-02-22T20:21:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841EYft",
+          "commit": {
+            "abbreviatedOid": "a80ddbc"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-22T20:44:57Z",
+          "updatedAt": "2022-02-22T20:44:57Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 90,
+      "id": "PR_kwDOEpUZs84zUQDw",
+      "title": "Message validation",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/90",
+      "state": "MERGED",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Alternative to #89.",
+      "createdAt": "2022-02-23T00:44:02Z",
+      "updatedAt": "2022-02-23T23:24:03Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "08087b582ffc94bb0b5fb8ff486f13c9204dbd34",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/input-validation",
+      "headRefOid": "d8b2eb367a33c3b31d0b2c242386561e0e74d650",
+      "closedAt": "2022-02-23T16:08:18Z",
+      "mergedAt": "2022-02-23T16:08:18Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "2a2861e3ca1112cbd58496799c6e082837c846fb"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841FT6i",
+          "commit": {
+            "abbreviatedOid": "d8b2eb3"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks great! Thanks @chris-wood ",
+          "createdAt": "2022-02-23T03:23:41Z",
+          "updatedAt": "2022-02-23T03:23:41Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs841KAm_",
+          "commit": {
+            "abbreviatedOid": "d8b2eb3"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-23T23:24:03Z",
+          "updatedAt": "2022-02-23T23:24:03Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 91,
+      "id": "PR_kwDOEpUZs84zWF6U",
+      "title": "minor fixes in pseudo-code",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/91",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-23T13:43:01Z",
+      "updatedAt": "2022-02-23T16:09:42Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "4dde4866b9ec2226726ab15e5be42a9f73a926a5",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "fix-verify-share",
+      "headRefOid": "f64910818addbb98211fe35fbe46ac0c7c9ea1a9",
+      "closedAt": "2022-02-23T16:09:04Z",
+      "mergedAt": "2022-02-23T16:09:04Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "02107d776ac2be1ebcf369151428f3f4c4cd8997"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841IGoO",
+          "commit": {
+            "abbreviatedOid": "f649108"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-23T16:08:59Z",
+          "updatedAt": "2022-02-23T16:08:59Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 92,
+      "id": "PR_kwDOEpUZs84zX-4x",
+      "title": "Describe commitment_share in the SignatureShare struct",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/92",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-23T23:26:18Z",
+      "updatedAt": "2022-02-23T23:28:07Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "02107d776ac2be1ebcf369151428f3f4c4cd8997",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "dconnolly-patch-1",
+      "headRefOid": "5dc84beda47a4350c0dbcbf07cfe3506b48642a0",
+      "closedAt": "2022-02-23T23:26:58Z",
+      "mergedAt": "2022-02-23T23:26:58Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "0a9947deafb9de2aac85db747c7e4e63f46f57d3"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841KBCh",
+          "commit": {
+            "abbreviatedOid": "5dc84be"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-02-23T23:26:53Z",
+          "updatedAt": "2022-02-23T23:26:53Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 93,
+      "id": "PR_kwDOEpUZs84zX_Xn",
+      "title": "Missing underscore",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/93",
+      "state": "MERGED",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-02-23T23:29:47Z",
+      "updatedAt": "2022-02-23T23:32:10Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "0a9947deafb9de2aac85db747c7e4e63f46f57d3",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "dconnolly-patch-1",
+      "headRefOid": "872834ae49f9b7ba60ff6a6fc6399ab08334199d",
+      "closedAt": "2022-02-23T23:32:10Z",
+      "mergedAt": "2022-02-23T23:32:10Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "e66d26c670e245c7117529d842884c1c856d796e"
+      },
       "comments": [],
       "reviews": []
     }
