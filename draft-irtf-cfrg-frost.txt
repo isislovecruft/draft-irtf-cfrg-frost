@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 27 August 2022         University of Waterloo, Zcash Foundation
+Expires: 28 August 2022         University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                               C. A. Wood
                                                               Cloudflare
-                                                        23 February 2022
+                                                        24 February 2022
 
 
            Two-Round Threshold Schnorr Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 August 2022.
+   This Internet-Draft will expire on 28 August 2022.
 
 Copyright Notice
 
@@ -621,7 +621,7 @@ Table of Contents
     # Compute the per-message challenge
     group_comm_enc = G.SerializeElement(R)
     group_public_key_enc = G.SerializeElement(group_public_key)
-    challenge_input = group_comm_enc || group_public_key_enc || msg_hash
+    challenge_input = group_comm_enc || group_public_key_enc || msg
     c = H2(challenge_input)
 
     # Compute the signature share
