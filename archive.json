@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-02-24T00:36:46.028048+00:00",
+  "timestamp": "2022-02-27T00:39:42.084340+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -125,7 +125,7 @@
       ],
       "body": "",
       "createdAt": "2021-11-15T23:15:09Z",
-      "updatedAt": "2022-02-23T23:27:24Z",
+      "updatedAt": "2022-02-24T22:57:32Z",
       "closedAt": null,
       "comments": [
         {
@@ -134,6 +134,20 @@
           "body": "@dconnolly are we OK to close this out?",
           "createdAt": "2022-02-23T23:27:24Z",
           "updatedAt": "2022-02-23T23:27:24Z"
+        },
+        {
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Specify signature encoding based on group Element and Scalar serialization #85\r\n\r\nI think the place we need to use the cofactor check is in `verify`, and to do that we need to enumerate the cofactor `h` for each ciphersuite\r\n\r\nExamples from `frost-redjubjub` which multiplies by the cofactor in `is_small_order()`:\r\nhttps://github.com/ZcashFoundation/frost/blob/8ce992541afa2e49fbe7606dd81ee8c2a8648446/frost-redjubjub/src/verification_key.rs#L196\r\nhttps://github.com/ZcashFoundation/frost/blob/f10a159c7039641fae63b53387e66e55a8604acf/frost-redjubjub/src/batch.rs#L258\r\n\r\n(Batch is not described in the spec but the Schnorr verification procedure leads directly to the batch verification procedure)\r\n\r\n<img width=\"510\" alt=\"image\" src=\"https://user-images.githubusercontent.com/552961/155616257-b1fbc1c6-c30d-4b5c-9bfc-8abad6d73cc7.png\">\r\n",
+          "createdAt": "2022-02-24T22:12:20Z",
+          "updatedAt": "2022-02-24T22:12:52Z"
+        },
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly isn't that being tracked separately by #68?",
+          "createdAt": "2022-02-24T22:57:32Z",
+          "updatedAt": "2022-02-24T22:57:32Z"
         }
       ]
     },
@@ -5145,7 +5159,7 @@
       "labels": [],
       "body": "Let's address the cofactor verification check in #12.\r\n\r\nCloses #72.\r\nCloses #70.",
       "createdAt": "2022-02-16T22:32:48Z",
-      "updatedAt": "2022-02-19T03:11:33Z",
+      "updatedAt": "2022-02-24T21:29:51Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
       "baseRefOid": "83184ef84efd7c277ec7d63a9e40640abec14546",
@@ -5394,7 +5408,7 @@
       "labels": [],
       "body": "",
       "createdAt": "2022-02-22T17:03:59Z",
-      "updatedAt": "2022-02-22T21:30:01Z",
+      "updatedAt": "2022-02-25T20:37:12Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
       "baseRefOid": "08087b582ffc94bb0b5fb8ff486f13c9204dbd34",
@@ -5405,7 +5419,15 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@dconnolly can we merge this?",
+          "createdAt": "2022-02-25T20:37:12Z",
+          "updatedAt": "2022-02-25T20:37:12Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOEpUZs841DeW8",
@@ -5733,6 +5755,32 @@
       "mergeCommit": {
         "oid": "e66d26c670e245c7117529d842884c1c856d796e"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 94,
+      "id": "PR_kwDOEpUZs84zfFKr",
+      "title": "Breakout commitment share generation to an aggregate subroutine",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/94",
+      "state": "OPEN",
+      "author": "chris-wood",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "And remove R_share as an output from round two. This also decomposes `sign` and `verify_signature_share` into smaller, reusable subroutines. ",
+      "createdAt": "2022-02-25T20:32:29Z",
+      "updatedAt": "2022-02-25T20:39:32Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "edaeb3f0584dbc1159c1a64ed684273b500c1b28",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "caw/breakout-comm-share",
+      "headRefOid": "9205e4fd62ae2ee8fbf170d4f8ca150fd3c461f4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
