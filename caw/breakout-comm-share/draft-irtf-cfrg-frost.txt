@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 29 August 2022         University of Waterloo, Zcash Foundation
+Expires: 1 September 2022       University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                               C. A. Wood
                                                               Cloudflare
-                                                        25 February 2022
+                                                        28 February 2022
 
 
            Two-Round Threshold Schnorr Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2022.
+   This Internet-Draft will expire on 1 September 2022.
 
 Copyright Notice
 
@@ -655,7 +655,7 @@ Table of Contents
   - nonce_i, pair of Scalar values (hiding_nonce, binding_nonce) generated in round one.
   - msg, the message to be signed (sent by the Coordinator).
   - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a
-    list of commitments issued by each signer, where each element in the list indicates the signer index j and their
+    list of commitments issued in Round 1 by each signer, where each element in the list indicates the signer index j and their
     two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j).
     This list MUST be sorted in ascending order by signer index.
   - participant_list, a set containing identifiers for each signer, similarly of length
@@ -712,7 +712,7 @@ Table of Contents
     in round one from the ith signer.
   - sig_share_i, a Scalar value indicating the signature share as produced in round two from the ith signer.
   - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a list of commitments
-    issued by each signer, where each element in the list indicates the signer index j and their
+    issued in Round 1 by each signer, where each element in the list indicates the signer index j and their
     two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j).
     This list MUST be sorted in ascending order by signer index.
   - participant_list, a set containing identifiers for each signer, similarly of length
