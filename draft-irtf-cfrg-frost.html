@@ -1866,7 +1866,8 @@ procedure to produce its own signature share.<a href="#section-5.2-3" class="pil
 </div>
 <p id="section-5.2-5">The output of this procedure is a signature share and group commitment share.
 Each signer then sends these shares back to the collector; see
-<a href="#encode-sig-share" class="xref">Appendix C.3</a> for encoding recommendations.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<a href="#encode-sig-share" class="xref">Appendix C.3</a> for encoding recommendations. Each signer MUST delete
+the nonce and corresponding commitment after this round completes.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 <p id="section-5.2-6">Upon receipt from each Signer, the Coordinator MUST validate the input
 signature and commitment shares using DeserializeElement for each. If validation
 fails, the Coordinator MUST abort the protocol. If validation succeeds, the
@@ -2370,8 +2371,8 @@ operation can be performed.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
     return secret_key, public_key, secret_key_shares
 </pre><a href="#appendix-B-2" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B-3">It is assumed the dealer then sends one secret key to each of the NUM_SIGNERS participants,
-and afterwards deletes the secrets from their local device.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">It is assumed the dealer then sends one secret key to each of the NUM_SIGNERS participants.
+The trusted dealer MUST delete all secrets upon completion.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 <p id="appendix-B-4">Use of this method for key generation requires a mutually authenticated secure channel
 between Coordinator and participants, wherein the channel provides confidentiality
 and integrity. Mutually authenticated TLS is one possible deployment option.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
