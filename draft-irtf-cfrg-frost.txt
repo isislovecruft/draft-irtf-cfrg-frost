@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 28 August 2022         University of Waterloo, Zcash Foundation
+Expires: 1 September 2022       University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                               C. A. Wood
                                                               Cloudflare
-                                                        24 February 2022
+                                                        28 February 2022
 
 
            Two-Round Threshold Schnorr Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 August 2022.
+   This Internet-Draft will expire on 1 September 2022.
 
 Copyright Notice
 
@@ -193,11 +193,9 @@ Table of Contents
    *  len(x) is the length of integer input x as an 8-byte, big-endian
       integer.
 
-   *  I2OSP(x, w): Convert non-negative integer x to a w-length, big-
-      endian byte string as described in [RFC8017].
-
-   *  OS2IP(s): Convert byte string s to a non-negative integer as
-      described in [RFC8017], assuming big-endian byte order.
+   *  encode_uint16(x): Convert two byte unsigned integer (uint16) x to
+      a 2-byte, big-endian byte string.  For example, encode_uint16(310)
+      = [0x01, 0x36].
 
    *  || denotes contatenation, i.e., x || y = xy.
 
@@ -436,7 +434,7 @@ Table of Contents
   def encode_group_commitment_list(commitment_list):
     encoded_group_commitment = nil
     for (index, hiding_nonce_commitment, binding_nonce_commitment) in commitment_list:
-      encoded_commitment = I2OSP(index, 2) ||
+      encoded_commitment = encode_uint16(index) ||
                            G.SerializeElement(hiding_nonce_commitment) ||
                            G.SerializeElement(binding_nonce_commitment)
       encoded_group_commitment = encoded_group_commitment || encoded_commitment
@@ -1022,11 +1020,6 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
-   [RFC8017]  Moriarty, K., Ed., Kaliski, B., Jonsson, J., and A. Rusch,
-              "PKCS #1: RSA Cryptography Specifications Version 2.2",
-              RFC 8017, DOI 10.17487/RFC8017, November 2016,
-              <https://www.rfc-editor.org/rfc/rfc8017>.
-
    [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
               Signature Algorithm (EdDSA)", RFC 8032,
               DOI 10.17487/RFC8032, January 2017,
@@ -1040,9 +1033,9 @@ Table of Contents
               Valence, H. D., Grigg, J., Hamburg, M., Lovecruft, I.,
               Tankersley, G., and F. Valsorda, "The ristretto255 and
               decaf448 Groups", Work in Progress, Internet-Draft, draft-
-              irtf-cfrg-ristretto255-decaf448-02, 17 February 2022,
+              irtf-cfrg-ristretto255-decaf448-03, 25 February 2022,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              ristretto255-decaf448-02>.
+              ristretto255-decaf448-03>.
 
    [SECG]     "Elliptic Curve Cryptography, Standards for Efficient
               Cryptography Group, ver. 2", 2009,
