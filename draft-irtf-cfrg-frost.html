@@ -1792,8 +1792,10 @@ commitments. A nonce is a pair of Scalar values, and a commitment is a pair of E
 </pre><a href="#section-5.1-3" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1-4">The private output <code>nonce</code> from Participant <code>P_i</code> is stored locally and kept private
-for use in the second round. The public output <code>comm</code> from Participant <code>P_i</code>
-is sent to the Coordinator; see <a href="#encode-commitment" class="xref">Appendix C.1</a> for encoding recommendations.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+for use in the second round. This nonce MUST NOT be reused in more than one invocation
+of FROST, and it MUST be generated from a source of secure randomness. The public output
+<code>comm</code> from Participant <code>P_i</code> is sent to the Coordinator; see <a href="#encode-commitment" class="xref">Appendix C.1</a>
+for encoding recommendations.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="frost-round-two">
