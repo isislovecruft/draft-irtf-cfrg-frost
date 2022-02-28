@@ -196,9 +196,11 @@ Table of Contents
    *  len(x) is the length of integer input x as an 8-byte, big-endian
       integer.
 
-   *  encode_uint16(x): Convert two byte unsigned integer (uint16) x to
-      a 2-byte, big-endian byte string.  For example, encode_uint16(310)
-      = [0x01, 0x36].
+   *  I2OSP(x, w): Convert non-negative integer x to a w-length, big-
+      endian byte string as described in [RFC8017].
+
+   *  OS2IP(s): Convert byte string s to a non-negative integer as
+      described in [RFC8017], assuming big-endian byte order.
 
    *  || denotes contatenation, i.e., x || y = xy.
 
@@ -437,7 +439,7 @@ Table of Contents
   def encode_group_commitment_list(commitment_list):
     encoded_group_commitment = nil
     for (index, hiding_nonce_commitment, binding_nonce_commitment) in commitment_list:
-      encoded_commitment = encode_uint16(index) ||
+      encoded_commitment = I2OSP(index, 2) ||
                            G.SerializeElement(hiding_nonce_commitment) ||
                            G.SerializeElement(binding_nonce_commitment)
       encoded_group_commitment = encoded_group_commitment || encoded_commitment
@@ -620,10 +622,8 @@ Table of Contents
       return (nonce, comm)
 
    The private output nonce from Participant P_i is stored locally and
-   kept private for use in the second round.  This nonce MUST NOT be
-   reused in more than one invocation of FROST, and it MUST be generated
-   from a source of secure randomness.  The public output comm from
-   Participant P_i is sent to the Coordinator; see Appendix C.1 for
+   kept private for use in the second round.  The public output comm
+   from Participant P_i is sent to the Coordinator; see Appendix C.1 for
    encoding recommendations.
 
 5.2.  Round Two - Signature Share Generation
@@ -655,7 +655,7 @@ Table of Contents
   - nonce_i, pair of Scalar values (hiding_nonce, binding_nonce) generated in round one.
   - msg, the message to be signed (sent by the Coordinator).
   - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a
-    list of commitments issued in Round 1 by each signer, where each element in the list indicates the signer index j and their
+    list of commitments issued by each signer, where each element in the list indicates the signer index j and their
     two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j).
     This list MUST be sorted in ascending order by signer index.
   - participant_list, a set containing identifiers for each signer, similarly of length
@@ -673,7 +673,7 @@ Table of Contents
     # Compute the group commitment
     group_commitment = compute_group_commitment(commitment_list, binding_factor)
 
-    # Compute Lagrange coefficient
+    # Compute Lagrangian coefficient
     lambda_i = derive_lagrange_coefficient(index, participant_list)
 
     # Compute the per-message challenge
@@ -687,9 +687,7 @@ Table of Contents
 
    The output of this procedure is a signature share and group
    commitment share.  Each signer then sends these shares back to the
-   collector; see Appendix C.3 for encoding recommendations.  Each
-   signer MUST delete the nonce and corresponding commitment after this
-   round completes.
+   collector; see Appendix C.3 for encoding recommendations.
 
    Upon receipt from each Signer, the Coordinator MUST validate the
    input signature and commitment shares using DeserializeElement for
@@ -704,7 +702,7 @@ Table of Contents
    correctness.  In particular, for each signer, the Coordinator uses
    commitment pairs generated during round one and the signature share
    generated during round two, along with other group parameters, to
-   check that the signature share is valid using the following
+   check that the signature share is correct using the following
    procedure.
 
   Inputs:
@@ -742,7 +740,7 @@ Table of Contents
     # Compute the challenge
     challenge = compute_challenge(group_commitment, group_public_key, msg)
 
-    # Compute Lagrange coefficient
+    # Compute Lagrangian coefficient
     lambda_i = derive_lagrange_coefficient(index, participant_list)
 
     # Compute relation values
@@ -1101,6 +1099,11 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC8017]  Moriarty, K., Ed., Kaliski, B., Jonsson, J., and A. Rusch,
+              "PKCS #1: RSA Cryptography Specifications Version 2.2",
+              RFC 8017, DOI 10.17487/RFC8017, November 2016,
+              <https://www.rfc-editor.org/rfc/rfc8017>.
+
    [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
               Signature Algorithm (EdDSA)", RFC 8032,
               DOI 10.17487/RFC8032, January 2017,
@@ -1174,8 +1177,8 @@ Appendix B.  Trusted Dealer Key Generation
        return secret_key, public_key, secret_key_shares
 
    It is assumed the dealer then sends one secret key to each of the
-   NUM_SIGNERS participants.  The trusted dealer MUST delete all secrets
-   upon completion.
+   NUM_SIGNERS participants, and afterwards deletes the secrets from
+   their local device.
 
    Use of this method for key generation requires a mutually
    authenticated secure channel between Coordinator and participants,
