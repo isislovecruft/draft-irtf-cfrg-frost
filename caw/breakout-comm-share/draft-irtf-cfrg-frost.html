@@ -1022,11 +1022,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">FROST</td>
-<td class="right">February 2022</td>
+<td class="right">March 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Connolly, et al.</td>
-<td class="center">Expires 1 September 2022</td>
+<td class="center">Expires 3 September 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1039,12 +1039,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-irtf-cfrg-frost-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-02-28" class="published">28 February 2022</time>
+<time datetime="2022-03-02" class="published">2 March 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-09-01">1 September 2022</time></dd>
+<dd class="expires"><time datetime="2022-09-03">3 September 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,7 +1107,7 @@ key-recovery attack that is possible when even only one participant is malicious
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1385,14 +1385,10 @@ at least THRESHOLD_LIMIT shares must be combined to issue a valid signature.<a h
           <code>len(x)</code> is the length of integer input <code>x</code> as an 8-byte, big-endian integer.<a href="#section-2-3.4" class="pilcrow">¶</a>
 </li>
         <li class="normal" id="section-2-3.5">
-          <code>I2OSP(x, w)</code>: Convert non-negative integer <code>x</code> to a <code>w</code>-length,
-big-endian byte string as described in <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-2-3.5" class="pilcrow">¶</a>
+          <code>encode_uint16(x)</code>: Convert two byte unsigned integer (uint16) <code>x</code> to a 2-byte,
+big-endian byte string. For example, <code>encode_uint16(310) = [0x01, 0x36]</code>.<a href="#section-2-3.5" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="section-2-3.6">
-          <code>OS2IP(s)</code>: Convert byte string <code>s</code> to a non-negative integer as
-described in <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>, assuming big-endian byte order.<a href="#section-2-3.6" class="pilcrow">¶</a>
-</li>
-        <li class="normal" id="section-2-3.7">|| denotes contatenation, i.e., x || y = xy.<a href="#section-2-3.7" class="pilcrow">¶</a>
+        <li class="normal" id="section-2-3.6">|| denotes contatenation, i.e., x || y = xy.<a href="#section-2-3.6" class="pilcrow">¶</a>
 </li>
       </ul>
 <p id="section-2-4">Unless otherwise stated, we assume that secrets are sampled uniformly at random
@@ -1678,7 +1674,7 @@ commitments into a bytestring that is used in the FROST protocol.<a href="#secti
   def encode_group_commitment_list(commitment_list):
     encoded_group_commitment = nil
     for (index, hiding_nonce_commitment, binding_nonce_commitment) in commitment_list:
-      encoded_commitment = I2OSP(index, 2) ||
+      encoded_commitment = encode_uint16(index) ||
                            G.SerializeElement(hiding_nonce_commitment) ||
                            G.SerializeElement(binding_nonce_commitment)
       encoded_group_commitment = encoded_group_commitment || encoded_commitment
@@ -1882,8 +1878,10 @@ commitments. A nonce is a pair of Scalar values, and a commitment is a pair of E
 </pre><a href="#section-5.1-3" class="pilcrow">¶</a>
 </div>
 <p id="section-5.1-4">The private output <code>nonce</code> from Participant <code>P_i</code> is stored locally and kept private
-for use in the second round. The public output <code>comm</code> from Participant <code>P_i</code>
-is sent to the Coordinator; see <a href="#encode-commitment" class="xref">Appendix C.1</a> for encoding recommendations.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
+for use in the second round. This nonce MUST NOT be reused in more than one invocation
+of FROST, and it MUST be generated from a source of secure randomness. The public output
+<code>comm</code> from Participant <code>P_i</code> is sent to the Coordinator; see <a href="#encode-commitment" class="xref">Appendix C.1</a>
+for encoding recommendations.<a href="#section-5.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="frost-round-two">
@@ -1914,7 +1912,7 @@ procedure to produce its own signature share.<a href="#section-5.2-3" class="pil
   - nonce_i, pair of Scalar values (hiding_nonce, binding_nonce) generated in round one.
   - msg, the message to be signed (sent by the Coordinator).
   - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a
-    list of commitments issued by each signer, where each element in the list indicates the signer index j and their
+    list of commitments issued in Round 1 by each signer, where each element in the list indicates the signer index j and their
     two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j).
     This list MUST be sorted in ascending order by signer index.
   - participant_list, a set containing identifiers for each signer, similarly of length
@@ -1932,7 +1930,7 @@ procedure to produce its own signature share.<a href="#section-5.2-3" class="pil
     # Compute the group commitment
     group_commitment = compute_group_commitment(commitment_list, binding_factor)
 
-    # Compute Lagrangian coefficient
+    # Compute Lagrange coefficient
     lambda_i = derive_lagrange_coefficient(index, participant_list)
 
     # Compute the per-message challenge
@@ -1947,7 +1945,8 @@ procedure to produce its own signature share.<a href="#section-5.2-3" class="pil
 </div>
 <p id="section-5.2-5">The output of this procedure is a signature share and group commitment share.
 Each signer then sends these shares back to the collector; see
-<a href="#encode-sig-share" class="xref">Appendix C.3</a> for encoding recommendations.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+<a href="#encode-sig-share" class="xref">Appendix C.3</a> for encoding recommendations. Each signer MUST delete
+the nonce and corresponding commitment after this round completes.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 <p id="section-5.2-6">Upon receipt from each Signer, the Coordinator MUST validate the input
 signature and commitment shares using DeserializeElement for each. If validation
 fails, the Coordinator MUST abort the protocol. If validation succeeds, the
@@ -1963,7 +1962,7 @@ Coordinator then verifies the set of signature shares using the following proced
 the Coordinator verifies each signature share for correctness. In particular,
 for each signer, the Coordinator uses commitment pairs generated during round
 one and the signature share generated during round two, along with other group
-parameters, to check that the signature share is correct using the following procedure.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+parameters, to check that the signature share is valid using the following procedure.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-2">
 <pre>
   Inputs:
@@ -2001,7 +2000,7 @@ parameters, to check that the signature share is correct using the following pro
     # Compute the challenge
     challenge = compute_challenge(group_commitment, group_public_key, msg)
 
-    # Compute Lagrangian coefficient
+    # Compute Lagrange coefficient
     lambda_i = derive_lagrange_coefficient(index, participant_list)
 
     # Compute relation values
@@ -2018,7 +2017,7 @@ signature.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-4">
 <pre>
   Inputs:
-  - group_commitment, the group commitment.
+  - group_commitment, the group commitment returned by compute_group_commitment
   - sig_shares, a set of signature shares z_i for each signer, of length NUM_SIGNERS,
   where THRESHOLD_LIMIT &lt;= NUM_SIGNERS &lt;= MAX_SIGNERS.
 
@@ -2393,10 +2392,6 @@ do not operate as signing oracles for arbitrary messages.<a href="#section-7.4-2
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8017">[RFC8017]</dt>
-        <dd>
-<span class="refAuthor">Moriarty, K., Ed.</span>, <span class="refAuthor">Kaliski, B.</span>, <span class="refAuthor">Jonsson, J.</span>, and <span class="refAuthor">A. Rusch</span>, <span class="refTitle">"PKCS #1: RSA Cryptography Specifications Version 2.2"</span>, <span class="seriesInfo">RFC 8017</span>, <span class="seriesInfo">DOI 10.17487/RFC8017</span>, <time datetime="2016-11" class="refDate">November 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8017">https://www.rfc-editor.org/rfc/rfc8017</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8032">[RFC8032]</dt>
         <dd>
 <span class="refAuthor">Josefsson, S.</span> and <span class="refAuthor">I. Liusvaara</span>, <span class="refTitle">"Edwards-Curve Digital Signature Algorithm (EdDSA)"</span>, <span class="seriesInfo">RFC 8032</span>, <span class="seriesInfo">DOI 10.17487/RFC8032</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8032">https://www.rfc-editor.org/rfc/rfc8032</a>&gt;</span>. </dd>
@@ -2478,8 +2473,8 @@ operation can be performed.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
     return secret_key, public_key, secret_key_shares
 </pre><a href="#appendix-B-2" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B-3">It is assumed the dealer then sends one secret key to each of the NUM_SIGNERS participants,
-and afterwards deletes the secrets from their local device.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">It is assumed the dealer then sends one secret key to each of the NUM_SIGNERS participants.
+The trusted dealer MUST delete all secrets upon completion.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 <p id="appendix-B-4">Use of this method for key generation requires a mutually authenticated secure channel
 between Coordinator and participants, wherein the channel provides confidentiality
 and integrity. Mutually authenticated TLS is one possible deployment option.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
