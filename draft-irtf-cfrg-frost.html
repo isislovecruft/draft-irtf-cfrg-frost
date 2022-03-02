@@ -1022,11 +1022,11 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">FROST</td>
-<td class="right">February 2022</td>
+<td class="right">March 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Connolly, et al.</td>
-<td class="center">Expires 1 September 2022</td>
+<td class="center">Expires 3 September 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1039,12 +1039,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-irtf-cfrg-frost-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-02-28" class="published">28 February 2022</time>
+<time datetime="2022-03-02" class="published">2 March 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-09-01">1 September 2022</time></dd>
+<dd class="expires"><time datetime="2022-09-03">3 September 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,7 +1107,7 @@ key-recovery attack that is possible when even only one participant is malicious
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 September 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1179,7 +1179,16 @@ key-recovery attack that is possible when even only one participant is malicious
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-encoding-operations" class="xref">Encoding Operations</a></p>
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="xref">4.3</a>.  <a href="#name-commitment-list-encoding" class="xref">Commitment List Encoding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="xref">4.4</a>.  <a href="#name-binding-factor-computation" class="xref">Binding Factor Computation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.5">
+                <p id="section-toc.1-1.4.2.5.1"><a href="#section-4.5" class="xref">4.5</a>.  <a href="#name-group-commitment-computatio" class="xref">Group Commitment Computation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.6">
+                <p id="section-toc.1-1.4.2.6.1"><a href="#section-4.6" class="xref">4.6</a>.  <a href="#name-signature-challenge-computa" class="xref">Signature Challenge Computation</a></p>
 </li>
             </ul>
 </li>
@@ -1193,7 +1202,7 @@ key-recovery attack that is possible when even only one participant is malicious
                 <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-round-two-signature-share-g" class="xref">Round Two - Signature Share Generation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
-                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-signature-share-aggregation" class="xref">Signature Share Aggregation</a></p>
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="xref">5.3</a>.  <a href="#name-signature-share-verificatio" class="xref">Signature Share Verification and Aggregation</a></p>
 </li>
             </ul>
 </li>
@@ -1647,11 +1656,11 @@ interpolation, defined as follows.<a href="#section-4.2.3-1" class="pilcrow">¶<
 </div>
 <div id="dep-encoding">
 <section id="section-4.3">
-        <h3 id="name-encoding-operations">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-encoding-operations" class="section-name selfRef">Encoding Operations</a>
+        <h3 id="name-commitment-list-encoding">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-commitment-list-encoding" class="section-name selfRef">Commitment List Encoding</a>
         </h3>
-<p id="section-4.3-1">This section describes various helper functions used for encoding data
-structures into values that can be processed with hash functions.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">This section describes the subroutine used for encoding a list of signer
+commitments into a bytestring that is used in the FROST protocol.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.3-2">
 <pre>
   Inputs:
@@ -1671,6 +1680,83 @@ structures into values that can be processed with hash functions.<a href="#secti
       encoded_group_commitment = encoded_group_commitment || encoded_commitment
     return encoded_group_commitment
 </pre><a href="#section-4.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="dep-binding-factor">
+<section id="section-4.4">
+        <h3 id="name-binding-factor-computation">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-binding-factor-computation" class="section-name selfRef">Binding Factor Computation</a>
+        </h3>
+<p id="section-4.4-1">This section describes the subroutine for computing the binding factor based
+on the signer commitment list and message to be signed.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.4-2">
+<pre>
+  Inputs:
+  - encoded_commitment_list, an encoded commitment list (as computed
+    by encode_group_commitment_list)
+  - msg, the message to be signed (sent by the Coordinator).
+
+  Outputs: binding_factor, a Scalar representing the binding factor
+
+  def compute_binding_factor(encoded_commitment_list, msg):
+    msg_hash = H3(msg)
+    rho_input = encoded_commitment_list || msg_hash
+    binding_factor = H1(rho_input)
+    return binding_factor
+</pre><a href="#section-4.4-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="dep-group-commit">
+<section id="section-4.5">
+        <h3 id="name-group-commitment-computatio">
+<a href="#section-4.5" class="section-number selfRef">4.5. </a><a href="#name-group-commitment-computatio" class="section-name selfRef">Group Commitment Computation</a>
+        </h3>
+<p id="section-4.5-1">This section describes the subroutine for creating the group commitment
+from a commitment list.<a href="#section-4.5-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.5-2">
+<pre>
+  Inputs:
+  - commitment_list = [(i, hiding_nonce_commitment_i, binding_nonce_commitment_i), ...], a list of
+    commitments issued by each signer, where each element in the list indicates the signer index i and their
+    two commitment Element values (hiding_nonce_commitment_i, binding_nonce_commitment_i).
+    This list MUST be sorted in ascending order by signer index.
+  - binding_factor, a Scalar
+
+  Outputs: An Element representing the group commitment
+
+  def compute_group_commitment(commitment_list, binding_factor):
+    group_commitment = G.Identity()
+    for (_, hiding_nonce_commitment, binding_nonce_commitment) in commitment_list:
+      group_commitment = group_commitment + (hiding_nonce_commitment + (binding_nonce_commitment * binding_factor))
+    return group_commitment
+</pre><a href="#section-4.5-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="dep-sig-challenge">
+<section id="section-4.6">
+        <h3 id="name-signature-challenge-computa">
+<a href="#section-4.6" class="section-number selfRef">4.6. </a><a href="#name-signature-challenge-computa" class="section-name selfRef">Signature Challenge Computation</a>
+        </h3>
+<p id="section-4.6-1">This section describes the subroutine for creating the per-message challenge.<a href="#section-4.6-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-4.6-2">
+<pre>
+  Inputs:
+  - group_commitment, an Element representing the group commitment
+  - group_public_key, public key corresponding to the signer secret key share.
+  - msg, the message to be signed (sent by the Coordinator).
+
+  Outputs: a challenge Scalar value
+
+  def compute_challenge(group_commitment, group_public_key, msg):
+    group_comm_enc = G.SerializeElement(group_commitment)
+    group_public_key_enc = G.SerializeElement(group_public_key)
+    challenge_input = group_comm_enc || group_public_key_enc || msg
+    challenge = H2(challenge_input)
+    return challenge
+</pre><a href="#section-4.6-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1824,46 +1910,37 @@ procedure to produce its own signature share.<a href="#section-5.2-3" class="pil
   - sk_i, Signer secret key share.
   - group_public_key, public key corresponding to the signer secret key share.
   - nonce_i, pair of Scalar values (hiding_nonce, binding_nonce) generated in round one.
-  - comm_i, pair of Element values (hiding_nonce_commitment, binding_nonce_commitment) generated in round one.
   - msg, the message to be signed (sent by the Coordinator).
-  - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a list of commitments issued by each signer,
-    where each element in the list indicates the signer index j and their
-    two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j). This list MUST be sorted in ascending order
-    by signer index.
+  - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a
+    list of commitments issued in Round 1 by each signer, where each element in the list indicates the signer index j and their
+    two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j).
+    This list MUST be sorted in ascending order by signer index.
   - participant_list, a set containing identifiers for each signer, similarly of length
     NUM_SIGNERS (sent by the Coordinator).
 
-  Outputs: a signature share sig_share and commitment share comm_share, which
-           are Scalar and Element values respectively.
+  Outputs: a Scalar value representing the signature share
 
-  def sign(index, sk_i, group_public_key, nonce_i, comm_i, msg, commitment_list, participant_list):
-    # Compute the binding factor
+  def sign(index, sk_i, group_public_key, nonce_i, msg, commitment_list, participant_list):
+    # Encode the commitment list
     encoded_commitments = encode_group_commitment_list(commitment_list)
-    msg_hash = H3(msg)
-    binding_factor = H1(encoded_commitments || msg_hash)
+
+    # Compute the binding factor
+    binding_factor = compute_binding_factor(encoded_commitments, msg)
 
     # Compute the group commitment
-    R = G.Identity()
-    for (_, hiding_nonce_commitment, binding_nonce_commitment) in commitment_list:
-      R = R + (hiding_nonce_commitment + (binding_nonce_commitment * binding_factor))
+    group_commitment = compute_group_commitment(commitment_list, binding_factor)
 
+    # Compute Lagrange coefficient
     lambda_i = derive_lagrange_coefficient(index, participant_list)
 
     # Compute the per-message challenge
-    group_comm_enc = G.SerializeElement(R)
-    group_public_key_enc = G.SerializeElement(group_public_key)
-    challenge_input = group_comm_enc || group_public_key_enc || msg
-    c = H2(challenge_input)
+    challenge = compute_challenge(group_commitment, group_public_key, msg)
 
     # Compute the signature share
     (hiding_nonce, binding_nonce) = nonce_i
-    sig_share = hiding_nonce + (binding_nonce * binding_factor) + (lambda_i * sk_i * c)
+    sig_share = hiding_nonce + (binding_nonce * binding_factor) + (lambda_i * sk_i * challenge)
 
-    # Compute the commitment share
-    (hiding_nonce_commitment, binding_nonce_commitment) = comm_i
-    comm_share = hiding_nonce_commitment + (binding_nonce_commitment * binding_factor)
-
-    return sig_share, comm_share
+    return sig_share
 </pre><a href="#section-5.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-5.2-5">The output of this procedure is a signature share and group commitment share.
@@ -1874,73 +1951,96 @@ the nonce and corresponding commitment after this round completes.<a href="#sect
 signature and commitment shares using DeserializeElement for each. If validation
 fails, the Coordinator MUST abort the protocol. If validation succeeds, the
 Coordinator then verifies the set of signature shares using the following procedure.<a href="#section-5.2-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.2-7">
-<pre>
-  Inputs:
-  - group_comm, the group commitment
-  - participant_list, a set containing identifiers for each signer, similarly of length
-    NUM_SIGNERS (sent by the Coordinator).
-  - index, Index `i` of the signer. Note index will never equal `0`.
-  - group_public_key, the public key for the group
-  - public_key_share, the public key for the ith signer, where public_key_share = G.ScalarBaseMult(s[i])
-  - sig_share, the signature share for the ith signer, computed from the signer
-  - comm_share, the commitment for the ith signer, computed from the signer
-  - msg, the message to be signed
-
-  Outputs: 1 if the signature share is valid, and 0 otherwise.
-
-  def verify_signature_share(group_comm, participant_list, index, group_public_key, public_key_share, sig_share, comm_share, msg):
-    group_comm_enc = G.SerializeElement(group_comm)
-    group_public_key_enc = G.SerializeElement(group_public_key)
-    challenge_input = group_comm_enc || group_public_key_enc || msg
-    c = H2(challenge_input)
-
-    l = G.ScalarBaseMult(sig_share)
-
-    lambda_i = derive_lagrange_coefficient(index, participant_list)
-    r = comm_share + (public_key_share * c * lambda_i)
-
-    return l == r
-</pre><a href="#section-5.2-7" class="pilcrow">¶</a>
-</div>
 </section>
 </div>
 <div id="frost-aggregation">
 <section id="section-5.3">
-        <h3 id="name-signature-share-aggregation">
-<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-signature-share-aggregation" class="section-name selfRef">Signature Share Aggregation</a>
+        <h3 id="name-signature-share-verificatio">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-signature-share-verificatio" class="section-name selfRef">Signature Share Verification and Aggregation</a>
         </h3>
 <p id="section-5.3-1">After signers perform round two and send their signature shares to the Coordinator,
-the Coordinator performs the <code>aggregate</code> operation and publishes the resulting
-signature. As described in <a href="#frost-round-two" class="xref">Section 5.2</a>, the Coordinator MUST validate each
-Signer's signature share before aggregation.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+the Coordinator verifies each signature share for correctness. In particular,
+for each signer, the Coordinator uses commitment pairs generated during round
+one and the signature share generated during round two, along with other group
+parameters, to check that the signature share is valid using the following procedure.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.3-2">
 <pre>
   Inputs:
-  - R: the group commitment.
-  - sig_shares: a set of signature shares z_i for each signer, of length NUM_SIGNERS,
+  - index, Index `i` of the signer. Note index will never equal `0`.
+  - public_key_share_i, the public key for the ith signer, where public_key_share = G.ScalarBaseMult(s[i])
+  - comm_i, pair of Element values (hiding_nonce_commitment, binding_nonce_commitment) generated
+    in round one from the ith signer.
+  - sig_share_i, a Scalar value indicating the signature share as produced in round two from the ith signer.
+  - commitment_list = [(j, hiding_nonce_commitment_j, binding_nonce_commitment_j), ...], a list of commitments
+    issued in Round 1 by each signer, where each element in the list indicates the signer index j and their
+    two commitment Element values (hiding_nonce_commitment_j, binding_nonce_commitment_j).
+    This list MUST be sorted in ascending order by signer index.
+  - participant_list, a set containing identifiers for each signer, similarly of length
+    NUM_SIGNERS (sent by the Coordinator).
+  - group_public_key, the public key for the group
+  - msg, the message to be signed
+
+  Outputs: True if the signature share is valid, and False otherwise.
+
+  def verify_signature_share(index, public_key_share_i, comm_i, sig_share_i, commitment_list,
+                             participant_list, group_public_key, msg):
+    # Encode the commitment list
+    encoded_commitments = encode_group_commitment_list(commitment_list)
+
+    # Compute the binding factor
+    binding_factor = compute_binding_factor(encoded_commitments, msg)
+
+    # Compute the group commitment
+    group_commitment = compute_group_commitment(commitment_list, binding_factor)
+
+    # Compute the commitment share
+    (hiding_nonce_commitment, binding_nonce_commitment) = comm_i
+    comm_share = hiding_nonce_commitment + (binding_nonce_commitment * binding_factor)
+
+    # Compute the challenge
+    challenge = compute_challenge(group_commitment, group_public_key, msg)
+
+    # Compute Lagrange coefficient
+    lambda_i = derive_lagrange_coefficient(index, participant_list)
+
+    # Compute relation values
+    l = G.ScalarBaseMult(sig_share_i)
+    r = comm_share + (public_key_share * challenge * lambda_i)
+
+    return l == r
+</pre><a href="#section-5.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.3-3">If any signature share fails to verify, i.e., if verify_signature_share returns False for
+any signer share, the Coordinator MUST abort the protocol. Otherwise, if all signer shares
+are valid, the Coordinator performs the <code>aggregate</code> operation and publishes the resulting
+signature.<a href="#section-5.3-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3-4">
+<pre>
+  Inputs:
+  - group_commitment, the group commitment returned by compute_group_commitment
+  - sig_shares, a set of signature shares z_i for each signer, of length NUM_SIGNERS,
   where THRESHOLD_LIMIT &lt;= NUM_SIGNERS &lt;= MAX_SIGNERS.
 
   Outputs: (R, z), a Schnorr signature consisting of an Element and Scalar value.
 
-  def frost_aggregate(R, sig_shares):
+  def frost_aggregate(group_commitment, sig_shares):
     z = 0
     for z_i in sig_shares:
       z = z + z_i
-    return (R, z)
-</pre><a href="#section-5.3-2" class="pilcrow">¶</a>
+    return (group_commitment, z)
+</pre><a href="#section-5.3-4" class="pilcrow">¶</a>
 </div>
-<p id="section-5.3-3">The output signature (R, z) from the aggregation step MUST be encoded as follows:<a href="#section-5.3-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.3-4">
+<p id="section-5.3-5">The output signature (R, z) from the aggregation step MUST be encoded as follows:<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.3-6">
 <pre>
   struct {
     opaque R_encoded[Ne];
     opaque z_encoded[Ns];
   } Signature;
-</pre><a href="#section-5.3-4" class="pilcrow">¶</a>
+</pre><a href="#section-5.3-6" class="pilcrow">¶</a>
 </div>
-<p id="section-5.3-5">Where Signature.R_encoded is <code>G.SerializeElement(R)</code> and Signature.z_encoded is
-<code>G.SerializeScalar(z)</code>.<a href="#section-5.3-5" class="pilcrow">¶</a></p>
+<p id="section-5.3-7">Where Signature.R_encoded is <code>G.SerializeElement(R)</code> and Signature.z_encoded is
+<code>G.SerializeScalar(z)</code>.<a href="#section-5.3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
