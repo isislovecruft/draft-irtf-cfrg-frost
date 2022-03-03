@@ -2502,12 +2502,12 @@ the scalar field of the prime-order group <code>G</code>.<a href="#appendix-B.1-
   Outputs: A list of n secret shares, each of which is an element of F
 
   Errors:
-  - "invalid parameters", if t &gt; n or if t=1
+  - "invalid parameters", if t &gt; n or if t is less than 1
 
   def secret_share_shard(s, n, t):
     if t &gt; n:
       raise "invalid parameters"
-    if t = 1:
+    if t &lt; 2:
       raise "invalid parameters"
 
     # Generate random coefficients for the polynomial, yielding
