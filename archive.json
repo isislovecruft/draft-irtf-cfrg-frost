@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-03-01T00:41:48.914064+00:00",
+  "timestamp": "2022-03-03T00:39:05.604363+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -1233,10 +1233,12 @@
         "isislovecruft",
         "chris-wood"
       ],
-      "labels": [],
+      "labels": [
+        "enhancement"
+      ],
       "body": "The adoption call for this draft indicated that we'd need to support specializations for all RFC8032 signatures, including Ed25519 and Ed448. This should be a trivial extension now that we have the ed25519 suite. ",
       "createdAt": "2022-02-06T01:55:19Z",
-      "updatedAt": "2022-02-28T19:10:34Z",
+      "updatedAt": "2022-03-01T21:03:49Z",
       "closedAt": null,
       "comments": [
         {
@@ -1395,6 +1397,26 @@
           "updatedAt": "2022-02-14T18:19:48Z"
         }
       ]
+    },
+    {
+      "number": 99,
+      "id": "I_kwDOEpUZs85E44Xa",
+      "title": "Produce test vector json in separate files for each ciphersuite",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/99",
+      "state": "OPEN",
+      "author": "dconnolly",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "chris-wood"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "This would make it easier for importing the test vectors for only the ciphersuite(s) you care about into your own code",
+      "createdAt": "2022-03-01T20:05:10Z",
+      "updatedAt": "2022-03-01T20:05:11Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -5858,24 +5880,26 @@
       "id": "PR_kwDOEpUZs84zfFKr",
       "title": "Breakout commitment share generation to an aggregate subroutine",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/94",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "chris-wood",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "And remove R_share as an output from round two. This also decomposes `sign` and `verify_signature_share` into smaller, reusable subroutines. ",
       "createdAt": "2022-02-25T20:32:29Z",
-      "updatedAt": "2022-02-28T21:35:33Z",
+      "updatedAt": "2022-03-02T15:05:20Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-frost",
       "baseRefName": "master",
       "baseRefOid": "320cb6dbb5ffd79bc13413097dffeb5395f47866",
       "headRepository": "cfrg/draft-irtf-cfrg-frost",
       "headRefName": "caw/breakout-comm-share",
-      "headRefOid": "af738488f6fb5a827a7b188fde6751e6a42724e6",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "cfc2614bab933ae561a9460020219892be4f1ffc",
+      "closedAt": "2022-03-02T15:05:20Z",
+      "mergedAt": "2022-03-02T15:05:20Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "6d98736ab4afb7fdcd10a914a65d5f8118f66010"
+      },
       "comments": [
         {
           "author": "chris-wood",
@@ -6089,6 +6113,59 @@
               "updatedAt": "2022-02-28T21:34:12Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841eSg0",
+          "commit": {
+            "abbreviatedOid": "9205e4f"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-02T06:07:18Z",
+          "updatedAt": "2022-03-02T06:07:18Z",
+          "comments": [
+            {
+              "originalPosition": 156,
+              "body": "\ud83d\udc4d",
+              "createdAt": "2022-03-02T06:07:18Z",
+              "updatedAt": "2022-03-02T06:07:18Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841eS8j",
+          "commit": {
+            "abbreviatedOid": "9205e4f"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-02T06:10:41Z",
+          "updatedAt": "2022-03-02T06:10:41Z",
+          "comments": [
+            {
+              "originalPosition": 232,
+              "body": "```suggestion\r\n  - group_commitment, the group commitment returned by compute_group_commitment\r\n```",
+              "createdAt": "2022-03-02T06:10:41Z",
+              "updatedAt": "2022-03-02T06:10:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841eVs3",
+          "commit": {
+            "abbreviatedOid": "af73848"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-02T06:30:04Z",
+          "updatedAt": "2022-03-02T06:30:04Z",
+          "comments": []
         }
       ]
     },
@@ -6319,6 +6396,52 @@
           "body": "Looks good!",
           "createdAt": "2022-02-28T19:39:59Z",
           "updatedAt": "2022-02-28T19:39:59Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 100,
+      "id": "PR_kwDOEpUZs84z02u7",
+      "title": "Bump actions/checkout from 2 to 3",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/100",
+      "state": "MERGED",
+      "author": "dependabot",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [
+        "dconnolly"
+      ],
+      "labels": [
+        "dependencies"
+      ],
+      "body": "Bumps [actions/checkout](https://github.com/actions/checkout) from 2 to 3.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/actions/checkout/releases\">actions/checkout's releases</a>.</em></p>\n<blockquote>\n<h2>v3.0.0</h2>\n<ul>\n<li>Update default runtime to node16</li>\n</ul>\n<h2>v2.4.0</h2>\n<ul>\n<li>Convert SSH URLs like <code>org-&lt;ORG_ID&gt;@github.com:</code> to <code>https://github.com/</code> - <a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/621\">pr</a></li>\n</ul>\n<h2>v2.3.5</h2>\n<p>Update dependencies</p>\n<h2>v2.3.4</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/379\">Add missing <code>await</code>s</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/360\">Swap to Environment Files</a></li>\n</ul>\n<h2>v2.3.3</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/345\">Remove Unneeded commit information from build logs</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/326\">Add Licensed to verify third party dependencies</a></li>\n</ul>\n<h2>v2.3.2</h2>\n<p><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/320\">Add Third Party License Information to Dist Files</a></p>\n<h2>v2.3.1</h2>\n<p><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/284\">Fix default branch resolution for .wiki and when using SSH</a></p>\n<h2>v2.3.0</h2>\n<p><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/278\">Fallback to the default branch</a></p>\n<h2>v2.2.0</h2>\n<p><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/258\">Fetch all history for all tags and branches when fetch-depth=0</a></p>\n<h2>v2.1.1</h2>\n<p>Changes to support GHES (<a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/236\">here</a> and <a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/248\">here</a>)</p>\n<h2>v2.1.0</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/191\">Group output</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/199\">Changes to support GHES alpha release</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/184\">Persist core.sshCommand for submodules</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/163\">Add support ssh</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/179\">Convert submodule SSH URL to HTTPS, when not using SSH</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/157\">Add submodule support</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/144\">Follow proxy settings</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/141\">Fix ref for pr closed event when a pr is merged</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/128\">Fix issue checking detached when git less than 2.22</a></li>\n</ul>\n</blockquote>\n</details>\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://github.com/actions/checkout/blob/main/CHANGELOG.md\">actions/checkout's changelog</a>.</em></p>\n<blockquote>\n<h1>Changelog</h1>\n<h2>v2.3.1</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/284\">Fix default branch resolution for .wiki and when using SSH</a></li>\n</ul>\n<h2>v2.3.0</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/278\">Fallback to the default branch</a></li>\n</ul>\n<h2>v2.2.0</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/258\">Fetch all history for all tags and branches when fetch-depth=0</a></li>\n</ul>\n<h2>v2.1.1</h2>\n<ul>\n<li>Changes to support GHES (<a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/236\">here</a> and <a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/248\">here</a>)</li>\n</ul>\n<h2>v2.1.0</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/191\">Group output</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/199\">Changes to support GHES alpha release</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/184\">Persist core.sshCommand for submodules</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/163\">Add support ssh</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/179\">Convert submodule SSH URL to HTTPS, when not using SSH</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/157\">Add submodule support</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/144\">Follow proxy settings</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/141\">Fix ref for pr closed event when a pr is merged</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/128\">Fix issue checking detached when git less than 2.22</a></li>\n</ul>\n<h2>v2.0.0</h2>\n<ul>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/108\">Do not pass cred on command line</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/107\">Add input persist-credentials</a></li>\n<li><a href=\"https://github-redirect.dependabot.com/actions/checkout/pull/104\">Fallback to REST API to download repo</a></li>\n</ul>\n</blockquote>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/actions/checkout/commit/a12a3943b4bdde767164f792f33f40b04645d846\"><code>a12a394</code></a> update readme for v3 (<a href=\"https://github-redirect.dependabot.com/actions/checkout/issues/708\">#708</a>)</li>\n<li><a href=\"https://github.com/actions/checkout/commit/8f9e05e482293f862823fcca12d9eddfb3723131\"><code>8f9e05e</code></a> Update to node 16 (<a href=\"https://github-redirect.dependabot.com/actions/checkout/issues/689\">#689</a>)</li>\n<li><a href=\"https://github.com/actions/checkout/commit/230611dbd0eb52da1e1f4f7bc8bb0c3a339fc8b7\"><code>230611d</code></a> Change secret name for PAT to not start with GITHUB_ (<a href=\"https://github-redirect.dependabot.com/actions/checkout/issues/623\">#623</a>)</li>\n<li>See full diff in <a href=\"https://github.com/actions/checkout/compare/v2...v3\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=actions/checkout&package-manager=github_actions&previous-version=2&new-version=3)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot merge` will merge this PR after your CI passes on it\n- `@dependabot squash and merge` will squash and merge this PR after your CI passes on it\n- `@dependabot cancel merge` will cancel a previously requested merge and block automerging\n- `@dependabot reopen` will reopen this PR if it is closed\n- `@dependabot close` will close this PR and stop Dependabot recreating it. You can achieve the same result by closing it manually\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\n\n\n</details>",
+      "createdAt": "2022-03-02T12:33:58Z",
+      "updatedAt": "2022-03-02T19:01:30Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "320cb6dbb5ffd79bc13413097dffeb5395f47866",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "dependabot/github_actions/actions/checkout-3",
+      "headRefOid": "e509c8a9b9fac07444f204622e4de91a1780fdd6",
+      "closedAt": "2022-03-02T19:01:27Z",
+      "mergedAt": "2022-03-02T19:01:27Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "42e400b70f340dc527a9820f3e6c0ad321befd6c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841htOa",
+          "commit": {
+            "abbreviatedOid": "e509c8a"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-02T19:01:22Z",
+          "updatedAt": "2022-03-02T19:01:22Z",
           "comments": []
         }
       ]
