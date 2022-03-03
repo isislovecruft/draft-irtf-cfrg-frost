@@ -1613,7 +1613,8 @@ represented as a set of coefficients.<a href="#section-4.2.2-1" class="pilcrow">
     if x_i &lt;= 0:
       raise "invalid parameters"
     for x_j in L:
-      raise "invalid parameters"
+      if x_j &lt;= 0:
+        raise "invalid parameters"
 
     numerator = 1
     denominator = 1
