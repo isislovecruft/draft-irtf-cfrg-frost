@@ -2460,23 +2460,22 @@ operation can be performed.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="appendix-B-2">
 <pre>
   Inputs:
+  - s, a group secret that MUST be derived from at least `Ns` bytes of entropy
   - n, the number of shares to generate, an integer
   - t, the threshold of the secret sharing scheme, an integer
 
-  Outputs: a secret key Scalar, public key Element, along with `n`
-  shares of the secret key, each a Scalar value.
+  Outputs: a public key Element, along with `n`shares of the secret key, each a Scalar value.
 
-  def trusted_dealer_keygen(n, t):
-    secret_key = G.RandomScalar()
+  def trusted_dealer_keygen(s, n, t):
     secret_key_shares = secret_share_shard(secret_key, n, t)
     public_key = G.ScalarBaseMult(secret_key)
-    return secret_key, public_key, secret_key_shares
+    return public_key, secret_key_shares
 </pre><a href="#appendix-B-2" class="pilcrow">¶</a>
 </div>
-<p id="appendix-B-3">It is assumed the dealer then sends one secret key to each of the NUM_SIGNERS participants.
-The trusted dealer MUST delete all secrets upon completion.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
+<p id="appendix-B-3">It is assumed the dealer then sends one secret key share to each of the NUM_SIGNERS participants.
+The trusted dealer MUST delete the secret_key and secret_key_shares upon completion.<a href="#appendix-B-3" class="pilcrow">¶</a></p>
 <p id="appendix-B-4">Use of this method for key generation requires a mutually authenticated secure channel
-between Coordinator and participants, wherein the channel provides confidentiality
+between the dealer and participants to send secret key shares, wherein the channel provides confidentiality
 and integrity. Mutually authenticated TLS is one possible deployment option.<a href="#appendix-B-4" class="pilcrow">¶</a></p>
 <div id="dep-shamir">
 <section id="appendix-B.1">
