@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-03-03T00:39:05.604363+00:00",
+  "timestamp": "2022-03-06T00:37:55.495642+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -1415,6 +1415,22 @@
       "body": "This would make it easier for importing the test vectors for only the ciphersuite(s) you care about into your own code",
       "createdAt": "2022-03-01T20:05:10Z",
       "updatedAt": "2022-03-01T20:05:11Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 106,
+      "id": "I_kwDOEpUZs85FIlnM",
+      "title": "trusted_dealer_keygen should output a VSS commitment",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/106",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We discuss right now that `trusted_dealer_keygen` should output a VSS commitment, but the interface for generating secret shares does not output the coefficients, and so is incompatible with what is needed to generate a commitment. We should change the interface so that it is possible, and then update `trusted_dealer_keygen` to generate and output the VSS commitment. \r\n",
+      "createdAt": "2022-03-04T17:24:15Z",
+      "updatedAt": "2022-03-04T17:26:24Z",
       "closedAt": null,
       "comments": []
     }
@@ -6442,6 +6458,329 @@
           "body": "",
           "createdAt": "2022-03-02T19:01:22Z",
           "updatedAt": "2022-03-02T19:01:22Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 101,
+      "id": "PR_kwDOEpUZs84z3QoO",
+      "title": "minor fix in verify_signature_share pseudo code",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/101",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-03T01:22:49Z",
+      "updatedAt": "2022-03-03T02:27:30Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "42e400b70f340dc527a9820f3e6c0ad321befd6c",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "minor-fix",
+      "headRefOid": "aed60f95e1b8b59eda33c53a58c0aa9dc5f13fd4",
+      "closedAt": "2022-03-03T01:58:45Z",
+      "mergedAt": "2022-03-03T01:58:45Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "e3bf48984f01a6330e23f843c3a6a9e8500854bb"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841jAek",
+          "commit": {
+            "abbreviatedOid": "aed60f9"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-03T01:58:41Z",
+          "updatedAt": "2022-03-03T01:58:41Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 102,
+      "id": "PR_kwDOEpUZs84z3dLw",
+      "title": "add a c implementation to readme",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/102",
+      "state": "MERGED",
+      "author": "aldenml",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Hello, for your consideration (relevant files):\r\n\r\nhttps://github.com/aldenml/ecc/blob/master/src/frost.h\r\nhttps://github.com/aldenml/ecc/blob/master/src/frost.c\r\nhttps://github.com/aldenml/ecc/blob/master/test/test_frost.c",
+      "createdAt": "2022-03-03T03:27:56Z",
+      "updatedAt": "2022-03-03T19:50:40Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "e3bf48984f01a6330e23f843c3a6a9e8500854bb",
+      "headRepository": "aldenml/draft-irtf-cfrg-frost",
+      "headRefName": "add-c-impl",
+      "headRefOid": "d7b732c75383b2c01bbe2a7eed7be95872d554b5",
+      "closedAt": "2022-03-03T19:49:25Z",
+      "mergedAt": "2022-03-03T19:49:25Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "def80a0a85c12ff95fb88f38d84f7f616a9a3ecf"
+      },
+      "comments": [
+        {
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Excellent work!",
+          "createdAt": "2022-03-03T19:49:21Z",
+          "updatedAt": "2022-03-03T19:49:21Z"
+        },
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "thanks for your feedback!",
+          "createdAt": "2022-03-03T19:50:40Z",
+          "updatedAt": "2022-03-03T19:50:40Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 103,
+      "id": "PR_kwDOEpUZs84z5yHW",
+      "title": "Add additional check for t",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/103",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We additionally require that t > 1",
+      "createdAt": "2022-03-03T16:36:05Z",
+      "updatedAt": "2022-03-03T16:38:00Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "e3bf48984f01a6330e23f843c3a6a9e8500854bb",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "verify-t",
+      "headRefOid": "0d27a1b6ff424ebaa593f2363c3e9091ea3bd2b0",
+      "closedAt": "2022-03-03T16:38:00Z",
+      "mergedAt": "2022-03-03T16:38:00Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "183f36429a674b42bc96f6474b4d616d11e8c454"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841mIy2",
+          "commit": {
+            "abbreviatedOid": "0d27a1b"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-03T16:37:55Z",
+          "updatedAt": "2022-03-03T16:37:55Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 104,
+      "id": "PR_kwDOEpUZs84z54RN",
+      "title": "Make trusted_dealer_keygen deterministic and clarify description",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/104",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-03-03T17:01:40Z",
+      "updatedAt": "2022-03-03T19:58:04Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "183f36429a674b42bc96f6474b4d616d11e8c454",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "deterministic-keygen-and-language",
+      "headRefOid": "188e4e37cf74e958ebbfde84086c513736c6d123",
+      "closedAt": "2022-03-03T19:58:01Z",
+      "mergedAt": "2022-03-03T19:58:01Z",
+      "mergedBy": "chelseakomlo",
+      "mergeCommit": {
+        "oid": "8a804a0ce2fffcbda2b756dfe87739a5bbf31489"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841nAIf",
+          "commit": {
+            "abbreviatedOid": "3be4f7a"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-03T19:23:59Z",
+          "updatedAt": "2022-03-03T19:23:59Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "Assigning it to this variable does spit out the group secret as a test vector correctly",
+              "createdAt": "2022-03-03T19:23:59Z",
+              "updatedAt": "2022-03-03T19:24:00Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841nAKA",
+          "commit": {
+            "abbreviatedOid": "3be4f7a"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "\ud83d\udc4d",
+          "createdAt": "2022-03-03T19:24:04Z",
+          "updatedAt": "2022-03-03T19:24:04Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEpUZs841nAwB",
+          "commit": {
+            "abbreviatedOid": "3be4f7a"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "LGTM pending suggestions -- thanks!",
+          "createdAt": "2022-03-03T19:26:27Z",
+          "updatedAt": "2022-03-03T19:28:19Z",
+          "comments": [
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\n    group_secret_key = G.random_scalar()\r\n```",
+              "createdAt": "2022-03-03T19:26:28Z",
+              "updatedAt": "2022-03-03T19:28:19Z"
+            },
+            {
+              "originalPosition": 4,
+              "body": "```suggestion\r\n  - s, a group secret that MUST be derived from at least `Ns` bytes of entropy\r\n```",
+              "createdAt": "2022-03-03T19:28:10Z",
+              "updatedAt": "2022-03-03T19:28:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841nF3a",
+          "commit": {
+            "abbreviatedOid": "f96295e"
+          },
+          "author": "chelseakomlo",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-03T19:47:24Z",
+          "updatedAt": "2022-03-03T19:47:24Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "Where is 'Ns' defined? ",
+              "createdAt": "2022-03-03T19:47:24Z",
+              "updatedAt": "2022-03-03T19:47:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841nGSX",
+          "commit": {
+            "abbreviatedOid": "f96295e"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2022-03-03T19:49:05Z",
+          "updatedAt": "2022-03-03T19:49:05Z",
+          "comments": [
+            {
+              "originalPosition": 4,
+              "body": "It's the length of a serialized scalar, defined as part of the group.",
+              "createdAt": "2022-03-03T19:49:05Z",
+              "updatedAt": "2022-03-03T19:49:05Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 105,
+      "id": "PR_kwDOEpUZs84z6gWi",
+      "title": "Raise an error if participant index is ever 0",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/105",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Because identifiers are provided externally, signers should check that they are non-zero. This is more to prevent doing things like dividing by zero or outputting an invalid signature than an actual security break. ",
+      "createdAt": "2022-03-03T20:12:14Z",
+      "updatedAt": "2022-03-03T20:40:07Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "8a804a0ce2fffcbda2b756dfe87739a5bbf31489",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "check-invalid-indices",
+      "headRefOid": "e3be54d0cb4bfe9a7d038ffa813a5e6c12c268fb",
+      "closedAt": "2022-03-03T20:39:39Z",
+      "mergedAt": "2022-03-03T20:39:39Z",
+      "mergedBy": "dconnolly",
+      "mergeCommit": {
+        "oid": "4ccc0371f15a930a7b03837da9c016f2af9879df"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs841nMkm",
+          "commit": {
+            "abbreviatedOid": "b25b65c"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-03T20:14:54Z",
+          "updatedAt": "2022-03-03T20:15:08Z",
+          "comments": [
+            {
+              "originalPosition": 11,
+              "body": "```suggestion\r\n    for x_j in L:\r\n      if x_j <= 0:\r\n        raise \"invalid parameters\"\r\n```",
+              "createdAt": "2022-03-03T20:14:54Z",
+              "updatedAt": "2022-03-03T20:15:08Z"
+            },
+            {
+              "originalPosition": 21,
+              "body": "```suggestion\r\n`i` MUST never equal `0`; recall that `f(0) = s`, where `f` is the polynomial defined in a Shamir secret sharing operation.\r\n```",
+              "createdAt": "2022-03-03T20:15:04Z",
+              "updatedAt": "2022-03-03T20:15:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEpUZs841nSKn",
+          "commit": {
+            "abbreviatedOid": "57ccc5e"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-03-03T20:39:21Z",
+          "updatedAt": "2022-03-03T20:39:21Z",
           "comments": []
         }
       ]
