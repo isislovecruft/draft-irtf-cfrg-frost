@@ -5,12 +5,12 @@
 CFRG                                                         D. Connolly
 Internet-Draft                                          Zcash Foundation
 Intended status: Informational                                  C. Komlo
-Expires: 8 September 2022       University of Waterloo, Zcash Foundation
+Expires: 9 September 2022       University of Waterloo, Zcash Foundation
                                                              I. Goldberg
                                                   University of Waterloo
                                                               C. A. Wood
                                                               Cloudflare
-                                                            7 March 2022
+                                                            8 March 2022
 
 
            Two-Round Threshold Schnorr Signatures with FROST
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 September 2022.
+   This Internet-Draft will expire on 9 September 2022.
 
 Copyright Notice
 
@@ -1108,6 +1108,8 @@ Table of Contents
    *  Isis Lovecruft
 
    *  T.  Wilson-Brown
+
+   *  Alden Torres
 
 9.  References
 
