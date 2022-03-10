@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-03-08T00:36:57.058808+00:00",
+  "timestamp": "2022-03-10T00:39:43.100296+00:00",
   "repo": "cfrg/draft-irtf-cfrg-frost",
   "labels": [
     {
@@ -1468,6 +1468,70 @@
       "body": "Currently, `secret_share_shard` requires that coefficients be non-zero, as they are sampled using `RandomScalar`. Further, `DeserializeElement` requires non-identity elements. However, both the secret `s` in `secret_share_shard` should be allowed to be zero, as well as each additional coefficient that is sampled at random. This is to ensure the largest possible search space for an adversary.\r\n\r\nhttps://github.com/cfrg/draft-irtf-cfrg-frost/blob/master/draft-irtf-cfrg-frost.md#shamir-secret-sharing-dep-shamir",
       "createdAt": "2022-03-07T23:05:41Z",
       "updatedAt": "2022-03-07T23:05:41Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 111,
+      "id": "I_kwDOEpUZs85FU5ES",
+      "title": "Highlight that single-round FROST is out of scope for the draft",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/111",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The draft is clearly two-round, but we do not mention that FROST has a single-round variant. We should add 1-2 sentences saying what the single-round variant is, and that it is out of scope for this document. \r\n\r\nhttps://github.com/cfrg/draft-irtf-cfrg-frost/blob/master/draft-irtf-cfrg-frost.md#two-round-frost-frost-spec",
+      "createdAt": "2022-03-08T20:48:38Z",
+      "updatedAt": "2022-03-08T20:48:38Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 112,
+      "id": "I_kwDOEpUZs85FU6F0",
+      "title": "Clarify that group info is public",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/112",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "We have a diagram that shows the protocol flow that shows that group info is an input to the coordinator and to each signer. We should clarify that all elements in group info are strictly public values.",
+      "createdAt": "2022-03-08T20:53:45Z",
+      "updatedAt": "2022-03-08T20:53:45Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 114,
+      "id": "I_kwDOEpUZs85FVLgv",
+      "title": "Inconsistent notation for group public key",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/114",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In the section on Two-Round FROST, we discuss the group's public key `PK`, but in `trusted_dealer_keygen` we use the notation `public_key`. We should also specify in the Two-Round FROST section that `PK` is an output from the key generation protocol, since participants cannot derive it directly themselves. ",
+      "createdAt": "2022-03-08T21:54:16Z",
+      "updatedAt": "2022-03-08T21:54:16Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 115,
+      "id": "I_kwDOEpUZs85FVMXD",
+      "title": "Group info additionally requires each signer's individual public key",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/issues/115",
+      "state": "OPEN",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Right now, we describe the coordinator and each participant as having the same `group info`. However, in order for the coordinator to perform `verify_signature_share`, the coordinator additionally requires each participant's public key. \r\n\r\nWe can have those values be within `group_info`, to make notation easy, and to not exclude the setting where a coordinator is not used. \r\n\r\nWe also need `trusted_dealer_keygen` to output these individual public keys, or to derive a function so that the coordinator and/or participants can derive these values themselves (it is possible to do so using only the VSS commitment). ",
+      "createdAt": "2022-03-08T21:58:39Z",
+      "updatedAt": "2022-03-08T21:58:39Z",
       "closedAt": null,
       "comments": []
     }
@@ -6938,6 +7002,56 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 113,
+      "id": "PR_kwDOEpUZs840Id1S",
+      "title": "Add Alden as a draft contributor",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-frost/pull/113",
+      "state": "MERGED",
+      "author": "chelseakomlo",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Thanks for all of your help @aldenml ! ",
+      "createdAt": "2022-03-08T21:44:24Z",
+      "updatedAt": "2022-03-09T02:36:39Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-frost",
+      "baseRefName": "master",
+      "baseRefOid": "50a57138ca7f805ef90398fd5143a7a7f5c09ff2",
+      "headRepository": "cfrg/draft-irtf-cfrg-frost",
+      "headRefName": "update-contributors",
+      "headRefOid": "55d1571982f9b332f54d985fe7dc689db4c9ee0e",
+      "closedAt": "2022-03-08T21:46:00Z",
+      "mergedAt": "2022-03-08T21:46:00Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "1ffe85f5b151c63a7bdc3dbfb9495ffbc6aba3c2"
+      },
+      "comments": [
+        {
+          "author": "aldenml",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "thank you!! \ud83c\udf89",
+          "createdAt": "2022-03-09T02:36:39Z",
+          "updatedAt": "2022-03-09T02:36:39Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEpUZs8413Q5j",
+          "commit": {
+            "abbreviatedOid": "55d1571"
+          },
+          "author": "dconnolly",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "\ud83d\udc4d ",
+          "createdAt": "2022-03-08T22:52:59Z",
+          "updatedAt": "2022-03-08T22:52:59Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
